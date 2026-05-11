@@ -11,7 +11,7 @@ import {
 } from '../utils/audio-engine.js'
 
 export const midiFileMeta = midiFileList
-const midiBaseUrl = '/rehearsal-player/midi/'
+const midiBaseUrl = '/midivox/midi/'
 
 export function useMidiPlayer() {
   const midiUrl = ref('')
@@ -209,9 +209,11 @@ export function useMidiPlayer() {
     const parsed = parseMidiFile(buffer)
     midi = parsed.midi
     tracks.value = parsed.tracks
-    const preferredProgram = localStorage.getItem('rehearsal-player:preferred-instrument')
+    const preferredProgram = localStorage.getItem('midivox:preferred-instrument')
     if (preferredProgram !== null) {
-      tracks.value.forEach((t) => { t.program = Number(preferredProgram) })
+      tracks.value.forEach((t) => {
+        t.program = Number(preferredProgram)
+      })
     }
     allNotes = parsed.allNotes
     maxNoteDuration = parsed.maxNoteDuration
@@ -405,13 +407,17 @@ export function useMidiPlayer() {
   }
 
   function setAllTrackVolumes(volume) {
-    tracks.value.forEach((track) => { track.volume = volume })
+    tracks.value.forEach((track) => {
+      track.volume = volume
+    })
     tracks.value.forEach((_, i) => applyTrackGain(i))
     if (isLoaded.value) scheduleVisualizerBlob()
   }
 
   function setAllTrackInstruments(program) {
-    tracks.value.forEach((track) => { track.program = program })
+    tracks.value.forEach((track) => {
+      track.program = program
+    })
     if (!audioCtx) return
     const loadId = ++instrumentLoadId
     tracks.value.forEach((_, index) => {

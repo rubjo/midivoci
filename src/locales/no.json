@@ -1,5 +1,5 @@
 {
-  "app.title": "Øvingsspiller",
+  "app.title": "MidiVox",
   "app.description": "En MIDI-øvingsspiller med pianorull-visualisering, flersporskontroller og tempojustering.",
   "app.libraries": "Biblioteker",
   "piano_roll": "Pianorull",

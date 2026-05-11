@@ -1,5 +1,5 @@
 {
-  "app.title": "Rehearsal Player",
+  "app.title": "MidiVox",
   "app.description": "A MIDI rehearsal player with piano roll visualization, multi-track controls, and tempo adjustment.",
   "app.libraries": "Libraries",
   "piano_roll": "Piano Roll",

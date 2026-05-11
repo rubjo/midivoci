@@ -185,7 +185,7 @@ import { useI18n } from 'vue-i18n'
 import { IconHeartbeat, IconDotsVertical } from '@tabler/icons-vue'
 import { instrumentList } from '../constants/instruments.js'
 
-const PREFERRED_INSTRUMENT_KEY = 'rehearsal-player:preferred-instrument'
+const PREFERRED_INSTRUMENT_KEY = 'midivox:preferred-instrument'
 
 const { t } = useI18n()
 

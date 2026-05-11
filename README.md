@@ -1,5 +1,5 @@
-# rehearsal-player
+# MidiVox
 
 Select and play a selection of MIDI files, controlling volume per track
 
-## https://rubjo.github.io/rehearsal-player/
+## https://rubjo.github.io/midivox/
