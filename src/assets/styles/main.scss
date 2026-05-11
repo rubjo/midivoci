@@ -48,9 +48,7 @@ body {
   background: var(--bg-page);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
-  transition:
-    background 0.2s,
-    color 0.2s;
+  transition: all 0.2s;
   line-height: 1;
 }
 
@@ -136,4 +134,8 @@ body {
 .font-mono {
   font-family: 'Victor Mono', monospace;
   font-variant-numeric: tabular-nums;
+}
+
+.surface-border {
+  border-color: var(--p-surface-border-color);
 }
