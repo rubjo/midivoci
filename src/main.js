@@ -9,11 +9,13 @@ import './assets/styles/main.scss'
 import en from './locales/en.json'
 import no from './locales/no.json'
 
-const savedLocale = localStorage.getItem('locale') || 'no'
+const urlParams = new URLSearchParams(window.location.search)
+const langParam = urlParams.get('lang')
+const savedLocale = langParam || localStorage.getItem('locale') || 'en'
 
 const i18n = createI18n({
   locale: savedLocale,
-  fallbackLocale: 'no',
+  fallbackLocale: 'en',
   messages: { en, no },
 })
 

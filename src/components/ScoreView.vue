@@ -1,7 +1,7 @@
 <template>
   <div class="bg-surface-card border-1 surface-border border-round-lg overflow-hidden">
     <div class="flex align-items-center justify-content-between p-3 border-bottom-1 surface-border">
-      <h3 class="text-sm font-semibold text-color-secondary text-uppercase m-0">
+      <h3 class="text-sm font-medium text-color-secondary text-uppercase m-0">
         {{ t('piano_roll') }}
       </h3>
       <div class="flex align-items-center gap-1">
@@ -60,7 +60,12 @@ const props = defineProps({
 
 const emit = defineEmits(['seek'])
 
-const visible = ref(true)
+const PIANO_ROLL_KEY = 'midivox:piano-roll-visible'
+const visible = ref(localStorage.getItem(PIANO_ROLL_KEY) === 'true')
+watch(visible, (v) => {
+  localStorage.setItem(PIANO_ROLL_KEY, v)
+  if (v) nextTick(() => applyVolumeToRects())
+})
 const visualizerRef = ref(null)
 const containerRef = ref(null)
 const cursorRef = ref(null)

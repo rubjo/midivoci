@@ -32,21 +32,27 @@
           <div class="info-popover">
             <h3>{{ t('app.title') }}</h3>
             <p>{{ t('app.description') }}</p>
-            <h4>{{ t('app.libraries') }}</h4>
-            <ul>
-              <li>Vue 3</li>
-              <li>Vite</li>
-              <li>PrimeVue</li>
-              <li>@tonejs/midi</li>
-              <li>soundfont-player</li>
-              <li>Tone.js</li>
-              <li>html-midi-player</li>
-              <li>vue-i18n</li>
-              <li>@tabler/icons-vue</li>
-            </ul>
-            <h4>MIDI Files</h4>
-            <p class="text-sm">
-              Courtesy of John's MIDI File Choral Music site —
+            <p>
+              {{ t('app.created_by') }}
+              <a href="https://github.com/rubjo" target="_blank" rel="noopener noreferrer"
+                >@rubjo</a
+              >
+              – {{ t('app.donations_welcome') }}
+              <a
+                href="https://www.paypal.com/donate/?hosted_button_id=QT5CW924DJN3Q"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif"
+                  alt="Donate with PayPal button"
+                  style="vertical-align: middle"
+                />
+              </a>
+            </p>
+            <h4>{{ t('app.midi_files') }}</h4>
+            <p>
+              {{ t('app.midi_credit') }}
               <a
                 href="https://www.learnchoralmusic.co.uk/"
                 target="_blank"
@@ -55,86 +61,124 @@
                 >learnchoralmusic.co.uk</a
               >
             </p>
+            <h4>{{ t('app.libraries') }}</h4>
+            <ul>
+              <li>@tonejs/midi</li>
+              <li>html-midi-player</li>
+              <li>soundfont-player</li>
+              <li>Tone.js</li>
+              <li>PrimeVue</li>
+              <li>Vue 3</li>
+              <li>vue-i18n</li>
+              <li>@tabler/icons-vue</li>
+              <li>Vite</li>
+            </ul>
+            <h4>{{ t('app.other_projects') }}</h4>
+            <ul>
+              <li>
+                <a
+                  href="https://rubjo.github.io/victor-mono/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Victor Mono</a
+                >
+              </li>
+              <li>
+                <a href="https://rubjo.github.io/dani/" target="_blank" rel="noopener noreferrer"
+                  >Dani</a
+                >
+              </li>
+              <li>
+                <a href="https://rubjo.github.io/m-bench/" target="_blank" rel="noopener noreferrer"
+                  >MBench</a
+                >
+              </li>
+            </ul>
           </div>
         </PrimePopover>
       </div>
     </header>
 
     <main>
-      <section class="flex flex-column md:flex-row align-items-center gap-2">
-        <PrimeAutocomplete
-          ref="autocomplete"
-          :suggestions="suggestions"
-          @complete="searchFiles"
-          @focus="onAutocompleteFocus"
-          @option-select="onOptionSelect"
-          showClear
-          @clear="suggestions = fileGroups"
-          option-label="label"
-          option-group-label="label"
-          option-group-children="items"
-          option-value="value"
-          :placeholder="t('searchForAndSelectMidiFile')"
-          class="w-full flex-1"
-          scroll-height="70vh"
-          :delay="300"
-          fluid
-          @update:model-value="handleFileSelect"
-        >
-          <template #item="slotProps">
-            {{ slotProps.value ? metaLabel(slotProps.value) : t('searchForAndSelectMidiFile') }}
-          </template>
-          <template #optiongroup="slotProps">
-            <div class="midi-group-header flex align-items-center gap-2">
-              <span class="font-semibold">{{
-                slotProps.option.composerMeta?.name || slotProps.option.label
-              }}</span>
-              <span
-                v-if="slotProps.option.composerMeta?.born || slotProps.option.composerMeta?.died"
-                class="text-sm text-500"
-              >
-                ({{ slotProps.option.composerMeta?.born || '?' }}–{{
-                  slotProps.option.composerMeta?.died || '?'
-                }})
-              </span>
-              <a
-                v-if="slotProps.option.composerMeta?.wikipedia"
-                :href="slotProps.option.composerMeta.wikipedia"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-xs text-400 hover:text-primary no-underline p-button p-1"
-                @click.stop
-                >&#8505;</a
-              >
-            </div>
-          </template>
-          <template #option="slotProps">
-            <div class="midi-option pl-4">
-              <div class="midi-option-main flex flex-column gap-2">
-                <strong class="midi-option-name">{{ slotProps.option.label }}</strong>
-                <div class="flex gap-2">
-                  <Tag class="text-xs font-mono">
-                    {{ formatDuration(slotProps.option.duration) }}
-                  </Tag>
-                  <Tag class="text-xs font-mono">
-                    {{ slotProps.option.numTracks }} {{ t('parts').toLowerCase() }}
-                  </Tag>
+      <section>
+        <PrimeInputGroup>
+          <PrimeAutocomplete
+            ref="autocomplete"
+            :suggestions="suggestions"
+            @complete="searchFiles"
+            @focus="onAutocompleteFocus"
+            @option-select="onOptionSelect"
+            showClear
+            @clear="suggestions = fileGroups"
+            option-label="label"
+            option-group-label="label"
+            option-group-children="items"
+            option-value="value"
+            :placeholder="t('searchForAndSelectMidiFile')"
+            class="w-full"
+            scroll-height="70vh"
+            :delay="300"
+            fluid
+            @update:model-value="handleFileSelect"
+          >
+            <template #item="slotProps">
+              {{ slotProps.value ? metaLabel(slotProps.value) : t('searchForAndSelectMidiFile') }}
+            </template>
+            <template #optiongroup="slotProps">
+              <div class="midi-group-header flex align-items-center gap-2">
+                <span class="font-medium">{{
+                  slotProps.option.composerMeta?.name || slotProps.option.label
+                }}</span>
+                <span
+                  v-if="slotProps.option.composerMeta?.born || slotProps.option.composerMeta?.died"
+                  class="text-sm text-500"
+                >
+                  ({{ slotProps.option.composerMeta?.born || '?' }}–{{
+                    slotProps.option.composerMeta?.died || '?'
+                  }})
+                </span>
+                <a
+                  v-if="slotProps.option.composerMeta?.wikipedia"
+                  :href="slotProps.option.composerMeta.wikipedia"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-xs text-400 hover:text-primary no-underline p-button p-1"
+                  @click.stop
+                >
+                  <IconInfoCircle :size="14" style="vertical-align: middle" />
+                </a>
+              </div>
+            </template>
+            <template #option="slotProps">
+              <div class="midi-option">
+                <div class="midi-option-main flex flex-column gap-2">
+                  <strong class="midi-option-name">{{ slotProps.option.label }}</strong>
+                  <div class="flex gap-2">
+                    <Tag class="text-xs font-mono">
+                      {{ formatDuration(slotProps.option.duration) }}
+                    </Tag>
+                    <Tag class="text-xs font-mono">
+                      {{ slotProps.option.numTracks }} {{ t('parts').toLowerCase() }}
+                    </Tag>
+                  </div>
                 </div>
               </div>
-            </div>
-          </template>
-        </PrimeAutocomplete>
-        <div class="w-full flex-1 flex align-items-center gap-2">
-          <Fluid class="w-full flex-1">
-            <PrimeFileUpload
-              mode="basic"
-              accept=".mid,.midi"
-              :auto="true"
-              :choose-label="t('orUpload')"
-              @select="handleFileUpload"
-            />
-          </Fluid>
-        </div>
+            </template>
+          </PrimeAutocomplete>
+          <PrimeFileUpload
+            mode="basic"
+            accept=".mid,.midi"
+            :auto="true"
+            :choose-label="t('orUpload')"
+            @select="handleFileUpload"
+            class="upload-inputgroup-btn"
+          >
+            <template #chooseicon>
+              <IconUpload :size="16" />
+              <span class="md:hidden">{{ t('upload') }}</span>
+            </template>
+          </PrimeFileUpload>
+        </PrimeInputGroup>
       </section>
 
       <TransportControls
@@ -182,7 +226,7 @@
 <script setup>
 import { ref, getCurrentInstance, computed, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { IconSun, IconMoon, IconLanguage, IconInfoCircle } from '@tabler/icons-vue'
+import { IconSun, IconMoon, IconLanguage, IconInfoCircle, IconUpload } from '@tabler/icons-vue'
 import { nb_NO } from 'primelocale/js/nb_NO.js'
 import { en } from 'primelocale/js/en.js'
 
@@ -192,7 +236,7 @@ import PrimePopover from 'primevue/popover'
 import PrimeFileUpload from 'primevue/fileupload'
 import PrimeAutocomplete from 'primevue/autocomplete'
 import Tag from 'primevue/tag'
-import Fluid from 'primevue/fluid'
+import PrimeInputGroup from 'primevue/inputgroup'
 
 import { useMidiPlayer, midiFileMeta } from './composables/useMidiPlayer.js'
 import TransportControls from './components/TransportControls.vue'
@@ -352,3 +396,9 @@ function searchFiles(event) {
     .filter((group) => group.items.length > 0)
 }
 </script>
+
+<style scoped>
+.info-popover {
+  line-height: 1.2;
+}
+</style>

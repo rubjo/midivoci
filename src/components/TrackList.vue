@@ -1,7 +1,7 @@
 <template>
   <div class="overflow-hidden bg-surface-card border-1 surface-border border-round-lg">
     <div class="flex align-items-center justify-content-between p-3 border-bottom-1 surface-border">
-      <h3 class="text-sm font-semibold text-color-secondary text-uppercase m-0">
+      <h3 class="text-sm font-medium text-color-secondary text-uppercase m-0">
         {{ t('tracks') }}
       </h3>
       <div class="flex align-items-center gap-1">
@@ -39,7 +39,7 @@
       <div
         class="flex align-items-center justify-content-between md:justify-content-start w-full md:flex-1 gap-1"
       >
-        <span class="font-semibold text-sm text-color-primary">{{
+        <span class="font-medium text-sm text-color-primary">{{
           track.name || `Track ${index + 1}`
         }}</span>
         <span
@@ -48,77 +48,143 @@
         >
           <template v-if="activeTracks?.has(index)">
             <span class="text-green-500" style="font-size: 1.25rem; line-height: 0">&#8226;</span>
-            <span class="text-green-500 font-semibold">{{ activeTracks.get(index) }}</span>
+            <span class="text-green-500 font-medium">{{ activeTracks.get(index) }}</span>
           </template>
         </span>
       </div>
 
-      <div
-        class="flex flex-column sm:flex-row align-items-stretch sm:align-items-center gap-1 flex-1"
-      >
-        <div class="flex-1 flex align-items-center gap-1">
-          <label class="text-sm font-medium text-color-secondary text-uppercase hidden lg:inline">{{
-            t('volume')
-          }}</label>
-          <input
-            type="range"
-            class="volume-slider flex-1"
-            min="0"
-            max="100"
-            :value="track.volume"
-            @input="$emit('setTrackVolume', index, $event.target.value)"
-          />
-          <span
-            class="text-xs font-semibold text-color-secondary font-mono"
-            style="min-width: 1.5rem"
-            >{{ track.volume }}</span
-          >
+      <template v-if="!compactMode">
+        <div
+          class="flex flex-column sm:flex-row align-items-stretch sm:align-items-center gap-1 flex-1 md:flex-none"
+        >
+          <div class="flex-1 flex align-items-center gap-1 py-2">
+            <label
+              class="text-sm font-medium text-color-secondary text-uppercase label hidden lg:inline"
+              >{{ t('volume') }}</label
+            >
+            <PrimeSlider
+              :min="0"
+              :max="100"
+              :model-value="track.volume"
+              @update:model-value="$emit('setTrackVolume', index, $event)"
+              class="flex-1 md:flex-none md:w-7rem mr-2"
+            />
+            <span
+              class="text-xs font-medium text-color-secondary font-mono"
+              style="min-width: 2rem"
+              >{{ track.volume }}%</span
+            >
+          </div>
+          <div class="flex-1 flex align-items-center gap-1">
+            <label
+              class="text-sm font-medium text-color-secondary text-uppercase label hidden lg:inline"
+              >{{ t('instrument') }}</label
+            >
+            <PrimeSelect
+              :model-value="track.program"
+              @update:model-value="$emit('setTrackInstrument', index, $event)"
+              :options="instrumentList"
+              option-label="name"
+              option-value="program"
+              size="small"
+              class="w-full"
+            />
+          </div>
         </div>
-        <div class="flex-1 flex align-items-center gap-1">
-          <label class="text-sm font-medium text-color-secondary text-uppercase hidden lg:inline">{{
-            t('instrument')
-          }}</label>
-          <PrimeSelect
-            :model-value="track.program"
-            @update:model-value="$emit('setTrackInstrument', index, $event)"
-            :options="instrumentList"
-            option-label="name"
-            option-value="program"
+        <div class="flex gap-1 w-full md:w-auto md:ml-auto">
+          <Button
             size="small"
-            class="w-full"
-          />
+            class="flex-1 md:flex-none text-xs text-uppercase"
+            :variant="track.muted ? undefined : 'outlined'"
+            :severity="track.muted ? 'danger' : 'secondary'"
+            @click="$emit('setTrackMuted', index, !track.muted)"
+          >
+            {{ t('mute') }}
+          </Button>
+          <Button
+            size="small"
+            class="flex-1 md:flex-none text-xs text-uppercase"
+            :variant="leadTrack.includes(index) ? undefined : 'outlined'"
+            :severity="leadTrack.includes(index) ? 'info' : 'secondary'"
+            @click="$emit('setTrackLead', index)"
+          >
+            {{ t('lead') }}
+          </Button>
+          <Button
+            size="small"
+            class="flex-1 md:flex-none text-xs text-uppercase"
+            :variant="track.solo ? undefined : 'outlined'"
+            :severity="track.solo ? 'success' : 'secondary'"
+            @click="$emit('setTrackSolo', index, !track.solo)"
+          >
+            {{ t('solo') }}
+          </Button>
         </div>
-      </div>
+      </template>
 
-      <div class="flex gap-1 w-full md:w-auto md:ml-auto">
-        <Button
-          size="small"
-          class="flex-1 md:flex-none text-xs text-uppercase"
-          :variant="track.muted ? undefined : 'outlined'"
-          :severity="track.muted ? 'danger' : 'secondary'"
-          @click="$emit('setTrackMuted', index, !track.muted)"
+      <template v-if="compactMode">
+        <div
+          class="flex flex-wrap md:flex-nowrap align-items-center gap-1 flex-1 justify-content-end"
         >
-          {{ t('mute') }}
-        </Button>
-        <Button
-          size="small"
-          class="flex-1 md:flex-none text-xs text-uppercase"
-          :variant="leadTrack === index ? undefined : 'outlined'"
-          :severity="leadTrack === index ? 'warn' : 'secondary'"
-          @click="$emit('setTrackLead', index)"
-        >
-          {{ t('lead') }}
-        </Button>
-        <Button
-          size="small"
-          class="flex-1 md:flex-none text-xs text-uppercase"
-          :variant="track.solo ? undefined : 'outlined'"
-          :severity="track.solo ? 'success' : 'secondary'"
-          @click="$emit('setTrackSolo', index, !track.solo)"
-        >
-          {{ t('solo') }}
-        </Button>
-      </div>
+          <div
+            class="flex-1 md:flex-none flex align-items-center gap-1 py-2"
+            style="min-width: 8rem"
+          >
+            <PrimeSlider
+              :min="0"
+              :max="100"
+              :model-value="track.volume"
+              @update:model-value="$emit('setTrackVolume', index, $event)"
+              class="flex-1 md:w-7rem mr-2"
+            />
+            <span
+              class="text-xs font-medium text-color-secondary font-mono"
+              style="min-width: 2rem"
+              >{{ track.volume }}%</span
+            >
+          </div>
+          <div class="flex-1 md:flex-initial flex align-items-center gap-1">
+            <div class="flex-1 md:flex-none">
+              <PrimeSelect
+                :model-value="track.program"
+                @update:model-value="$emit('setTrackInstrument', index, $event)"
+                :options="instrumentList"
+                option-label="name"
+                option-value="program"
+                size="small"
+                class="w-full"
+              />
+            </div>
+            <Button
+              size="small"
+              class="text-xs text-uppercase"
+              :variant="track.muted ? undefined : 'outlined'"
+              :severity="track.muted ? 'danger' : 'secondary'"
+              @click="$emit('setTrackMuted', index, !track.muted)"
+            >
+              {{ 'M' }}
+            </Button>
+            <Button
+              size="small"
+              class="text-xs text-uppercase"
+              :variant="leadTrack.includes(index) ? undefined : 'outlined'"
+              :severity="leadTrack.includes(index) ? 'info' : 'secondary'"
+              @click="$emit('setTrackLead', index)"
+            >
+              {{ 'L' }}
+            </Button>
+            <Button
+              size="small"
+              class="text-xs text-uppercase"
+              :variant="track.solo ? undefined : 'outlined'"
+              :severity="track.solo ? 'success' : 'secondary'"
+              @click="$emit('setTrackSolo', index, !track.solo)"
+            >
+              {{ 'S' }}
+            </Button>
+          </div>
+        </div>
+      </template>
     </div>
   </div>
 
@@ -131,7 +197,7 @@
   >
     <div class="flex align-items-center gap-3 p-2">
       <PrimeSlider v-model="bulkVolume" :min="0" :max="100" class="flex-1" />
-      <span class="text-sm font-semibold font-mono" style="min-width: 2rem; text-align: right">{{
+      <span class="text-sm font-medium font-mono" style="min-width: 2rem; text-align: right">{{
         bulkVolume
       }}</span>
     </div>
@@ -188,13 +254,14 @@ import { IconHeartbeat, IconDotsVertical } from '@tabler/icons-vue'
 import { instrumentList } from '../constants/instruments.js'
 
 const PREFERRED_INSTRUMENT_KEY = 'midivox:preferred-instrument'
+const COMPACT_MODE_KEY = 'midivox:compact-mode'
 
 const { t } = useI18n()
 
 defineProps({
   tracks: { type: Array, default: () => [] },
   activeTracks: { type: Map, default: () => new Map() },
-  leadTrack: { type: Number, default: -1 },
+  leadTrack: { type: Array, default: () => [] },
   showNoteIndicators: { type: Boolean, default: false },
 })
 
@@ -209,18 +276,28 @@ const emit = defineEmits([
   'toggleNoteIndicators',
 ])
 
+const compactMode = ref(localStorage.getItem(COMPACT_MODE_KEY) === 'true')
+function toggleCompactMode() {
+  compactMode.value = !compactMode.value
+  localStorage.setItem(COMPACT_MODE_KEY, String(compactMode.value))
+}
+
 const bulkMenuRef = ref(null)
 const showVolumeModal = ref(false)
 const showInstrumentModal = ref(false)
-const bulkVolume = ref(80)
+const bulkVolume = ref(100)
 const bulkInstrument = ref(0)
 const saveAsPreferred = ref(false)
 
 const menuItems = computed(() => [
   {
+    label: compactMode.value ? t('compact_mode_off') : t('compact_mode_on'),
+    command: toggleCompactMode,
+  },
+  {
     label: t('set_volume_all'),
     command: () => {
-      bulkVolume.value = 80
+      bulkVolume.value = 100
       showVolumeModal.value = true
     },
   },
@@ -267,5 +344,15 @@ function applyInstrument() {
   .track-item {
     gap: 0.5rem;
   }
+}
+
+@media (max-width: 768px) {
+  .p-select {
+    min-width: 0;
+  }
+}
+
+.compact-actions .p-button {
+  max-width: 2rem;
 }
 </style>

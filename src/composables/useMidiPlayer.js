@@ -25,7 +25,7 @@ export function useMidiPlayer() {
   const isLoaded = ref(false)
   const visualizerUrl = ref('')
   const activeTracks = ref(new Map())
-  const leadTrack = ref(-1)
+  const leadTrack = ref([])
 
   let audioCtx = null
   let masterGain = null
@@ -468,32 +468,28 @@ export function useMidiPlayer() {
         })
       }
     }
-    leadTrack.value = -1
+    leadTrack.value = []
     applyAllTrackGains()
     refreshVisualizerBlob()
   }
 
   function setTrackLead(index) {
-    if (leadTrack.value === index) {
-      tracks.value.forEach((t) => {
-        t.volume = 100
-      })
-      leadTrack.value = -1
+    const leads = [...leadTrack.value]
+    const pos = leads.indexOf(index)
+    if (pos >= 0) {
+      leads.splice(pos, 1)
+      if (tracks.value[index]) tracks.value[index].volume = 100
     } else {
-      const anySolo = tracks.value.some((t) => t.solo)
-      if (anySolo) {
-        tracks.value.forEach((t, i) => {
-          t.solo = false
-          t.muted = prevMuted[i] ?? false
-        })
-      }
-      if (tracks.value[index]?.muted) {
-        tracks.value[index].muted = false
-      }
+      leads.push(index)
+      if (tracks.value[index]) tracks.value[index].volume = 100
+    }
+    leadTrack.value = leads
+    if (leads.length > 0) {
       tracks.value.forEach((t, i) => {
-        t.volume = i === index ? 100 : 25
+        if (!leads.includes(i)) t.volume = 25
       })
-      leadTrack.value = index
+    } else {
+      tracks.value.forEach((t) => { t.volume = 100 })
     }
     applyAllTrackGains()
     if (isLoaded.value) refreshVisualizerBlob()
@@ -520,7 +516,7 @@ export function useMidiPlayer() {
     isLoaded.value = false
     tracks.value = []
     activeTracks.value = new Map()
-    leadTrack.value = -1
+    leadTrack.value = []
     if (visualizerUrl.value) {
       URL.revokeObjectURL(visualizerUrl.value)
       visualizerUrl.value = ''

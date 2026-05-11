@@ -2,6 +2,8 @@
   "app.title": "MidiVox",
   "app.description": "A MIDI rehearsal player with piano roll visualization, multi-track controls, and tempo adjustment.",
   "app.libraries": "Libraries",
+  "app.midi_files": "MIDI Files",
+  "app.midi_credit": "Courtesy of John's MIDI File Choral Music site —",
   "piano_roll": "Piano Roll",
   "piano_roll_empty": "Load a MIDI file to see the piano roll",
   "tracks": "Tracks",
@@ -16,6 +18,7 @@
   "or": "or",
   "lead": "Lead",
   "tempo": "Tempo",
+  "upload": "Upload",
   "play": "Play",
   "pause": "Pause",
   "stop": "Stop",
@@ -33,5 +36,10 @@
   "set_preferred_instrument": "Set preferred instrument",
   "preferred_instrument": "Preferred instrument",
   "cancel": "Cancel",
-  "apply": "Apply"
+  "apply": "Apply",
+  "compact_mode_on": "Enable compact mode",
+  "compact_mode_off": "Disable compact mode",
+  "app.created_by": "Created by",
+  "app.donations_welcome": "donations welcome!",
+  "app.other_projects": "Other projects"
 }

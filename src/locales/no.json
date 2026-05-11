@@ -2,6 +2,8 @@
   "app.title": "MidiVox",
   "app.description": "En MIDI-øvingsspiller med pianorull-visualisering, flersporskontroller og tempojustering.",
   "app.libraries": "Biblioteker",
+  "app.midi_files": "MIDI-filer",
+  "app.midi_credit": "MIDI-filer tilpasset fra John's MIDI File Choral Music —",
   "piano_roll": "Pianorull",
   "piano_roll_empty": "Last en MIDI-fil for å se pianorullen",
   "tracks": "Spor",
@@ -14,6 +16,7 @@
   "mute": "Demp",
   "solo": "Solo",
   "or": "eller",
+  "upload": "Last opp",
   "lead": "Led",
   "tempo": "Tempo",
   "play": "Spill",
@@ -33,5 +36,10 @@
   "set_preferred_instrument": "Sett foretrukket instrument",
   "preferred_instrument": "Foretrukket instrument",
   "cancel": "Avbryt",
-  "apply": "Bruk"
+  "apply": "Bruk",
+  "compact_mode_on": "Slå på kompakt modus",
+  "compact_mode_off": "Slå av kompakt modus",
+  "app.created_by": "Laget av",
+  "app.donations_welcome": "donasjoner tas imot med takk!",
+  "app.other_projects": "Andre av mine prosjekter"
 }

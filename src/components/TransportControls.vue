@@ -2,7 +2,7 @@
   <div
     class="flex flex-wrap align-items-center gap-4 p-3 bg-surface-card border-1 surface-border border-round-lg"
   >
-    <div class="flex gap-1 w-full md:w-auto">
+    <div class="flex gap-1 align-items-center w-full md:w-auto">
       <Button
         :disabled="!isLoaded"
         :title="isPlaying ? t('pause') : t('play')"
@@ -20,18 +20,24 @@
       >
         <IconPlayerStopFilled :size="18" />
       </Button>
+      <span class="text-sm font-mono text-color-secondary ml-2" style="white-space: nowrap">
+        {{ formatTime(currentTime) }} / {{ formatTime(duration) }}
+      </span>
     </div>
 
-    <div class="flex align-items-center gap-2 min-w-0 flex-1 md:flex-none">
+    <div class="flex align-items-center gap-2 w-full md:w-20rem md:ml-auto">
       <label
-        class="text-sm font-medium text-color-secondary text-uppercase"
+        class="text-sm font-medium text-color-secondary text-uppercase label flex-shrink-0"
         style="white-space: nowrap"
         >{{ t('tempo') }}</label
+      >
+      <Button size="small" class="flex-shrink-0" @click="changeTempoBy(-5)" :disabled="!isLoaded"
+        >-5</Button
       >
       <PrimeSlider
         :min="25"
         :max="300"
-        class="flex-1 md:w-7rem"
+        class="flex-1 md:max-w-10rem"
         :model-value="originalBpm ? Math.round((bpm / originalBpm) * 100) : 100"
         @update:model-value="
           originalBpm
@@ -39,34 +45,28 @@
             : $emit('setTempo', $event)
         "
       />
+      <Button size="small" class="flex-shrink-0" @click="changeTempoBy(5)" :disabled="!isLoaded"
+        >+5</Button
+      >
       <span
-        class="text-sm font-semibold text-color-primary font-mono"
-        style="min-width: 3rem; white-space: nowrap"
+        class="text-sm font-medium text-color-primary font-mono flex-shrink-0"
+        :class="{ 'cursor-pointer text-decoration-line underline hover:text-primary': canReset }"
+        style="white-space: nowrap"
+        @click="resetTempo"
       >
         {{ originalBpm ? Math.round((bpm / originalBpm) * 100) + '%' : Math.round(bpm) }}
       </span>
-      <Button
-        v-if="originalBpm && Math.round(bpm) !== Math.round(originalBpm)"
-        :title="t('reset_tempo')"
-        @click="$emit('setTempo', originalBpm)"
-      >
-        <IconRefresh :size="18" stroke-width="2.5" />
-      </Button>
     </div>
-
-    <span class="text-sm font-mono text-color-secondary md:ml-auto" style="white-space: nowrap">
-      {{ formatTime(currentTime) }} / {{ formatTime(duration) }}
-    </span>
   </div>
 </template>
 
 <script setup>
 import { useI18n } from 'vue-i18n'
+import { computed } from 'vue'
 import {
   IconPlayerPlayFilled,
   IconPlayerPauseFilled,
   IconPlayerStopFilled,
-  IconRefresh,
 } from '@tabler/icons-vue'
 
 import Button from 'primevue/button'
@@ -74,7 +74,7 @@ import PrimeSlider from 'primevue/slider'
 
 const { t } = useI18n()
 
-defineProps({
+const props = defineProps({
   isLoaded: Boolean,
   isPlaying: Boolean,
   bpm: Number,
@@ -83,7 +83,22 @@ defineProps({
   duration: Number,
 })
 
-defineEmits(['togglePlay', 'stop', 'setTempo'])
+const emit = defineEmits(['togglePlay', 'stop', 'setTempo'])
+
+const canReset = computed(
+  () => props.originalBpm && Math.round(props.bpm) !== Math.round(props.originalBpm),
+)
+
+function resetTempo() {
+  if (canReset.value) emit('setTempo', props.originalBpm)
+}
+
+function changeTempoBy(delta) {
+  if (!props.originalBpm) return
+  const currentPct = Math.round((props.bpm / props.originalBpm) * 100)
+  const newPct = Math.max(25, Math.min(300, currentPct + delta))
+  emit('setTempo', (newPct / 100) * props.originalBpm)
+}
 
 function formatTime(seconds) {
   if (!seconds || !isFinite(seconds)) return '0:00'
