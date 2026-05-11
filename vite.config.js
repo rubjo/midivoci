@@ -1,0 +1,141 @@
+import { fileURLToPath, URL } from 'node:url'
+import { readdirSync, readFileSync, existsSync } from 'node:fs'
+import { resolve } from 'node:path'
+
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import vueDevTools from 'vite-plugin-vue-devtools'
+import tonejsMidi from '@tonejs/midi'
+const { Midi } = tonejsMidi
+
+function midiFilePlugin() {
+  const VIRTUAL_MODULE = 'virtual:midi-files'
+  const PUBLIC_DIR = resolve(fileURLToPath(new URL('.', import.meta.url)), 'public')
+  const midiDir = resolve(PUBLIC_DIR, 'midi')
+
+  function walk(dir) {
+    let results = []
+    const list = readdirSync(dir, { withFileTypes: true })
+    for (const dirent of list) {
+      const res = resolve(dir, dirent.name)
+      if (dirent.isDirectory()) {
+        results = results.concat(walk(res))
+      } else if (dirent.name.endsWith('.mid')) {
+        results.push(res)
+      }
+    }
+    return results
+  }
+
+  return {
+    name: 'midi-file-plugin',
+    resolveId(id) {
+      if (id === VIRTUAL_MODULE) return VIRTUAL_MODULE
+    },
+    load(id) {
+      if (id !== VIRTUAL_MODULE) return
+
+      if (!existsSync(midiDir)) {
+        return 'export const midiFileList = []; export default midiFileList;'
+      }
+
+      const files = walk(midiDir)
+      
+      // Pass 1: Calculate natural display names and count them
+      const fileData = files.map((fullPath) => {
+        const buf = readFileSync(fullPath)
+        const fileName = resolve(fullPath, '').replace(midiDir + '/', '').replace(/^\\/, '')
+        let name = fileName.replace(/\.mid$/, '')
+        let composer = ''
+        let numTracks = 0
+        let duration = 0
+        
+        try {
+          const midi = new Midi(new Uint8Array(buf))
+          numTracks = midi.tracks.filter(t => t.notes.length > 0).length
+          duration = midi.duration
+          if (midi.header.name) name = midi.header.name
+          if (midi.header.copyright) {
+            const m = midi.header.copyright.match(/[©(c)]\s*\d{4}\s*(.+)/i)
+            if (m) composer = m[1].trim()
+          }
+          if (!composer) {
+            const dirName = fileName.split('/')[0]
+            if (dirName) composer = dirName
+          }
+          const fnMatch = fileName.match(/^(.+?)\s*-\s*(.+?)\.mid$/)
+          if (fnMatch) {
+            if (!composer) composer = fnMatch[1].trim()
+            if (name === fileName.replace(/\.mid$/, '')) name = fnMatch[2].trim()
+          }
+        } catch (e) {
+          // fallback handled by initial name value
+        }
+
+        const naturalDisplay = name.replace(/_/g, ' ').replace(/-/g, ' ')
+        return { fileName, name, composer, naturalDisplay, numTracks, duration }
+      })
+
+      const titleCounts = {}
+      fileData.forEach(f => {
+        titleCounts[f.naturalDisplay] = (titleCounts[f.naturalDisplay] || 0) + 1
+      })
+
+      // Build composer metadata map from ABOUT.md files
+      const composerMetaMap = {}
+      const composerDirs = [...new Set(fileData.map(f => f.fileName.split('/')[0]))]
+      for (const dir of composerDirs) {
+        const aboutPath = resolve(midiDir, dir, 'ABOUT.md')
+        if (existsSync(aboutPath)) {
+          const content = readFileSync(aboutPath, 'utf-8')
+          const meta = {}
+          for (const line of content.split('\n')) {
+            const m = line.match(/^(\w+):\s*"(.+)"\s*$/)
+            if (m) meta[m[1]] = m[2]
+          }
+          composerMetaMap[dir] = meta
+        }
+      }
+
+      // Pass 2: Finalize display based on counts
+      const list = fileData.map(f => {
+        let display = f.naturalDisplay
+        if (titleCounts[display] > 1) {
+          const baseName = f.fileName.split('/').pop().replace(/\.mid$/, '')
+          display = `${display} (${baseName})`
+        }
+        return { 
+          fileName: f.fileName, 
+          name: f.name, 
+          composer: f.composer, 
+          composerMeta: composerMetaMap[f.fileName.split('/')[0]] || null,
+          display, 
+          numTracks: f.numTracks, 
+          duration: f.duration 
+        }
+      })
+
+      return `export const midiFileList = ${JSON.stringify(list)}; export default midiFileList;`
+    },
+  }
+}
+
+export default defineConfig({
+  base: '/rehearsal-player/',
+  plugins: [
+    vue({
+      template: {
+        compilerOptions: {
+          isCustomElement: (tag) => tag.includes('-'),
+        },
+      },
+    }),
+    vueDevTools(),
+    midiFilePlugin(),
+  ],
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
+})
