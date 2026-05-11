@@ -36,7 +36,9 @@
       class="track-item flex flex-wrap p-3 border-bottom-1 surface-border hover-surface gap-1 md:flex-nowrap md:align-items-center"
       :class="{ 'track-active': showNoteIndicators && activeTracks?.has(index) }"
     >
-      <div class="flex align-items-center justify-content-between w-full md:flex-1">
+      <div
+        class="flex align-items-center justify-content-between md:justify-content-start w-full md:flex-1 gap-1"
+      >
         <span class="font-semibold text-sm text-color-primary">{{
           track.name || `Track ${index + 1}`
         }}</span>
