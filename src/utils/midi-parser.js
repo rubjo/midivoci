@@ -41,28 +41,39 @@ export function parseMidiFile(buffer) {
     }
   })
 
-  const finalAllNotes = allNotes.map(n => ({
-    ...n,
-    trackIndex: trackMap.get(n.trackIndex)
-  })).filter(n => n.trackIndex !== undefined)
+  const finalAllNotes = allNotes
+    .map((n) => ({
+      ...n,
+      trackIndex: trackMap.get(n.trackIndex),
+    }))
+    .filter((n) => n.trackIndex !== undefined)
 
   const finalMidi = midi.clone()
   finalMidi.tracks = finalMidi.tracks.filter((t, i) => t.notes.length > 0)
 
-  return { midi: finalMidi, tracks: filteredTracks, allNotes: finalAllNotes, bpm, duration, maxNoteDuration }
+  return {
+    midi: finalMidi,
+    tracks: filteredTracks,
+    allNotes: finalAllNotes,
+    bpm,
+    duration,
+    maxNoteDuration,
+  }
 }
 
 export function generateVisualizerBlob(midi, tracks) {
   const clone = midi.clone()
-  const anySolo = tracks.some(t => t.solo)
+  const anySolo = tracks.some((t) => t.solo)
 
   clone.tracks.forEach((_, i) => {
     const state = tracks[i]
     if (!state) return
     const shouldDim = anySolo ? !state.solo : state.muted
-    try { clone.tracks[i].addProgramChange(0, i) } catch { }
-    clone.tracks[i].notes.forEach(n => {
-      n.velocity = shouldDim ? 10 : Math.max(1, Math.round(n.velocity * state.volume / 100))
+    try {
+      clone.tracks[i].addProgramChange(0, i)
+    } catch {}
+    clone.tracks[i].notes.forEach((n) => {
+      n.velocity = shouldDim ? 10 : Math.max(1, Math.round((n.velocity * state.volume) / 100))
     })
   })
 

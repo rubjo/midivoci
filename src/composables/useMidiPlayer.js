@@ -490,7 +490,9 @@ export function useMidiPlayer() {
         if (!leads.includes(i)) t.volume = 25
       })
     } else {
-      tracks.value.forEach((t) => { t.volume = 100 })
+      tracks.value.forEach((t) => {
+        t.volume = 100
+      })
     }
     applyAllTrackGains()
     if (isLoaded.value) refreshVisualizerBlob()

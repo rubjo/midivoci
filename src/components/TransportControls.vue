@@ -5,12 +5,28 @@
     <div class="flex gap-1 align-items-center w-full md:w-auto">
       <Button
         :disabled="!isLoaded"
+        :title="t('skip_back')"
+        class="flex-1 md:flex-none"
+        @click="skipBack"
+      >
+        <IconRewindBackward10 :size="18" />
+      </Button>
+      <Button
+        :disabled="!isLoaded"
         :title="isPlaying ? t('pause') : t('play')"
         class="flex-1 md:flex-none"
         @click="$emit('togglePlay')"
       >
         <IconPlayerPlayFilled v-if="!isPlaying" :size="18" />
         <IconPlayerPauseFilled v-else :size="18" />
+      </Button>
+      <Button
+        :disabled="!isLoaded"
+        :title="t('skip_forward')"
+        class="flex-1 md:flex-none"
+        @click="skipForward"
+      >
+        <IconRewindForward10 :size="18" />
       </Button>
       <Button
         :disabled="!isLoaded"
@@ -67,6 +83,8 @@ import {
   IconPlayerPlayFilled,
   IconPlayerPauseFilled,
   IconPlayerStopFilled,
+  IconRewindBackward10,
+  IconRewindForward10,
 } from '@tabler/icons-vue'
 
 import Button from 'primevue/button'
@@ -83,7 +101,7 @@ const props = defineProps({
   duration: Number,
 })
 
-const emit = defineEmits(['togglePlay', 'stop', 'setTempo'])
+const emit = defineEmits(['togglePlay', 'stop', 'setTempo', 'seek'])
 
 const canReset = computed(
   () => props.originalBpm && Math.round(props.bpm) !== Math.round(props.originalBpm),
@@ -98,6 +116,14 @@ function changeTempoBy(delta) {
   const currentPct = Math.round((props.bpm / props.originalBpm) * 100)
   const newPct = Math.max(25, Math.min(300, currentPct + delta))
   emit('setTempo', (newPct / 100) * props.originalBpm)
+}
+
+function skipBack() {
+  emit('seek', Math.max(0, (props.currentTime || 0) - 10))
+}
+
+function skipForward() {
+  emit('seek', Math.min(props.duration || 0, (props.currentTime || 0) + 10))
 }
 
 function formatTime(seconds) {

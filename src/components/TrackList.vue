@@ -69,9 +69,7 @@
               @update:model-value="$emit('setTrackVolume', index, $event)"
               class="flex-1 md:flex-none md:w-7rem mr-2"
             />
-            <span
-              class="text-xs font-medium text-color-secondary font-mono"
-              style="min-width: 2rem"
+            <span class="text-xs font-medium text-color-secondary font-mono" style="min-width: 2rem"
               >{{ track.volume }}%</span
             >
           </div>
@@ -137,9 +135,7 @@
               @update:model-value="$emit('setTrackVolume', index, $event)"
               class="flex-1 md:w-7rem mr-2"
             />
-            <span
-              class="text-xs font-medium text-color-secondary font-mono"
-              style="min-width: 2rem"
+            <span class="text-xs font-medium text-color-secondary font-mono" style="min-width: 2rem"
               >{{ track.volume }}%</span
             >
           </div>
@@ -162,7 +158,7 @@
               :severity="track.muted ? 'danger' : 'secondary'"
               @click="$emit('setTrackMuted', index, !track.muted)"
             >
-              {{ 'M' }}
+              {{ t('mute')[0] }}
             </Button>
             <Button
               size="small"
@@ -171,7 +167,7 @@
               :severity="leadTrack.includes(index) ? 'info' : 'secondary'"
               @click="$emit('setTrackLead', index)"
             >
-              {{ 'L' }}
+              {{ t('lead')[0] }}
             </Button>
             <Button
               size="small"
@@ -180,7 +176,7 @@
               :severity="track.solo ? 'success' : 'secondary'"
               @click="$emit('setTrackSolo', index, !track.solo)"
             >
-              {{ 'S' }}
+              {{ t('solo')[0] }}
             </Button>
           </div>
         </div>

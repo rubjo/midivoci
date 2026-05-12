@@ -1,7 +1,10 @@
 <template>
   <div class="app" :data-theme="theme">
     <header class="app-header">
-      <h1>{{ t('app.title') }}</h1>
+      <div class="flex align-items-center gap-2">
+        <img src="./assets/logo.png" alt="MidiVox" class="header-logo" />
+        <h1>{{ t('app.title') }}</h1>
+      </div>
       <div class="header-actions">
         <div @click.stop>
           <PrimeSelect
@@ -10,8 +13,12 @@
             option-value="code"
             :model-value="locale"
             @change="setLocale"
+            @show="langDropdownOpen = true"
+            @hide="onLangDropdownHide"
             class="lang-select"
+            scroll-height="400px"
             label-class="pr-0 py-2"
+            append-to="body"
           >
             <template #value="slotProps">
               <div class="flex align-items-center gap-1" v-if="slotProps.value">
@@ -25,79 +32,96 @@
           <IconSun v-if="isDark" :size="16" />
           <IconMoon v-else :size="16" />
         </Button>
-        <Button ref="infoBtnRef" @click="toggleInfo">
+        <Button @click="infoDialogVisible = true">
           <IconInfoCircle :size="16" />
         </Button>
-        <PrimePopover ref="infoPopoverRef">
-          <div class="info-popover">
-            <h3>{{ t('app.title') }}</h3>
-            <p>{{ t('app.description') }}</p>
-            <p>
-              {{ t('app.created_by') }}
-              <a href="https://github.com/rubjo" target="_blank" rel="noopener noreferrer"
-                >@rubjo</a
-              >
-              <template v-if="!isTauri">
-                – {{ t('app.donations_welcome') }}
+        <PrimeDialog
+          v-model:visible="infoDialogVisible"
+          modal
+          :draggable="false"
+          :style="{ maxWidth: '420px' }"
+          class="info-dialog"
+          header="MidiVox"
+        >
+          <img src="./assets/logo.png" alt="MidiVox" class="info-dialog-banner" />
+          <div class="info-dialog-body">
+            <div class="text-center -mt-5 mb-4">
+              <em style="font-size: 1.5rem">{{ t('app.tagline') }}</em>
+            </div>
+            {{ t('app.description') }}
+            {{ t('app.created_by') }}
+            <a href="https://github.com/rubjo/midivox" target="_blank" rel="noopener noreferrer"
+              >@rubjo</a
+            >
+            <span v-if="!isTauri" class="info-dialog-donate">
+              – {{ t('app.donations_welcome') }}
+              <div class="mt-3">
                 <a
                   href="https://www.paypal.com/donate/?hosted_button_id=QT5CW924DJN3Q"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   <img
-                    src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif"
-                    alt="Donate with PayPal button"
-                    style="vertical-align: middle"
+                    width="175"
+                    src="https://raw.githubusercontent.com/andreostrovsky/donate-with-paypal/refs/heads/master/blue.svg"
+                    alt="PayPal donate"
                   />
                 </a>
-              </template>
-            </p>
-            <h4>{{ t('app.midi_files') }}</h4>
-            <p>
+              </div>
+            </span>
+
+            <PrimeDivider />
+
+            <h4 class="text-sm font-semibold text-color-secondary text-uppercase mb-2">
+              {{ t('app.midi_files') }}
+            </h4>
+            <p class="text-sm">
               {{ t('app.midi_credit') }}
               <a
                 href="https://www.learnchoralmusic.co.uk/"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="text-primary hover:text-primary"
                 >learnchoralmusic.co.uk</a
               >
             </p>
-            <h4>{{ t('app.libraries') }}</h4>
-            <ul>
-              <li>@tonejs/midi</li>
-              <li>html-midi-player</li>
-              <li>soundfont-player</li>
-              <li>Tone.js</li>
-              <li>PrimeVue</li>
-              <li>Vue 3</li>
-              <li>vue-i18n</li>
-              <li>@tabler/icons-vue</li>
-              <li>Vite</li>
-            </ul>
-            <h4>{{ t('app.other_projects') }}</h4>
-            <ul>
-              <li>
-                <a
-                  href="https://rubjo.github.io/victor-mono/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  >Victor Mono</a
-                >
-              </li>
-              <li>
-                <a href="https://rubjo.github.io/dani/" target="_blank" rel="noopener noreferrer"
-                  >Dani</a
-                >
-              </li>
-              <li>
-                <a href="https://rubjo.github.io/m-bench/" target="_blank" rel="noopener noreferrer"
-                  >MBench</a
-                >
-              </li>
-            </ul>
+
+            <PrimeDivider />
+
+            <h4 class="text-sm font-semibold text-color-secondary text-uppercase mb-2">
+              {{ t('app.libraries') }}
+            </h4>
+            <div class="text-sm info-dialog-tags flex flex-wrap gap-2">
+              <a
+                v-for="lib in libraries"
+                :key="lib.name"
+                :href="lib.url"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="info-dialog-tag"
+              >
+                {{ lib.name }}
+              </a>
+            </div>
+
+            <PrimeDivider />
+
+            <h4 class="text-sm font-semibold text-color-secondary text-uppercase mb-2">
+              {{ t('app.other_projects') }}
+            </h4>
+            <div class="text-sm flex flex-column gap-1">
+              <a
+                v-for="p in projects"
+                :key="p.name"
+                :href="p.url"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="info-dialog-link"
+              >
+                {{ p.name }}
+              </a>
+            </div>
           </div>
-        </PrimePopover>
+        </PrimeDialog>
       </div>
     </header>
 
@@ -174,6 +198,7 @@
             :choose-label="t('orUpload')"
             @select="handleFileUpload"
             class="upload-inputgroup-btn"
+            :disabled="langDropdownOpen"
           >
             <template #chooseicon>
               <IconUpload :size="16" />
@@ -194,6 +219,7 @@
         @toggle-play="togglePlay"
         @stop="stop"
         @set-tempo="setTempo"
+        @seek="seek"
       />
 
       <ScoreView
@@ -226,15 +252,23 @@
 </template>
 
 <script setup>
-import { ref, getCurrentInstance, computed, nextTick } from 'vue'
+import { ref, getCurrentInstance, computed, nextTick, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { IconSun, IconMoon, IconLanguage, IconInfoCircle, IconUpload } from '@tabler/icons-vue'
 import { nb_NO } from 'primelocale/js/nb_NO.js'
 import { en } from 'primelocale/js/en.js'
+import { de } from 'primelocale/js/de.js'
+import { fr } from 'primelocale/js/fr.js'
+import { it } from 'primelocale/js/it.js'
+import { es } from 'primelocale/js/es.js'
+import { da } from 'primelocale/js/da.js'
+import { sv } from 'primelocale/js/sv.js'
+import { fi } from 'primelocale/js/fi.js'
 
 import Button from 'primevue/button'
 import PrimeSelect from 'primevue/select'
-import PrimePopover from 'primevue/popover'
+import PrimeDialog from 'primevue/dialog'
+import PrimeDivider from 'primevue/divider'
 import PrimeFileUpload from 'primevue/fileupload'
 import PrimeAutocomplete from 'primevue/autocomplete'
 import Tag from 'primevue/tag'
@@ -254,7 +288,40 @@ const $primevue = getCurrentInstance().appContext.config.globalProperties.$prime
 const langOptions = [
   { code: 'en', label: 'English' },
   { code: 'no', label: 'Norsk' },
+  { code: 'de', label: 'Deutsch' },
+  { code: 'fr', label: 'Français' },
+  { code: 'it', label: 'Italiano' },
+  { code: 'es', label: 'Español' },
+  { code: 'da', label: 'Dansk' },
+  { code: 'sv', label: 'Svenska' },
+  { code: 'fi', label: 'Suomi' },
 ]
+
+const langDropdownOpen = ref(false)
+let langHideTimer
+
+function onLangDropdownHide() {
+  langHideTimer = setTimeout(() => {
+    langDropdownOpen.value = false
+  }, 150)
+}
+
+onUnmounted(() => clearTimeout(langHideTimer))
+
+const primeLocales = { no: nb_NO, de, fr, it, es, da, sv, fi }
+
+function setPrimeLocale(localeCode) {
+  $primevue.config.locale = primeLocales[localeCode] || en
+}
+
+function setLocale(e) {
+  const val = typeof e === 'string' ? e : e.value
+  locale.value = val
+  localStorage.setItem('locale', val)
+  setPrimeLocale(val)
+}
+
+setPrimeLocale(locale.value)
 
 const autocomplete = ref(null)
 
@@ -272,20 +339,6 @@ function onOptionSelect() {
   autocomplete.value?.hide()
 }
 
-function setPrimeLocale(localeCode) {
-  $primevue.config.locale = localeCode === 'no' ? nb_NO : en
-}
-
-function setLocale(e) {
-  const val = typeof e === 'string' ? e : e.value
-  locale.value = val
-  localStorage.setItem('locale', val)
-  setPrimeLocale(val)
-}
-
-// init PrimeVue locale
-setPrimeLocale(locale.value)
-
 const theme = ref(localStorage.getItem('theme') || 'light')
 const isDark = ref(theme.value === 'dark')
 document.documentElement.setAttribute('data-theme', theme.value)
@@ -298,12 +351,26 @@ function toggleTheme() {
 }
 
 const showNoteIndicators = ref(false)
-const infoBtnRef = ref(null)
-const infoPopoverRef = ref(null)
+const infoDialogVisible = ref(false)
 
-function toggleInfo(event) {
-  infoPopoverRef.value.toggle(event)
-}
+const libraries = [
+  { name: '@tonejs/midi', url: 'https://github.com/Tonejs/Midi' },
+  { name: 'html-midi-player', url: 'https://github.com/cifkao/html-midi-player' },
+  { name: 'soundfont-player', url: 'https://github.com/danigb/soundfont-player' },
+  { name: 'Tone.js', url: 'https://tonejs.github.io/' },
+  { name: 'PrimeVue', url: 'https://primevue.org/' },
+  { name: 'Vue 3', url: 'https://vuejs.org/' },
+  { name: 'vue-i18n', url: 'https://vue-i18n.intlify.dev/' },
+  { name: '@tabler/icons-vue', url: 'https://tabler.io/icons' },
+  { name: 'Vite', url: 'https://vite.dev/' },
+  { name: 'Tauri', url: 'https://tauri.app/' },
+]
+
+const projects = [
+  { name: 'Victor Mono', url: 'https://rubjo.github.io/victor-mono/' },
+  { name: 'Dani', url: 'https://rubjo.github.io/dani/' },
+  { name: 'MBench', url: 'https://rubjo.github.io/m-bench/' },
+]
 
 function handleFileUpload(e) {
   const file = e.files?.[0]
@@ -402,7 +469,22 @@ function searchFiles(event) {
 </script>
 
 <style scoped>
-.info-popover {
-  line-height: 1.2;
+.header-logo {
+  width: 28px;
+  height: 28px;
+}
+
+.info-dialog-banner {
+  display: block;
+  width: 100%;
+  margin: -2rem 0 -1rem 0;
+}
+
+.info-dialog-body {
+  line-height: 1.5;
+}
+
+.info-dialog-donate {
+  text-align: center;
 }
 </style>

@@ -5,18 +5,26 @@ import { definePreset } from '@primeuix/themes'
 import Aura from '@primeuix/themes/aura'
 import { createI18n } from 'vue-i18n'
 import 'victormono'
-import './assets/styles/main.scss'
+import './styles/main.scss'
 import en from './locales/en.json'
 import no from './locales/no.json'
+import de from './locales/de.json'
+import fr from './locales/fr.json'
+import it from './locales/it.json'
+import es from './locales/es.json'
+import da from './locales/da.json'
+import sv from './locales/sv.json'
+import fi from './locales/fi.json'
 
 const urlParams = new URLSearchParams(window.location.search)
 const langParam = urlParams.get('lang')
 const savedLocale = langParam || localStorage.getItem('locale') || 'en'
 
 const i18n = createI18n({
+  legacy: false,
   locale: savedLocale,
   fallbackLocale: 'en',
-  messages: { en, no },
+  messages: { en, no, de, fr, it, es, da, sv, fi },
 })
 
 const app = createApp(App)
