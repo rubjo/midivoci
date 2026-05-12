@@ -1,7 +1,7 @@
 <template>
   <div class="app" :data-theme="theme">
     <header class="app-header">
-      <div class="flex align-items-center gap-2">
+      <div class="flex align-items-center gap-2 cursor-pointer" @click="infoDialogVisible = true">
         <img src="./assets/logo.png" alt="MidiVox" class="header-logo" />
         <h1>{{ t('app.title') }}</h1>
       </div>
@@ -31,9 +31,6 @@
         <Button @click="toggleTheme" :title="isDark ? t('light_mode') : t('dark_mode')">
           <IconSun v-if="isDark" :size="16" />
           <IconMoon v-else :size="16" />
-        </Button>
-        <Button @click="infoDialogVisible = true">
-          <IconInfoCircle :size="16" />
         </Button>
         <PrimeDialog
           v-model:visible="infoDialogVisible"
@@ -152,24 +149,28 @@
               {{ slotProps.value ? metaLabel(slotProps.value) : t('searchForComposerOrWork') }}
             </template>
             <template #optiongroup="slotProps">
-              <div class="midi-group-header flex align-items-center gap-2">
-                <span class="font-medium">{{
-                  slotProps.option.composerMeta?.name || slotProps.option.label
-                }}</span>
-                <span
-                  v-if="slotProps.option.composerMeta?.born || slotProps.option.composerMeta?.died"
-                  class="text-sm text-500"
-                >
-                  ({{ slotProps.option.composerMeta?.born || '?' }}–{{
-                    slotProps.option.composerMeta?.died || '?'
-                  }})
-                </span>
+              <div class="midi-group-header flex align-items-center w-full">
+                <div class="flex align-items-center gap-2 flex-wrap flex-1 min-w-0">
+                  <span class="font-medium">{{
+                    slotProps.option.composerMeta?.name || slotProps.option.label
+                  }}</span>
+                  <span
+                    v-if="
+                      slotProps.option.composerMeta?.born || slotProps.option.composerMeta?.died
+                    "
+                    class="text-sm"
+                  >
+                    ({{ slotProps.option.composerMeta?.born || '?' }}–{{
+                      slotProps.option.composerMeta?.died || '?'
+                    }})
+                  </span>
+                </div>
                 <a
                   v-if="slotProps.option.composerMeta?.wikipedia"
                   :href="slotProps.option.composerMeta.wikipedia"
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="text-xs text-400 hover:text-primary no-underline p-button p-1"
+                  class="p-button p-1 flex-shrink-0"
                   @click.stop
                 >
                   <IconInfoCircle :size="14" style="vertical-align: middle" />
@@ -179,12 +180,12 @@
             <template #option="slotProps">
               <div class="midi-option">
                 <div class="midi-option-main flex flex-column gap-2">
-                  <strong class="midi-option-name">{{ slotProps.option.label }}</strong>
+                  <span class="midi-option-name">{{ slotProps.option.label }}</span>
                   <div class="flex gap-2">
-                    <Tag class="text-xs font-mono">
+                    <Tag class="text-xs font-normal font-mono">
                       {{ formatDuration(slotProps.option.duration) }}
                     </Tag>
-                    <Tag class="text-xs font-mono">
+                    <Tag class="text-xs font-normal font-mono">
                       {{ slotProps.option.numTracks }} {{ t('parts').toLowerCase() }}
                     </Tag>
                   </div>

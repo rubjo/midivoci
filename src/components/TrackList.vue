@@ -292,7 +292,7 @@ const emit = defineEmits([
   'toggleNoteIndicators',
 ])
 
-const compactMode = ref(localStorage.getItem(COMPACT_MODE_KEY) === 'true')
+const compactMode = ref(localStorage.getItem(COMPACT_MODE_KEY) !== 'false')
 function toggleCompactMode() {
   compactMode.value = !compactMode.value
   localStorage.setItem(COMPACT_MODE_KEY, String(compactMode.value))

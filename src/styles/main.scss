@@ -117,22 +117,14 @@ body {
 }
 
 .midi-group-header {
-  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.025em;
-  padding: 0.25rem;
-}
-
-.midi-option {
-  padding-left: 1rem;
-  .midi-option-main {
-    gap: 0.5rem;
-  }
 }
 
 .midi-option-name {
   overflow-wrap: break-word;
   word-break: break-word;
+  line-height: 1.5;
 }
 
 @media (max-width: 768px) {
