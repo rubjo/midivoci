@@ -330,8 +330,18 @@ function onAutocompleteFocus() {
   const query = input?.value?.trim() || ''
   if (!query) {
     suggestions.value = fileGroups.value
-    nextTick(() => autocomplete.value?.show())
+  } else {
+    const q = query.toLowerCase()
+    suggestions.value = fileGroups.value
+      .map((g) => ({
+        ...g,
+        items: g.items.filter(
+          (it) => it._display.includes(q) || it._composer.includes(q),
+        ),
+      }))
+      .filter((g) => g.items.length > 0)
   }
+  nextTick(() => autocomplete.value?.show())
 }
 
 function onOptionSelect() {
