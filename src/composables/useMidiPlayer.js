@@ -11,7 +11,8 @@ import {
 } from '../utils/audio-engine.js'
 
 export const midiFileMeta = midiFileList
-const midiBaseUrl = '/midivox/midi/'
+const isTauri = !!import.meta.env.TAURI_ENV_PLATFORM
+const midiBaseUrl = isTauri ? '/midi/' : '/midivox/midi/'
 
 export function useMidiPlayer() {
   const midiUrl = ref('')
