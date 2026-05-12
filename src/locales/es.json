@@ -31,7 +31,7 @@
   "play": "Reproducir",
   "preferred_instrument": "Instrumento preferido",
   "reset_tempo": "Restablecer tempo",
-  "searchForAndSelectMidiFile": "Buscar y seleccionar archivo MIDI",
+  "searchForComposerOrWork": "Buscar compositor u obra",
   "set_instrument_all": "Establecer instrumento para todas las pistas",
   "set_preferred_instrument": "Establecer instrumento preferido",
   "set_volume_all": "Establecer volumen para todas las pistas",

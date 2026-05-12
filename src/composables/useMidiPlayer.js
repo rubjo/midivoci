@@ -552,7 +552,7 @@ export function useMidiPlayer() {
 
     // Only proceed if the value is exactly a known filename from our metadata.
     // This prevents search queries or group headers from triggering loads.
-    const exists = midiFileMeta.some((m) => m.fileName === file)
+    const exists = midiFileMeta.value.some((m) => m.fileName === file)
     if (!exists) return
 
     try {

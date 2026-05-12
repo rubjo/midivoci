@@ -31,7 +31,7 @@
   "play": "Play",
   "preferred_instrument": "Preferred instrument",
   "reset_tempo": "Reset tempo",
-  "searchForAndSelectMidiFile": "Search and select MIDI file",
+  "searchForComposerOrWork": "Search for composer or work",
   "set_instrument_all": "Set instrument for all tracks",
   "set_preferred_instrument": "Set preferred instrument",
   "set_volume_all": "Set volume for all tracks",

@@ -31,7 +31,7 @@
   "play": "Spela",
   "preferred_instrument": "Föredraget instrument",
   "reset_tempo": "Återställ tempo",
-  "searchForAndSelectMidiFile": "Sök och välj MIDI-fil",
+  "searchForComposerOrWork": "Sök efter kompositör eller verk",
   "set_instrument_all": "Ställ in instrument för alla spår",
   "set_preferred_instrument": "Ställ in föredraget instrument",
   "set_volume_all": "Ställ in volym för alla spår",

@@ -140,15 +140,16 @@
             option-group-label="label"
             option-group-children="items"
             option-value="value"
-            :placeholder="t('searchForAndSelectMidiFile')"
+            :placeholder="t('searchForComposerOrWork')"
             class="w-full"
             scroll-height="70vh"
             :delay="300"
+            :loading="!dataLoaded"
             fluid
             @update:model-value="handleFileSelect"
           >
             <template #item="slotProps">
-              {{ slotProps.value ? metaLabel(slotProps.value) : t('searchForAndSelectMidiFile') }}
+              {{ slotProps.value ? metaLabel(slotProps.value) : t('searchForComposerOrWork') }}
             </template>
             <template #optiongroup="slotProps">
               <div class="midi-group-header flex align-items-center gap-2">
@@ -324,8 +325,10 @@ function setLocale(e) {
 setPrimeLocale(locale.value)
 
 const autocomplete = ref(null)
+let autocompleteGuard = false
 
 function onAutocompleteFocus() {
+  if (autocompleteGuard) return
   const input = autocomplete.value?.$el?.querySelector('input')
   const query = input?.value?.trim() || ''
   if (!query) {
@@ -335,9 +338,7 @@ function onAutocompleteFocus() {
     suggestions.value = fileGroups.value
       .map((g) => ({
         ...g,
-        items: g.items.filter(
-          (it) => it._display.includes(q) || it._composer.includes(q),
-        ),
+        items: g.items.filter((it) => it._display.includes(q) || it._composer.includes(q)),
       }))
       .filter((g) => g.items.length > 0)
   }
@@ -347,6 +348,11 @@ function onAutocompleteFocus() {
 function onOptionSelect() {
   suggestions.value = []
   autocomplete.value?.hide()
+  autocompleteGuard = true
+  setTimeout(() => {
+    autocompleteGuard = false
+  }, 300)
+  setTimeout(() => document.activeElement?.blur(), 50)
 }
 
 const theme = ref(localStorage.getItem('theme') || 'light')
@@ -395,7 +401,7 @@ function formatDuration(seconds) {
 }
 
 function metaLabel(fileName) {
-  const m = midiFileMeta.find((e) => e.fileName === fileName)
+  const m = midiFileMeta.value.find((e) => e.fileName === fileName)
   if (!m) return fileName
   const composer = m.composer || 'Unknown Composer'
   const workName = m.display.split('/').pop() || m.display
@@ -431,7 +437,7 @@ const {
 
 const fileGroups = computed(() => {
   const groupsMap = {}
-  midiFileMeta.forEach((file) => {
+  midiFileMeta.value.forEach((file) => {
     const composer = file.fileName.split('/')[0] || file.composer || 'Unknown Composer'
     if (!groupsMap[composer]) {
       groupsMap[composer] = {
@@ -459,6 +465,7 @@ const fileGroups = computed(() => {
   return result
 })
 
+const dataLoaded = computed(() => midiFileMeta.value.length > 0)
 const suggestions = ref([])
 
 function searchFiles(event) {
@@ -480,8 +487,8 @@ function searchFiles(event) {
 
 <style scoped>
 .header-logo {
-  width: 28px;
-  height: 28px;
+  width: 34px;
+  height: 34px;
 }
 
 .info-dialog-banner {

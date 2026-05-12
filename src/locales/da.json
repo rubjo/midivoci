@@ -31,7 +31,7 @@
   "play": "Afspil",
   "preferred_instrument": "Foretrukket instrument",
   "reset_tempo": "Nulstil tempo",
-  "searchForAndSelectMidiFile": "Søg og vælg MIDI-fil",
+  "searchForComposerOrWork": "Søg efter komponist eller værk",
   "set_instrument_all": "Sæt instrument for alle spor",
   "set_preferred_instrument": "Sæt foretrukket instrument",
   "set_volume_all": "Sæt lydstyrke for alle spor",
