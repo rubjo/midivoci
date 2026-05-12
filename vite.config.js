@@ -125,8 +125,11 @@ function midiFilePlugin() {
   }
 }
 
+const host = process.env.TAURI_DEV_HOST
+
 export default defineConfig({
-  base: '/midivox/',
+  clearScreen: false,
+  base: process.env.TAURI_ENV_PLATFORM ? './' : '/midivox/',
   plugins: [
     vue({
       template: {
@@ -142,5 +145,30 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
+  },
+  server: {
+    port: 5173,
+    strictPort: host ? true : false,
+    host: host || false,
+    hmr: host
+      ? {
+          protocol: 'ws',
+          host,
+          port: 1421,
+        }
+      : undefined,
+    watch: {
+      ignored: ['**/src-tauri/**'],
+    },
+  },
+  envPrefix: ['VITE_', 'TAURI_ENV_*'],
+  build: {
+    target: process.env.TAURI_ENV_PLATFORM
+      ? process.env.TAURI_ENV_PLATFORM === 'windows'
+        ? 'chrome105'
+        : 'safari14'
+      : undefined,
+    minify: !process.env.TAURI_ENV_DEBUG ? 'esbuild' : false,
+    sourcemap: !!process.env.TAURI_ENV_DEBUG,
   },
 })

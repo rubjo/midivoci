@@ -32,24 +32,26 @@
           <div class="info-popover">
             <h3>{{ t('app.title') }}</h3>
             <p>{{ t('app.description') }}</p>
-            <p>
-              {{ t('app.created_by') }}
-              <a href="https://github.com/rubjo" target="_blank" rel="noopener noreferrer"
-                >@rubjo</a
-              >
-              – {{ t('app.donations_welcome') }}
-              <a
-                href="https://www.paypal.com/donate/?hosted_button_id=QT5CW924DJN3Q"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif"
-                  alt="Donate with PayPal button"
-                  style="vertical-align: middle"
-                />
-              </a>
-            </p>
+              <p>
+                {{ t('app.created_by') }}
+                <a href="https://github.com/rubjo" target="_blank" rel="noopener noreferrer"
+                  >@rubjo</a
+                >
+                <template v-if="!isTauri">
+                  – {{ t('app.donations_welcome') }}
+                  <a
+                    href="https://www.paypal.com/donate/?hosted_button_id=QT5CW924DJN3Q"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif"
+                      alt="Donate with PayPal button"
+                      style="vertical-align: middle"
+                    />
+                  </a>
+                </template>
+              </p>
             <h4>{{ t('app.midi_files') }}</h4>
             <p>
               {{ t('app.midi_credit') }}
@@ -242,6 +244,8 @@ import { useMidiPlayer, midiFileMeta } from './composables/useMidiPlayer.js'
 import TransportControls from './components/TransportControls.vue'
 import TrackList from './components/TrackList.vue'
 import ScoreView from './components/ScoreView.vue'
+
+const isTauri = !!window.__TAURI__
 
 const { t, locale } = useI18n()
 

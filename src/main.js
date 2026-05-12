@@ -50,3 +50,13 @@ app.use(PrimeVue, {
 
 app.use(i18n)
 app.mount('#app')
+
+if (window.__TAURI__) {
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('a[href]')
+    if (!link || !link.href) return
+    if (link.href.startsWith('file://') || link.href.startsWith('blob:')) return
+    e.preventDefault()
+    window.__TAURI__.opener.openUrl(link.href)
+  })
+}
