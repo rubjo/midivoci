@@ -6,15 +6,6 @@
       </h3>
       <div class="flex align-items-center gap-1">
         <Button
-          size="small"
-          @click="bulkMenuRef?.toggle($event)"
-          :title="t('bulk_actions')"
-          :aria-label="t('bulk_actions')"
-        >
-          <IconDotsVertical :size="16" />
-        </Button>
-        <PrimeMenu ref="bulkMenuRef" :model="menuItems" popup />
-        <Button
           :severity="showNoteIndicators ? 'success' : ''"
           size="small"
           :title="showNoteIndicators ? t('hide_note_indicators') : t('show_note_indicators')"
@@ -23,6 +14,23 @@
         >
           <IconHeartbeat :size="16" />
         </Button>
+        <PrimeMenu ref="bulkMenuRef" :model="menuItems" popup />
+        <Button
+          size="small"
+          @click="bulkMenuRef?.toggle($event)"
+          :title="t('bulk_actions')"
+          :aria-label="t('bulk_actions')"
+        >
+          <IconDotsVertical :size="16" />
+        </Button>
+        <Button
+          size="small"
+          variant="text"
+          :title="expanded ? t('collapse') : t('expand')"
+          @click="expanded = !expanded"
+        >
+          <IconChevronDown :size="16" class="chevron" :class="{ expanded: expanded }" />
+        </Button>
       </div>
     </div>
 
@@ -30,6 +38,7 @@
       {{ t('tracks_empty') }}
     </div>
 
+    <template v-if="expanded">
     <div
       v-for="(track, index) in tracks"
       :key="index"
@@ -195,6 +204,7 @@
         </div>
       </template>
     </div>
+    </template>
   </div>
 
   <PrimeDialog
@@ -265,6 +275,7 @@ import {
   IconVolumeOff,
   IconMicrophone2,
   IconHeadphones,
+  IconChevronDown,
 } from '@tabler/icons-vue'
 import { instrumentList } from '../constants/instruments.js'
 import InstrumentIcon from './icons/InstrumentIcon.vue'
@@ -273,6 +284,8 @@ const PREFERRED_INSTRUMENT_KEY = 'midivox:preferred-instrument'
 const COMPACT_MODE_KEY = 'midivox:compact-mode'
 
 const { t } = useI18n()
+
+const expanded = ref(true)
 
 defineProps({
   tracks: { type: Array, default: () => [] },
@@ -366,6 +379,14 @@ function applyInstrument() {
   .p-select {
     min-width: 0;
   }
+}
+
+.chevron {
+  transition: transform 0.2s;
+}
+
+.chevron.expanded {
+  transform: rotate(180deg);
 }
 
 .compact-actions {

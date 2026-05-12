@@ -64,7 +64,19 @@ function midiFilePlugin() {
       }
 
       const naturalDisplay = name.replace(/_/g, ' ').replace(/-/g, ' ')
-      return { fileName, name, composer, naturalDisplay, numTracks, duration }
+
+      let meta = null
+      const mdPath = fullPath.replace(/\.mid$/, '.md')
+      if (existsSync(mdPath)) {
+        const content = readFileSync(mdPath, 'utf-8')
+        meta = {}
+        for (const line of content.split('\n')) {
+          const m = line.match(/^(\w+):\s*"(.+)"\s*$/)
+          if (m) meta[m[1]] = m[2]
+        }
+      }
+
+      return { fileName, name, composer, naturalDisplay, numTracks, duration, meta }
     })
 
     const titleCounts = {}
@@ -104,6 +116,7 @@ function midiFilePlugin() {
         display,
         numTracks: f.numTracks,
         duration: f.duration,
+        meta: f.meta,
       }
     })
   }

@@ -11,6 +11,7 @@
   --btn-bg: #fff;
   --btn-border: #e5e7eb;
   --btn-hover: #f3f4f6;
+  --p-list-option-focus-background: #fafafa !important;
 }
 
 [data-theme='dark'] {
@@ -27,6 +28,7 @@
   --p-form-field-background: var(--btn-bg) !important;
   --p-slider-handle-content-background: #d8dee9;
   --p-slider-handle-content-hover-background: #ffffff;
+  --p-list-option-focus-background: #1c1d1f !important;
 }
 
 [data-theme='dark'] .note {

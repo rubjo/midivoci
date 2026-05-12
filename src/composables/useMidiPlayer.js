@@ -27,6 +27,7 @@ export function useMidiPlayer() {
   const visualizerUrl = ref('')
   const activeTracks = ref(new Map())
   const leadTrack = ref([])
+  const currentFileMeta = ref(null)
 
   let audioCtx = null
   let masterGain = null
@@ -520,6 +521,7 @@ export function useMidiPlayer() {
     tracks.value = []
     activeTracks.value = new Map()
     leadTrack.value = []
+    currentFileMeta.value = null
     if (visualizerUrl.value) {
       URL.revokeObjectURL(visualizerUrl.value)
       visualizerUrl.value = ''
@@ -552,11 +554,12 @@ export function useMidiPlayer() {
 
     // Only proceed if the value is exactly a known filename from our metadata.
     // This prevents search queries or group headers from triggering loads.
-    const exists = midiFileMeta.value.some((m) => m.fileName === file)
-    if (!exists) return
+    const item = midiFileMeta.value.find((m) => m.fileName === file)
+    if (!item) return
 
     try {
       await loadMidiFromUrl(midiBaseUrl + file)
+      currentFileMeta.value = item.meta || null
     } catch (err) {
       console.error('Failed to load MIDI file:', file, err)
     }
@@ -566,6 +569,7 @@ export function useMidiPlayer() {
     ensureAudio()
     const file = e.target.files[0]
     if (file) {
+      currentFileMeta.value = null
       const buffer = await file.arrayBuffer()
       const blobUrl = URL.createObjectURL(file)
       await loadMidiFromBuffer(buffer, blobUrl)
@@ -585,6 +589,7 @@ export function useMidiPlayer() {
     visualizerUrl,
     activeTracks,
     leadTrack,
+    currentFileMeta,
     handleFileSelect,
     handleUpload,
     togglePlay,

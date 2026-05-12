@@ -178,15 +178,25 @@
               </div>
             </template>
             <template #option="slotProps">
-              <div class="midi-option">
+              <div class="midi-option pl-3">
                 <div class="midi-option-main flex flex-column gap-2">
-                  <span class="midi-option-name">{{ slotProps.option.label }}</span>
+                  <span class="midi-option-name font-semibold">{{ slotProps.option.label }}</span>
                   <div class="flex gap-2">
-                    <Tag class="text-xs font-normal font-mono">
+                    <Tag severity="secondary" class="text-xs font-normal font-mono track-info">
+                      <IconClock :size="12" class="mr-1" />
                       {{ formatDuration(slotProps.option.duration) }}
                     </Tag>
-                    <Tag class="text-xs font-normal font-mono">
+                    <Tag severity="secondary" class="text-xs font-normal font-mono track-info">
+                      <IconUsers :size="12" class="mr-1" />
                       {{ slotProps.option.numTracks }} {{ t('parts').toLowerCase() }}
+                    </Tag>
+                    <Tag
+                      v-if="slotProps.option.youtube"
+                      severity="info"
+                      class="text-xs font-normal font-mono track-info"
+                    >
+                      <IconDeviceTv :size="12" class="mr-1" />
+                      {{ t('live_performance_video') }}
                     </Tag>
                   </div>
                 </div>
@@ -267,6 +277,8 @@
         @set-track-lead="setTrackLead"
         @toggle-note-indicators="showNoteIndicators = !showNoteIndicators"
       />
+
+      <YouTubePanel v-if="currentFileMeta?.youtube" :youtube-url="currentFileMeta.youtube" />
     </main>
   </div>
 </template>
@@ -281,6 +293,9 @@ import {
   IconInfoCircle,
   IconUpload,
   IconHelp,
+  IconClock,
+  IconUsers,
+  IconDeviceTv,
 } from '@tabler/icons-vue'
 import { nb_NO } from 'primelocale/js/nb_NO.js'
 import { en } from 'primelocale/js/en.js'
@@ -305,6 +320,7 @@ import { useMidiPlayer, midiFileMeta } from './composables/useMidiPlayer.js'
 import TransportControls from './components/TransportControls.vue'
 import TrackList from './components/TrackList.vue'
 import ScoreView from './components/ScoreView.vue'
+import YouTubePanel from './components/YouTubePanel.vue'
 
 const isTauri = !!window.__TAURI__
 
@@ -447,6 +463,7 @@ const {
   visualizerUrl,
   activeTracks,
   leadTrack,
+  currentFileMeta,
   handleFileSelect,
   handleUpload,
   togglePlay,
@@ -480,6 +497,7 @@ const fileGroups = computed(() => {
       value: file.fileName,
       numTracks: file.numTracks,
       duration: file.duration,
+      youtube: !!file.meta?.youtube,
       _display: file.display.toLowerCase(),
       _composer: (file.composer || '').toLowerCase(),
     })
@@ -555,5 +573,9 @@ function searchFiles(event) {
   font-size: 1.5rem;
   line-height: 1.5;
   margin: 1rem 0;
+}
+
+.track-info {
+  border: 1px solid color-mix(in srgb, var(--text-muted) 20%, transparent);
 }
 </style>
