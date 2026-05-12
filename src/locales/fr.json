@@ -43,6 +43,9 @@
   "tempo": "Tempo",
   "tracks": "Pistes",
   "tracks_empty": "Aucune piste chargée",
+  "empty_state_pick_or_upload": "Choisissez ou téléchargez de la musique",
+  "empty_state_volume": "Modifiez le volume de chaque voix (ou utilisez les boutons muet/principal/solo)",
+  "empty_state_press_play": "Appuyez sur Lecture",
   "upload": "Télécharger",
   "volume": "Volume"
 }

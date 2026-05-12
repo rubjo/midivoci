@@ -43,6 +43,9 @@
   "tempo": "Tempo",
   "tracks": "Spuren",
   "tracks_empty": "Keine Spuren geladen",
+  "empty_state_pick_or_upload": "Musik auswählen oder hochladen",
+  "empty_state_volume": "Ändere die Lautstärke für jede Stimme (oder verwende die Stumm/Lead/Solo-Buttons)",
+  "empty_state_press_play": "Drücke Abspielen",
   "upload": "Hochladen",
   "volume": "Lautstärke"
 }

@@ -68,9 +68,12 @@
               :model-value="track.volume"
               @update:model-value="$emit('setTrackVolume', index, $event)"
               class="flex-1 md:flex-none md:w-7rem mr-2"
+              :disabled="track.muted"
             />
-            <span class="text-xs font-medium text-color-secondary font-mono" style="min-width: 2rem"
-              >{{ track.volume }}%</span
+            <span
+              class="text-xs font-medium text-color-secondary font-mono"
+              style="min-width: 2rem"
+              >{{ track.muted ? '—' : track.volume + '%' }}</span
             >
           </div>
           <div class="flex-1 flex align-items-center gap-1">
@@ -85,7 +88,8 @@
               option-label="name"
               option-value="program"
               size="small"
-              class="w-full"
+              class="w-full md:w-14rem"
+              scroll-height="50vh"
             />
           </div>
         </div>
@@ -121,9 +125,7 @@
       </template>
 
       <template v-if="compactMode">
-        <div
-          class="flex flex-wrap md:flex-nowrap align-items-center gap-1 flex-1 justify-content-end"
-        >
+        <div class="flex align-items-center gap-1 flex-1 md:flex-none justify-content-between">
           <div
             class="flex-1 md:flex-none flex align-items-center gap-1 py-2"
             style="min-width: 8rem"
@@ -134,12 +136,15 @@
               :model-value="track.volume"
               @update:model-value="$emit('setTrackVolume', index, $event)"
               class="flex-1 md:w-7rem mr-2"
+              :disabled="track.muted"
             />
-            <span class="text-xs font-medium text-color-secondary font-mono" style="min-width: 2rem"
-              >{{ track.volume }}%</span
+            <span
+              class="text-xs font-medium text-color-secondary font-mono"
+              style="min-width: 2rem"
+              >{{ track.muted ? '—' : track.volume + '%' }}</span
             >
           </div>
-          <div class="flex-1 md:flex-initial flex align-items-center gap-1">
+          <div class="compact-actions flex align-items-center gap-1">
             <div class="flex-1 md:flex-none">
               <PrimeSelect
                 :model-value="track.program"
@@ -148,35 +153,43 @@
                 option-label="name"
                 option-value="program"
                 size="small"
-                class="w-full"
-              />
+                scroll-height="50vh"
+              >
+                <template #value>
+                  <InstrumentIcon
+                    :program="track.program"
+                    :size="16"
+                    style="display: block; margin: 0 auto"
+                  />
+                </template>
+              </PrimeSelect>
             </div>
             <Button
               size="small"
-              class="text-xs text-uppercase"
+              class="text-xs"
               :variant="track.muted ? undefined : 'outlined'"
               :severity="track.muted ? 'danger' : 'secondary'"
               @click="$emit('setTrackMuted', index, !track.muted)"
             >
-              {{ t('mute')[0] }}
+              <IconVolumeOff :size="16" class="-m-2" />
             </Button>
             <Button
               size="small"
-              class="text-xs text-uppercase"
+              class="text-xs"
               :variant="leadTrack.includes(index) ? undefined : 'outlined'"
               :severity="leadTrack.includes(index) ? 'info' : 'secondary'"
               @click="$emit('setTrackLead', index)"
             >
-              {{ t('lead')[0] }}
+              <IconMicrophone2 :size="16" class="-m-2" />
             </Button>
             <Button
               size="small"
-              class="text-xs text-uppercase"
+              class="text-xs"
               :variant="track.solo ? undefined : 'outlined'"
               :severity="track.solo ? 'success' : 'secondary'"
               @click="$emit('setTrackSolo', index, !track.solo)"
             >
-              {{ t('solo')[0] }}
+              <IconHeadphones :size="16" class="-m-2" />
             </Button>
           </div>
         </div>
@@ -246,8 +259,15 @@ import PrimeMenu from 'primevue/menu'
 import PrimeToggleSwitch from 'primevue/toggleswitch'
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { IconHeartbeat, IconDotsVertical } from '@tabler/icons-vue'
+import {
+  IconHeartbeat,
+  IconDotsVertical,
+  IconVolumeOff,
+  IconMicrophone2,
+  IconHeadphones,
+} from '@tabler/icons-vue'
 import { instrumentList } from '../constants/instruments.js'
+import InstrumentIcon from './icons/InstrumentIcon.vue'
 
 const PREFERRED_INSTRUMENT_KEY = 'midivox:preferred-instrument'
 const COMPACT_MODE_KEY = 'midivox:compact-mode'
@@ -348,7 +368,14 @@ function applyInstrument() {
   }
 }
 
-.compact-actions .p-button {
-  max-width: 2rem;
+.compact-actions {
+  .p-select {
+    height: 1.75rem;
+    width: 4.25rem;
+  }
+  .p-button {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
 }
 </style>

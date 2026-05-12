@@ -43,6 +43,9 @@
   "tempo": "Tempo",
   "tracks": "Spor",
   "tracks_empty": "Ingen spor indlæst",
+  "empty_state_pick_or_upload": "Vælg eller upload musik",
+  "empty_state_volume": "Juster lydstyrken for hver stemme (eller brug dæmp/lead/solo-knapperne)",
+  "empty_state_press_play": "Tryk Afspil",
   "upload": "Upload",
   "volume": "Lydstyrke"
 }

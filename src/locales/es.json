@@ -43,6 +43,9 @@
   "tempo": "Tempo",
   "tracks": "Pistas",
   "tracks_empty": "Ninguna pista cargada",
+  "empty_state_pick_or_upload": "Elige o sube música",
+  "empty_state_volume": "Cambia el volumen de cada voz (o usa los botones silenciar/principal/solo)",
+  "empty_state_press_play": "Presiona Reproducir",
   "upload": "Subir",
   "volume": "Volumen"
 }

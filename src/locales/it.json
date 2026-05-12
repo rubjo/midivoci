@@ -43,6 +43,9 @@
   "tempo": "Tempo",
   "tracks": "Tracce",
   "tracks_empty": "Nessuna traccia caricata",
+  "empty_state_pick_or_upload": "Scegli o carica musica",
+  "empty_state_volume": "Cambia il volume per ogni voce (o usa i pulsanti muto/principale/solo)",
+  "empty_state_press_play": "Premi Riproduci",
   "upload": "Carica",
   "volume": "Volume"
 }

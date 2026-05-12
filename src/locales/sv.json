@@ -43,6 +43,9 @@
   "tempo": "Tempo",
   "tracks": "Spår",
   "tracks_empty": "Inga spår laddade",
+  "empty_state_pick_or_upload": "Välj eller ladda upp musik",
+  "empty_state_volume": "Ändra volymen för varje stämma (eller använd tysta/lead/solo-knapparna)",
+  "empty_state_press_play": "Tryck Spela",
   "upload": "Ladda upp",
   "volume": "Volym"
 }

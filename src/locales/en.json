@@ -43,6 +43,9 @@
   "tempo": "Tempo",
   "tracks": "Tracks",
   "tracks_empty": "No tracks loaded",
+  "empty_state_pick_or_upload": "Pick or upload music",
+  "empty_state_volume": "Change the volume level for any voice/part (or use the mute/lead/solo buttons)",
+  "empty_state_press_play": "Press Play",
   "upload": "Upload",
   "volume": "Volume"
 }

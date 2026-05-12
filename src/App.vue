@@ -209,6 +209,23 @@
         </PrimeInputGroup>
       </section>
 
+      <div
+        v-if="!isLoaded"
+        class="empty-state flex flex-column align-items-center justify-content-center"
+      >
+        <IconHelp
+          v-if="!showHelp"
+          :size="64"
+          class="empty-state-icon cursor-pointer"
+          @click="showHelp = true"
+        />
+        <div v-else class="empty-state-inner">
+          <div class="empty-state-step">1. {{ t('empty_state_pick_or_upload') }}</div>
+          <div class="empty-state-step">2. {{ t('empty_state_volume') }}</div>
+          <div class="empty-state-step">3. {{ t('empty_state_press_play') }}</div>
+        </div>
+      </div>
+
       <TransportControls
         v-if="isLoaded"
         :is-loaded="isLoaded"
@@ -255,7 +272,14 @@
 <script setup>
 import { ref, getCurrentInstance, computed, nextTick, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { IconSun, IconMoon, IconLanguage, IconInfoCircle, IconUpload } from '@tabler/icons-vue'
+import {
+  IconSun,
+  IconMoon,
+  IconLanguage,
+  IconInfoCircle,
+  IconUpload,
+  IconHelp,
+} from '@tabler/icons-vue'
 import { nb_NO } from 'primelocale/js/nb_NO.js'
 import { en } from 'primelocale/js/en.js'
 import { de } from 'primelocale/js/de.js'
@@ -368,6 +392,7 @@ function toggleTheme() {
 
 const showNoteIndicators = ref(false)
 const infoDialogVisible = ref(false)
+const showHelp = ref(false)
 
 const libraries = [
   { name: '@tonejs/midi', url: 'https://github.com/Tonejs/Midi' },
@@ -503,5 +528,30 @@ function searchFiles(event) {
 
 .info-dialog-donate {
   text-align: center;
+}
+
+.empty-state {
+  min-height: 30vh;
+  padding: 2rem;
+}
+
+.empty-state-icon {
+  color: var(--p-text-muted-color);
+  opacity: 0.25;
+  transition: opacity 0.25s;
+}
+
+.empty-state-icon:hover {
+  opacity: 0.75;
+}
+
+.empty-state-inner {
+  width: min(80vw, 480px);
+}
+
+.empty-state-step {
+  font-size: 1.5rem;
+  line-height: 1.5;
+  margin: 1rem 0;
 }
 </style>

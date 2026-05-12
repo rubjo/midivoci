@@ -25,6 +25,8 @@
   --btn-border: #36465a;
   --btn-hover: #2e3e52;
   --p-form-field-background: var(--btn-bg) !important;
+  --p-slider-handle-content-background: #d8dee9;
+  --p-slider-handle-content-hover-background: #ffffff;
 }
 
 [data-theme='dark'] .note {
@@ -48,7 +50,11 @@ body {
   background: var(--bg-page);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
-  transition: all 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s,
+    fill 0.2s;
   line-height: 1;
 }
 

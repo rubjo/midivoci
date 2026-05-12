@@ -43,6 +43,9 @@
   "tempo": "Tempo",
   "tracks": "Raidat",
   "tracks_empty": "Ei raitoja ladattu",
+  "empty_state_pick_or_upload": "Valitse tai lataa musiikki",
+  "empty_state_volume": "Säädä äänenvoimakkuutta kullekin äänelle (tai käytä mykistä/johtava/soolo-painikkeita)",
+  "empty_state_press_play": "Paina Toista",
   "upload": "Lataa",
   "volume": "Äänenvoimakkuus"
 }

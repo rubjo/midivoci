@@ -43,6 +43,9 @@
   "tempo": "Tempo",
   "tracks": "Spor",
   "tracks_empty": "Ingen spor lastet",
+  "empty_state_pick_or_upload": "Velg eller last opp musikk",
+  "empty_state_volume": "Juster volumet for hver stemme (eller bruk demp/led/solo-knappene)",
+  "empty_state_press_play": "Trykk Spill",
   "upload": "Last opp",
   "volume": "Volum"
 }
