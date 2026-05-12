@@ -84,6 +84,16 @@ body {
   }
 }
 
+.p-autocomplete-overlay {
+  max-width: 90vw;
+}
+
+.p-autocomplete-overlay .p-autocomplete-option {
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
 .p-autocomplete-list {
   padding: 0 !important;
 }
