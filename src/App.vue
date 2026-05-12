@@ -218,6 +218,7 @@
           :size="64"
           class="empty-state-icon cursor-pointer"
           @click="showHelp = true"
+          style="stroke-width: 0.08rem"
         />
         <div v-else class="empty-state-inner">
           <div class="empty-state-step">1. {{ t('empty_state_pick_or_upload') }}</div>
