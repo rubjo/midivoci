@@ -12,6 +12,7 @@
   "bpm": "BPM",
   "bulk_actions": "Bulk actions",
   "cancel": "Cancel",
+  "close": "Close",
   "collapse": "Collapse",
   "compact_mode_off": "Disable compact mode",
   "compact_mode_on": "Enable compact mode",
@@ -36,8 +37,10 @@
   "piano_roll_empty": "Load a MIDI file to see the piano roll",
   "play": "Play",
   "preferred_instrument": "Preferred instrument",
+  "reset": "Reset",
   "reset_tempo": "Reset tempo",
   "searchForComposerOrWork": "Search for composer or work",
+  "semitones": "semitones",
   "set_instrument_all": "Set instrument for all tracks",
   "set_preferred_instrument": "Set preferred instrument",
   "set_volume_all": "Set volume for all tracks",
@@ -49,6 +52,7 @@
   "tempo": "Tempo",
   "tracks": "Tracks",
   "tracks_empty": "No tracks loaded",
+  "transpose": "Transpose",
   "upload": "Upload",
   "volume": "Volume"
 }

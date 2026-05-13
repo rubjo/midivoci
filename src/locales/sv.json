@@ -12,6 +12,7 @@
   "bpm": "BPM",
   "bulk_actions": "Massåtgärder",
   "cancel": "Avbryt",
+  "close": "Stäng",
   "collapse": "Dölj",
   "compact_mode_off": "Inaktivera kompakt läge",
   "compact_mode_on": "Aktivera kompakt läge",
@@ -36,8 +37,10 @@
   "piano_roll_empty": "Ladda en MIDI-fil för att se pianorullen",
   "play": "Spela",
   "preferred_instrument": "Föredraget instrument",
+  "reset": "Återställ",
   "reset_tempo": "Återställ tempo",
   "searchForComposerOrWork": "Sök efter kompositör eller verk",
+  "semitones": "halvtoner",
   "set_instrument_all": "Ställ in instrument för alla spår",
   "set_preferred_instrument": "Ställ in föredraget instrument",
   "set_volume_all": "Ställ in volym för alla spår",
@@ -49,6 +52,7 @@
   "tempo": "Tempo",
   "tracks": "Spår",
   "tracks_empty": "Inga spår laddade",
+  "transpose": "Transponera",
   "upload": "Ladda upp",
   "volume": "Volym"
 }

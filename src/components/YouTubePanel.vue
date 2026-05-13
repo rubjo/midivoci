@@ -11,7 +11,7 @@
         size="small"
         variant="text"
         :title="expanded ? t('collapse') : t('expand')"
-        @click="expanded = !expanded"
+        @click="toggleExpanded"
       >
         <IconChevronDown :size="16" class="chevron" :class="{ expanded: expanded }" />
       </Button>
@@ -39,11 +39,18 @@ import Button from 'primevue/button'
 
 const { t } = useI18n()
 
+const EXPANDED_KEY = 'midivox:youtube-panel-expanded'
+
 const props = defineProps({
   youtubeUrl: { type: String, default: '' },
 })
 
-const expanded = ref(true)
+const expanded = ref(localStorage.getItem(EXPANDED_KEY) !== 'false')
+
+function toggleExpanded() {
+  expanded.value = !expanded.value
+  localStorage.setItem(EXPANDED_KEY, String(expanded.value))
+}
 
 const embedUrl = computed(() => {
   if (!props.youtubeUrl) return ''

@@ -12,6 +12,7 @@
   "bpm": "BPM",
   "bulk_actions": "Massehandlinger",
   "cancel": "Avbryt",
+  "close": "Lukk",
   "collapse": "Skjul",
   "compact_mode_off": "Slå av kompakt visning",
   "compact_mode_on": "Slå på kompakt visning",
@@ -36,8 +37,10 @@
   "piano_roll_empty": "Last en MIDI-fil for å se pianorullen",
   "play": "Spill",
   "preferred_instrument": "Foretrukket instrument",
+  "reset": "Tilbakestill",
   "reset_tempo": "Tilbakestill tempo",
   "searchForComposerOrWork": "Søk etter komponist eller verk",
+  "semitones": "halvtoner",
   "set_instrument_all": "Sett instrument for alle spor",
   "set_preferred_instrument": "Sett foretrukket instrument",
   "set_volume_all": "Sett volum for alle spor",
@@ -49,6 +52,7 @@
   "tempo": "Tempo",
   "tracks": "Spor",
   "tracks_empty": "Ingen spor lastet",
+  "transpose": "Transponer",
   "upload": "Last opp",
   "volume": "Volum"
 }

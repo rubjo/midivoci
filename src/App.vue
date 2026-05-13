@@ -150,15 +150,12 @@
             </template>
             <template #optiongroup="slotProps">
               <div class="midi-group-header flex align-items-center w-full">
-                <div class="flex align-items-center gap-2 flex-wrap flex-1 min-w-0">
-                  <span class="font-medium">{{
-                    slotProps.option.composerMeta?.name || slotProps.option.label
-                  }}</span>
+                <div class="flex align-items-center gap-2 flex-wrap flex-1 min-w-0 text-sm">
+                  <span>{{ slotProps.option.composerMeta?.name || slotProps.option.label }}</span>
                   <span
                     v-if="
                       slotProps.option.composerMeta?.born || slotProps.option.composerMeta?.died
                     "
-                    class="text-sm"
                   >
                     ({{ slotProps.option.composerMeta?.born || '?' }}–{{
                       slotProps.option.composerMeta?.died || '?'
@@ -179,21 +176,21 @@
             </template>
             <template #option="slotProps">
               <div class="midi-option pl-3">
-                <div class="midi-option-main flex flex-column gap-2">
+                <div class="midi-option-main flex flex-column gap-1">
                   <span class="midi-option-name font-semibold">{{ slotProps.option.label }}</span>
                   <div class="flex gap-2">
-                    <Tag severity="secondary" class="text-xs font-normal font-mono track-info">
+                    <Tag severity="secondary" class="text-xs font-mono track-info">
                       <IconClock :size="12" class="mr-1" />
                       {{ formatDuration(slotProps.option.duration) }}
                     </Tag>
-                    <Tag severity="secondary" class="text-xs font-normal font-mono track-info">
+                    <Tag severity="secondary" class="text-xs font-mono track-info">
                       <IconUsers :size="12" class="mr-1" />
                       {{ slotProps.option.numTracks }} {{ t('parts').toLowerCase() }}
                     </Tag>
                     <Tag
                       v-if="slotProps.option.youtube"
                       severity="info"
-                      class="text-xs font-normal font-mono track-info"
+                      class="text-xs font-mono track-info"
                     >
                       <IconDeviceTv :size="12" class="mr-1" />
                       {{ t('live_performance_video') }}
@@ -246,10 +243,12 @@
         :original-bpm="originalBpm"
         :current-time="currentTime"
         :duration="duration"
+        :transpose="transpose"
         @toggle-play="togglePlay"
         @stop="stop"
         @set-tempo="setTempo"
         @seek="seek"
+        @set-transpose="setTranspose"
       />
 
       <ScoreView
@@ -464,6 +463,8 @@ const {
   activeTracks,
   leadTrack,
   currentFileMeta,
+  transpose,
+  setTranspose,
   handleFileSelect,
   handleUpload,
   togglePlay,

@@ -72,23 +72,74 @@
       >
         {{ originalBpm ? Math.round((bpm / originalBpm) * 100) + '%' : Math.round(bpm) }}
       </span>
+      <Button
+        :disabled="!isLoaded"
+        size="small"
+        class="flex-shrink-0"
+        :title="t('transpose')"
+        :aria-label="t('transpose')"
+        @click="transposeDialogVisible = true"
+        :severity="transpose ? 'danger' : undefined"
+      >
+        <IconArrowsTransferUpDown :size="16" />
+      </Button>
     </div>
   </div>
+
+  <PrimeDialog
+    v-model:visible="transposeDialogVisible"
+    :header="t('transpose')"
+    :modal="true"
+    :draggable="false"
+    :style="{ width: '300px' }"
+    class="transpose-dialog"
+  >
+    <div class="flex flex-column gap-4 p-2">
+      <PrimeSlider
+        :min="-12"
+        :max="12"
+        :step="1"
+        class="w-full"
+        :model-value="transpose"
+        @update:model-value="$emit('setTranspose', $event)"
+      />
+      <div class="text-center">
+        {{ transposeLabel }}
+      </div>
+    </div>
+    <template #footer>
+      <div class="flex gap-2 justify-content-center">
+        <Button
+          severity="secondary"
+          variant="outlined"
+          @click="emit('setTranspose', 0)"
+          :disabled="!transpose"
+        >
+          {{ t('reset') }}
+        </Button>
+        <Button severity="secondary" variant="outlined" @click="transposeDialogVisible = false">
+          {{ t('close') }}
+        </Button>
+      </div>
+    </template>
+  </PrimeDialog>
 </template>
 
 <script setup>
 import { useI18n } from 'vue-i18n'
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import {
   IconPlayerPlayFilled,
   IconPlayerPauseFilled,
   IconPlayerStopFilled,
   IconRewindBackward10,
   IconRewindForward10,
+  IconArrowsTransferUpDown,
 } from '@tabler/icons-vue'
 
 import Button from 'primevue/button'
 import PrimeSlider from 'primevue/slider'
+import PrimeDialog from 'primevue/dialog'
 
 const { t } = useI18n()
 
@@ -99,13 +150,22 @@ const props = defineProps({
   originalBpm: Number,
   currentTime: Number,
   duration: Number,
+  transpose: { type: Number, default: 0 },
 })
 
-const emit = defineEmits(['togglePlay', 'stop', 'setTempo', 'seek'])
+const emit = defineEmits(['togglePlay', 'stop', 'setTempo', 'seek', 'setTranspose'])
+
+const transposeDialogVisible = ref(false)
 
 const canReset = computed(
   () => props.originalBpm && Math.round(props.bpm) !== Math.round(props.originalBpm),
 )
+
+const transposeLabel = computed(() => {
+  const v = props.transpose
+  const prefix = v > 0 ? '+' : ''
+  return `${prefix}${v} ${t('semitones')}`
+})
 
 function resetTempo() {
   if (canReset.value) emit('setTempo', props.originalBpm)

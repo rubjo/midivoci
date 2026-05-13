@@ -12,6 +12,7 @@
   "bpm": "BPM",
   "bulk_actions": "Joukkotoiminnot",
   "cancel": "Peruuta",
+  "close": "Sulje",
   "collapse": "Piilota",
   "compact_mode_off": "Poista kompakti tila käytöstä",
   "compact_mode_on": "Ota kompakti tila käyttöön",
@@ -36,8 +37,10 @@
   "piano_roll_empty": "Lataa MIDI-tiedosto nähdäksesi pianorullan",
   "play": "Toista",
   "preferred_instrument": "Ensisijainen soitin",
+  "reset": "Palauta",
   "reset_tempo": "Palauta tempo",
   "searchForComposerOrWork": "Etsi säveltäjää tai teosta",
+  "semitones": "puolisävelaskelta",
   "set_instrument_all": "Aseta soitin kaikille raidoille",
   "set_preferred_instrument": "Aseta ensisijainen soitin",
   "set_volume_all": "Aseta äänenvoimakkuus kaikille raidoille",
@@ -49,6 +52,7 @@
   "tempo": "Tempo",
   "tracks": "Raidat",
   "tracks_empty": "Ei raitoja ladattu",
+  "transpose": "Transponoi",
   "upload": "Lataa",
   "volume": "Äänenvoimakkuus"
 }

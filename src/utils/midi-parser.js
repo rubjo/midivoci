@@ -13,6 +13,7 @@ export function parseMidiFile(buffer) {
       allNotes.push({
         trackIndex: ti,
         name: n.name,
+        midi: n.midi,
         time: n.time,
         duration: n.duration,
         velocity: n.velocity,
@@ -61,7 +62,7 @@ export function parseMidiFile(buffer) {
   }
 }
 
-export function generateVisualizerBlob(midi, tracks) {
+export function generateVisualizerBlob(midi, tracks, transposeOffset = 0) {
   const clone = midi.clone()
   const anySolo = tracks.some((t) => t.solo)
 
@@ -73,6 +74,9 @@ export function generateVisualizerBlob(midi, tracks) {
       clone.tracks[i].addProgramChange(0, i)
     } catch {}
     clone.tracks[i].notes.forEach((n) => {
+      if (transposeOffset) {
+        n.midi = Math.max(0, Math.min(127, n.midi + transposeOffset))
+      }
       n.velocity = shouldDim ? 10 : Math.max(1, Math.round((n.velocity * state.volume) / 100))
     })
   })

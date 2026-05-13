@@ -12,6 +12,7 @@
   "bpm": "BPM",
   "bulk_actions": "Azioni multiple",
   "cancel": "Annulla",
+  "close": "Chiudi",
   "collapse": "Comprimi",
   "compact_mode_off": "Disattiva modalità compatta",
   "compact_mode_on": "Attiva modalità compatta",
@@ -36,8 +37,10 @@
   "piano_roll_empty": "Carica un file MIDI per vedere il rullo del pianoforte",
   "play": "Riproduci",
   "preferred_instrument": "Strumento preferito",
+  "reset": "Reimposta",
   "reset_tempo": "Reimposta tempo",
   "searchForComposerOrWork": "Cerca compositore o opera",
+  "semitones": "semitoni",
   "set_instrument_all": "Imposta strumento per tutte le tracce",
   "set_preferred_instrument": "Imposta strumento preferito",
   "set_volume_all": "Imposta volume per tutte le tracce",
@@ -49,6 +52,7 @@
   "tempo": "Tempo",
   "tracks": "Tracce",
   "tracks_empty": "Nessuna traccia caricata",
+  "transpose": "Trasponi",
   "upload": "Carica",
   "volume": "Volume"
 }

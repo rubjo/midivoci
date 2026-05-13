@@ -28,6 +28,7 @@ export function useMidiPlayer() {
   const activeTracks = ref(new Map())
   const leadTrack = ref([])
   const currentFileMeta = ref(null)
+  const transpose = ref(0)
 
   let audioCtx = null
   let masterGain = null
@@ -109,6 +110,19 @@ export function useMidiPlayer() {
     return lo
   }
 
+  const NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+
+  function noteNameFromMidi(midi) {
+    const clamped = Math.max(0, Math.min(127, Math.round(midi)))
+    const octave = Math.floor(clamped / 12) - 1
+    return NOTE_NAMES[clamped % 12] + octave
+  }
+
+  function getTransposedName(n) {
+    if (!transpose.value) return n.name
+    return noteNameFromMidi(n.midi + transpose.value)
+  }
+
   function computeActiveTracks(time) {
     const active = new Map()
     const anySolo = tracks.value.some((t) => t.solo)
@@ -124,7 +138,7 @@ export function useMidiPlayer() {
       if (anySolo && !tracks.value[n.trackIndex]?.solo) continue
       if (tracks.value[n.trackIndex]?.muted) continue
       if (!active.has(n.trackIndex)) {
-        active.set(n.trackIndex, n.name)
+        active.set(n.trackIndex, getTransposedName(n))
       }
     }
     return active
@@ -148,7 +162,7 @@ export function useMidiPlayer() {
             // If the note was supposed to play in the past (e.g. start of song),
             // schedule it for 'now' to avoid skipping it, but keep the duration relative.
             const scheduledTime = Math.max(now, absTime)
-            inst.play(n.name, scheduledTime, { duration: n.duration * ratio, gain: 1 })
+            inst.play(getTransposedName(n), scheduledTime, { duration: n.duration * ratio, gain: 1 })
           } catch {}
         }
       }
@@ -181,7 +195,7 @@ export function useMidiPlayer() {
       if (absTime > now + LOOKAHEAD) break
       if (!shouldPlayTrack(index)) continue
       try {
-        inst.play(n.name, absTime, { duration: n.duration * ratio, gain: 1 })
+        inst.play(getTransposedName(n), absTime, { duration: n.duration * ratio, gain: 1 })
       } catch {}
     }
   }
@@ -200,7 +214,7 @@ export function useMidiPlayer() {
       URL.revokeObjectURL(visualizerUrl.value)
       visualizerUrl.value = ''
     }
-    const blob = generateVisualizerBlob(midi, tracks.value)
+    const blob = generateVisualizerBlob(midi, tracks.value, transpose.value)
     visualizerUrl.value = URL.createObjectURL(blob)
   }
 
@@ -383,6 +397,14 @@ export function useMidiPlayer() {
     }
   }
 
+  function setTranspose(val) {
+    const clamped = Math.max(-12, Math.min(12, Math.round(val)))
+    if (clamped === transpose.value) return
+    transpose.value = clamped
+    if (playing) stop()
+    refreshVisualizerBlob()
+  }
+
   function setTrackVolume(index, value) {
     const vol = parseInt(value, 10)
     if (tracks.value[index]) tracks.value[index].volume = vol
@@ -522,6 +544,7 @@ export function useMidiPlayer() {
     activeTracks.value = new Map()
     leadTrack.value = []
     currentFileMeta.value = null
+    transpose.value = 0
     if (visualizerUrl.value) {
       URL.revokeObjectURL(visualizerUrl.value)
       visualizerUrl.value = ''
@@ -590,6 +613,8 @@ export function useMidiPlayer() {
     activeTracks,
     leadTrack,
     currentFileMeta,
+    transpose,
+    setTranspose,
     handleFileSelect,
     handleUpload,
     togglePlay,
