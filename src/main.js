@@ -18,7 +18,7 @@ import fi from './locales/fi.json'
 
 const urlParams = new URLSearchParams(window.location.search)
 const langParam = urlParams.get('lang')
-const savedLocale = langParam || localStorage.getItem('locale') || 'en'
+const savedLocale = langParam || localStorage.getItem('midivox:locale') || 'en'
 
 const i18n = createI18n({
   legacy: false,

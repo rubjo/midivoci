@@ -1,6 +1,7 @@
 import { fileURLToPath, URL } from 'node:url'
 import { readdirSync, readFileSync, existsSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { unzipSync, strFromU8 } from 'fflate'
 
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
@@ -19,54 +20,95 @@ function midiFilePlugin() {
       const res = resolve(dir, dirent.name)
       if (dirent.isDirectory()) {
         results = results.concat(walk(res))
-      } else if (dirent.name.endsWith('.mid')) {
+      } else if (dirent.name.endsWith('.mid') || dirent.name.endsWith('.mxl')) {
         results.push(res)
       }
     }
     return results
   }
 
-  function computeList(midiDir) {
-    if (!existsSync(midiDir)) return []
+  function computeList(musicDir) {
+    if (!existsSync(musicDir)) return []
 
-    const files = walk(midiDir)
+    const files = walk(musicDir)
 
     const fileData = files.map((fullPath) => {
       const buf = readFileSync(fullPath)
       const fileName = resolve(fullPath, '')
-        .replace(midiDir + '/', '')
+        .replace(musicDir + '/', '')
         .replace(/^\\/, '')
-      let name = fileName.replace(/\.mid$/, '')
+      const isMxl = fileName.endsWith('.mxl')
+      let name = fileName.replace(/\.(mid|mxl)$/, '')
       let composer = ''
       let numTracks = 0
       let duration = 0
 
-      try {
-        const midi = new Midi(new Uint8Array(buf))
-        numTracks = midi.tracks.filter((t) => t.notes.length > 0).length
-        duration = midi.duration
-        if (midi.header.name) name = midi.header.name
-        if (midi.header.copyright) {
-          const m = midi.header.copyright.match(/[©(c)]\s*\d{4}\s*(.+)/i)
-          if (m) composer = m[1].trim()
-        }
-        if (!composer) {
-          const dirName = fileName.split('/')[0]
-          if (dirName) composer = dirName
-        }
-        const fnMatch = fileName.match(/^(.+?)\s*-\s*(.+?)\.mid$/)
+      if (isMxl) {
+        const dirName = fileName.split('/')[0]
+        if (dirName) composer = dirName
+        const fnMatch = fileName.match(/^(.+?)\s*-\s*(.+?)\.mxl$/)
         if (fnMatch) {
           if (!composer) composer = fnMatch[1].trim()
-          if (name === fileName.replace(/\.mid$/, '')) name = fnMatch[2].trim()
+          if (name === fileName) name = fnMatch[2].trim()
         }
-      } catch (e) {
-        // fallback handled by initial name value
+        // Parse MXL (ZIP) for part count and approximate duration
+        try {
+          const zip = unzipSync(new Uint8Array(buf))
+          const container = zip['META-INF/container.xml']
+          let xmlText = ''
+          if (container) {
+            const cStr = strFromU8(container)
+            const rMatch = cStr.match(/full-path\s*=\s*"([^"]+)"/)
+            if (rMatch && zip[rMatch[1]]) xmlText = strFromU8(zip[rMatch[1]])
+          }
+          if (!xmlText) {
+            for (const key of Object.keys(zip)) {
+              if (/\.musicxml$/i.test(key) || (/\.xml$/i.test(key) && key !== 'META-INF/container.xml')) {
+                xmlText = strFromU8(zip[key])
+                break
+              }
+            }
+          }
+          if (xmlText) {
+            const partCount = xmlText.match(/<score-part\b/g)
+            if (partCount) numTracks = partCount.length
+            const dMatch = xmlText.match(/<divisions>(\d+)<\/divisions>/)
+            const divisions = dMatch ? parseInt(dMatch[1]) : 1
+            const durs = [...xmlText.matchAll(/<duration>(\d+)<\/duration>/g)]
+            const totalDur = durs.reduce((s, m) => s + parseInt(m[1]), 0)
+            if (divisions > 0) duration = (totalDur / divisions) * 0.5
+          }
+        } catch (e) {
+          // leave defaults (0)
+        }
+      } else {
+        try {
+          const midi = new Midi(new Uint8Array(buf))
+          numTracks = midi.tracks.filter((t) => t.notes.length > 0).length
+          duration = midi.duration
+          if (midi.header.name) name = midi.header.name
+          if (midi.header.copyright) {
+            const m = midi.header.copyright.match(/[©(c)]\s*\d{4}\s*(.+)/i)
+            if (m) composer = m[1].trim()
+          }
+          if (!composer) {
+            const dirName = fileName.split('/')[0]
+            if (dirName) composer = dirName
+          }
+          const fnMatch = fileName.match(/^(.+?)\s*-\s*(.+?)\.mid$/)
+          if (fnMatch) {
+            if (!composer) composer = fnMatch[1].trim()
+            if (name === fileName.replace(/\.mid$/, '')) name = fnMatch[2].trim()
+          }
+        } catch (e) {
+          // fallback handled by initial name value
+        }
       }
 
       const naturalDisplay = name.replace(/_/g, ' ').replace(/-/g, ' ')
 
       let meta = null
-      const mdPath = fullPath.replace(/\.mid$/, '.md')
+      const mdPath = fullPath.replace(/\.(mid|mxl)$/, '.md')
       if (existsSync(mdPath)) {
         const content = readFileSync(mdPath, 'utf-8')
         meta = {}
@@ -76,10 +118,10 @@ function midiFilePlugin() {
         }
       }
 
-      const pdfPath = fullPath.replace(/\.mid$/, '.pdf')
+      const pdfPath = fullPath.replace(/\.(mid|mxl)$/, '.pdf')
       const hasPdf = existsSync(pdfPath)
 
-      return { fileName, name, composer, naturalDisplay, numTracks, duration, meta, hasPdf }
+      return { fileName, name, composer, naturalDisplay, numTracks, duration, meta, hasPdf, format: isMxl ? 'musicxml' : 'midi' }
     })
 
     const titleCounts = {}
@@ -90,7 +132,7 @@ function midiFilePlugin() {
     const composerMetaMap = {}
     const composerDirs = [...new Set(fileData.map((f) => f.fileName.split('/')[0]))]
     for (const dir of composerDirs) {
-      const aboutPath = resolve(midiDir, dir, 'ABOUT.md')
+      const aboutPath = resolve(musicDir, dir, 'ABOUT.md')
       if (existsSync(aboutPath)) {
         const content = readFileSync(aboutPath, 'utf-8')
         const meta = {}
@@ -108,7 +150,7 @@ function midiFilePlugin() {
         const baseName = f.fileName
           .split('/')
           .pop()
-          .replace(/\.mid$/, '')
+          .replace(/\.(mid|mxl)$/, '')
         display = `${display} (${baseName})`
       }
       return {
@@ -121,6 +163,7 @@ function midiFilePlugin() {
         meta: f.meta,
         hasPdf: f.hasPdf,
         composerRef: f.fileName.split('/')[0],
+        format: f.format,
       }
     })
     return { composers: composerMetaMap, files: expandedList }
@@ -130,7 +173,7 @@ function midiFilePlugin() {
     name: 'midi-file-plugin',
     buildStart() {
       const PUBLIC_DIR = resolve(fileURLToPath(new URL('.', import.meta.url)), 'public')
-      fileList = computeList(resolve(PUBLIC_DIR, 'midi'))
+      fileList = computeList(resolve(PUBLIC_DIR, 'music'))
     },
     resolveId(id) {
       if (id === VIRTUAL_MODULE) return VIRTUAL_MODULE
@@ -150,7 +193,7 @@ function normalize(raw) {
 if (import.meta.env.DEV) {
   data.value = normalize(${JSON.stringify(fileList)})
 } else {
-  const base = (import.meta.env.BASE_URL || '/') + 'midi/midi-files.json'
+  const base = (import.meta.env.BASE_URL || '/') + 'music/midi-files.json'
   fetch(base).then(function(r) { return r.json() }).then(function(d) { data.value = normalize(d) })
 }
 export const midiFileList = data
@@ -160,7 +203,7 @@ export default data
     generateBundle() {
       this.emitFile({
         type: 'asset',
-        fileName: 'midi/midi-files.json',
+        fileName: 'music/midi-files.json',
         source: JSON.stringify(fileList),
       })
     },

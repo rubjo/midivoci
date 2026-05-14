@@ -12,7 +12,7 @@ import {
 
 export const midiFileMeta = midiFileList
 const isTauri = !!import.meta.env.TAURI_ENV_PLATFORM
-const midiBaseUrl = isTauri ? '/midi/' : '/midivox/midi/'
+const musicBaseUrl = isTauri ? '/music/' : '/midivox/music/'
 
 export function useMidiPlayer() {
   const midiUrl = ref('')
@@ -355,8 +355,9 @@ export function useMidiPlayer() {
     playing ? pause() : play()
   }
 
-  function seek(time) {
+  async function seek(time) {
     if (!midi || !isLoaded.value) return
+    await ensureAudio()
     const clamped = Math.max(0, Math.min(time, duration.value))
     currentTime.value = clamped
     const ratio = (midi.header.tempos[0]?.bpm || 120) / bpm.value
@@ -615,7 +616,7 @@ export function useMidiPlayer() {
     if (!item) return
 
     try {
-      await loadMidiFromUrl(midiBaseUrl + file)
+      await loadMidiFromUrl(musicBaseUrl + file)
       const meta = item.meta || {}
       currentFileMeta.value = { ...meta, composer: item.composer, title: item.display }
       currentFileHasPdf.value = !!item.hasPdf
@@ -662,6 +663,7 @@ export function useMidiPlayer() {
     toggleLoop,
     handleFileSelect,
     handleUpload,
+    loadMidiFromBuffer,
     togglePlay,
     stop,
     setTempo,

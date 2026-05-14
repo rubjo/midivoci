@@ -134,7 +134,7 @@
     </header>
 
     <main>
-      <section v-if="!midiUrl">
+      <section v-if="!midiUrl && !musicXmlContent">
         <PrimeInputGroup>
           <PrimeAutocomplete
             ref="autocomplete"
@@ -153,7 +153,6 @@
             :delay="300"
             :loading="!dataLoaded"
             fluid
-            @update:model-value="handleFileSelect"
           >
             <template #header>
               <div class="flex gap-3 p-2 border-bottom-1 surface-border">
@@ -205,13 +204,27 @@
                 <div class="midi-option-main flex flex-column gap-1">
                   <span class="midi-option-name font-semibold">{{ slotProps.option.label }}</span>
                   <div class="flex gap-2 flex-wrap">
-                    <Tag severity="secondary" class="font-mono track-info">
+                    <Tag
+                      v-if="slotProps.option.duration > 0"
+                      severity="secondary"
+                      class="font-mono track-info"
+                    >
                       <IconClock :size="12" />
                       {{ formatDuration(slotProps.option.duration) }}
                     </Tag>
-                    <Tag severity="secondary" class="font-mono track-info">
+                    <Tag
+                      v-if="slotProps.option.numTracks > 0"
+                      severity="secondary"
+                      class="font-mono track-info"
+                    >
                       <IconUsers :size="12" />
                       {{ slotProps.option.numTracks }} {{ t('parts').toLowerCase() }}
+                    </Tag>
+                    <Tag
+                      severity="secondary"
+                      class="font-mono track-info"
+                    >
+                      {{ slotProps.option.format === 'musicxml' ? 'MusicXML' : 'MIDI' }}
                     </Tag>
                     <Tag
                       v-if="slotProps.option.youtube"
@@ -236,7 +249,7 @@
           </PrimeAutocomplete>
           <PrimeFileUpload
             mode="basic"
-            accept=".mid,.midi"
+            accept=".mid,.midi,.musicxml,.xml,.mxl"
             :choose-label="t('orUpload')"
             @select="handleFileUpload"
             class="upload-inputgroup-btn"
@@ -251,7 +264,7 @@
       </section>
 
       <div
-        v-if="!isLoaded"
+        v-if="!isLoaded && !musicXmlContent"
         class="empty-state flex flex-column align-items-center justify-content-center"
       >
         <IconHelp
@@ -320,12 +333,21 @@
       <YouTubePanel v-if="currentFileMeta?.youtube" :youtube-url="currentFileMeta.youtube" />
 
       <PdfPanel v-if="currentFileHasPdf" :pdf-url="currentPdfUrl" />
+
+      <MusicXmlPanel
+        v-if="musicXmlContent"
+        :xml-content="musicXmlContent"
+        :current-time="currentTime"
+        :duration="duration"
+        @seek="seek"
+        @midi-ready="handleMidiReady"
+      />
     </main>
   </div>
 </template>
 
 <script setup>
-import { ref, getCurrentInstance, computed, nextTick, watch, onUnmounted } from 'vue'
+import { ref, getCurrentInstance, computed, nextTick, watch, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   IconSun,
@@ -365,6 +387,8 @@ import TrackList from './components/TrackList.vue'
 import ScoreView from './components/ScoreView.vue'
 import YouTubePanel from './components/YouTubePanel.vue'
 import PdfPanel from './components/PdfPanel.vue'
+import MusicXmlPanel from './components/MusicXmlPanel.vue'
+import { decompressMxl } from './utils/musicxml-utils.js'
 
 const isTauri = !!window.__TAURI__
 
@@ -404,7 +428,7 @@ function setPrimeLocale(localeCode) {
 function setLocale(e) {
   const val = typeof e === 'string' ? e : e.value
   locale.value = val
-  localStorage.setItem('locale', val)
+  localStorage.setItem('midivox:locale', val)
   setPrimeLocale(val)
 }
 
@@ -450,6 +474,7 @@ function clearCurrentTrack() {
   currentFileMeta.value = null
   currentFileHasPdf.value = false
   tracks.value = []
+  musicXmlContent.value = ''
   suggestions.value = filteredGroups.value
   nextTick(() => autocomplete.value?.show())
 }
@@ -466,7 +491,11 @@ watch([filterScore, filterVideo], () => {
   suggestions.value = getFilteredSuggestions(input?.value)
 })
 
-function onOptionSelect() {
+function onOptionSelect(event) {
+  if (event?.value?.value) {
+    autocompleteValue.value = event.value.value
+    onFileSelected(event.value.value)
+  }
   suggestions.value = []
   autocomplete.value?.hide()
   autocompleteGuard = true
@@ -476,21 +505,21 @@ function onOptionSelect() {
   setTimeout(() => document.activeElement?.blur(), 50)
 }
 
-const isFloating = ref(localStorage.getItem('floatControls') === 'true')
+const isFloating = ref(localStorage.getItem('midivox:float-controls') !== 'false')
 
 function toggleFloat() {
   isFloating.value = !isFloating.value
-  localStorage.setItem('floatControls', String(isFloating.value))
+  localStorage.setItem('midivox:float-controls', String(isFloating.value))
 }
 
-const theme = ref(localStorage.getItem('theme') || 'light')
+const theme = ref(localStorage.getItem('midivox:theme') || 'light')
 const isDark = ref(theme.value === 'dark')
 document.documentElement.setAttribute('data-theme', theme.value)
 
 function toggleTheme() {
   isDark.value = !isDark.value
   theme.value = isDark.value ? 'dark' : 'light'
-  localStorage.setItem('theme', theme.value)
+  localStorage.setItem('midivox:theme', theme.value)
   document.documentElement.setAttribute('data-theme', theme.value)
 }
 
@@ -501,6 +530,8 @@ const showHelp = ref(false)
 const libraries = [
   { name: '@tonejs/midi', url: 'https://github.com/Tonejs/Midi' },
   { name: 'html-midi-player', url: 'https://github.com/cifkao/html-midi-player' },
+  { name: 'verovio', url: 'https://www.verovio.org/' },
+  { name: 'fflate', url: 'https://github.com/101arrowz/fflate' },
   { name: 'soundfont-player', url: 'https://github.com/danigb/soundfont-player' },
   { name: 'Tone.js', url: 'https://tonejs.github.io/' },
   { name: 'PrimeVue', url: 'https://primevue.org/' },
@@ -509,6 +540,7 @@ const libraries = [
   { name: '@tabler/icons-vue', url: 'https://tabler.io/icons' },
   { name: 'Vite', url: 'https://vite.dev/' },
   { name: 'Tauri', url: 'https://tauri.app/' },
+  { name: 'musicxml-player', url: 'https://github.com/infojunkie/musicxml-player' },
 ]
 
 const projects = [
@@ -517,15 +549,74 @@ const projects = [
   { name: 'MBench', url: 'https://rubjo.github.io/m-bench/' },
 ]
 
+const musicXmlContent = ref('')
+let pendingMidiFileName = ''
+
 async function handleFileUpload(e) {
   const file = e.files?.[0]
-  if (file) {
+  if (!file) return
+  const isMusicXml = /\.(musicxml|xml|mxl)$/i.test(file.name)
+  if (isMusicXml) {
     try {
-      await handleUpload({ target: { files: [file] } })
+      let text
+      if (/\.mxl$/i.test(file.name)) {
+        const buf = await file.arrayBuffer()
+        text = decompressMxl(buf)
+      } else {
+        text = await file.text()
+      }
+      const fileName = file.name.replace(/\.(musicxml|xml|mxl)$/i, '')
+      pendingMidiFileName = fileName
+      localStorage.setItem('midivox:musicxml-panel-expanded', 'true')
+      musicXmlContent.value = text
     } catch (err) {
-      console.error('File upload failed:', err)
+      console.error('MusicXML upload failed:', err)
     }
+    return
   }
+  try {
+    await handleUpload({ target: { files: [file] } })
+  } catch (err) {
+    console.error('File upload failed:', err)
+  }
+}
+
+function onFileSelected(val) {
+  const item = midiFileMeta.value.find((m) => m.fileName === val)
+  if (!item) return
+  if (item.format === 'musicxml') {
+    loadMusicXmlFile(val, item)
+  } else {
+    handleFileSelect(val)
+  }
+}
+
+async function loadMusicXmlFile(fileName, item) {
+  const isTauri = !!window.__TAURI__
+  const baseUrl = isTauri ? '/music/' : '/midivox/music/'
+  try {
+    const res = await fetch(baseUrl + fileName)
+    const buf = await res.arrayBuffer()
+    const text = decompressMxl(buf)
+    localStorage.setItem('midivox:musicxml-panel-expanded', 'true')
+    musicXmlContent.value = text
+    midiUrl.value = baseUrl + fileName
+    currentFileHasPdf.value = !!item.hasPdf
+    const meta = item.meta || {}
+    currentFileMeta.value = { ...meta, composer: item.composer, title: item.display }
+  } catch (err) {
+    console.error('Failed to load MusicXML file:', fileName, err)
+  }
+}
+
+function handleMidiReady(buffer) {
+  const fileName = pendingMidiFileName
+  pendingMidiFileName = ''
+  const blobUrl = URL.createObjectURL(new Blob([buffer], { type: 'audio/midi' }))
+  if (!currentFileMeta.value) {
+    currentFileMeta.value = { title: fileName, composer: '' }
+  }
+  loadMidiFromBuffer(buffer, blobUrl, currentFileMeta.value)
 }
 
 function formatDuration(seconds) {
@@ -563,6 +654,7 @@ const {
   toggleLoop,
   handleFileSelect,
   handleUpload,
+  loadMidiFromBuffer,
   togglePlay,
   stop,
   setTempo,
@@ -575,6 +667,29 @@ const {
   setTrackSolo,
   setTrackLead,
 } = useMidiPlayer()
+
+function isTyping(el) {
+  const tag = el?.tagName
+  return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || el?.isContentEditable
+}
+
+function handleKeydown(e) {
+  if (!isLoaded.value) return
+  if (isTyping(document.activeElement)) return
+  if (e.key === ' ') {
+    e.preventDefault()
+    togglePlay()
+  } else if (e.key === 'ArrowLeft') {
+    e.preventDefault()
+    seek(Math.max(0, (currentTime.value || 0) - 10))
+  } else if (e.key === 'ArrowRight') {
+    e.preventDefault()
+    seek(Math.min(duration.value || 0, (currentTime.value || 0) + 10))
+  }
+}
+
+onMounted(() => window.addEventListener('keydown', handleKeydown))
+onUnmounted(() => window.removeEventListener('keydown', handleKeydown))
 
 const fileGroups = computed(() => {
   const groupsMap = {}
@@ -594,8 +709,9 @@ const fileGroups = computed(() => {
       value: file.fileName,
       numTracks: file.numTracks,
       duration: file.duration,
+      format: file.format,
       youtube: !!file.meta?.youtube,
-      hasPdf: !!file.hasPdf,
+      hasPdf: !!file.hasPdf || file.format === 'musicxml',
       _display: file.display.toLowerCase(),
       _composer: (file.composer || '').toLowerCase(),
     })
@@ -610,7 +726,7 @@ const fileGroups = computed(() => {
 
 const currentPdfUrl = computed(() => {
   if (!midiUrl.value || !currentFileHasPdf.value) return ''
-  return midiUrl.value.replace(/\.mid$/, '.pdf')
+  return midiUrl.value.replace(/\.(mid|mxl)$/, '.pdf')
 })
 
 const dataLoaded = computed(() => midiFileMeta.value.length > 0)

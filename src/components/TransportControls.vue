@@ -137,6 +137,7 @@
         <div class="settings-section">
           <span class="settings-label">{{ t('transpose') }}</span>
           <div class="settings-slider-row p-2">
+            <Button size="small" :disabled="!isLoaded" @click="$emit('setTranspose', transpose - 1)">−1</Button>
             <PrimeSlider
               :min="-12"
               :max="12"
@@ -145,6 +146,7 @@
               @update:model-value="$emit('setTranspose', $event)"
               class="flex-1"
             />
+            <Button size="small" :disabled="!isLoaded" @click="$emit('setTranspose', transpose + 1)">+1</Button>
           </div>
           <div class="settings-sub-row">
             <span>{{ transposeLabel }}</span>

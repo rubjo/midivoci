@@ -25,7 +25,7 @@
   "compact_mode_off": "Slå av kompakt visning",
   "compact_mode_on": "Slå på kompakt visning",
   "dark_mode": "Mørk modus",
-  "empty_state_pick_or_upload": "Velg eller last opp musikk",
+  "empty_state_pick_or_upload": "Velg eller last opp musikk (MIDI- eller MusicXML-format)",
   "empty_state_press_play": "Trykk Spill",
   "empty_state_volume": "Juster volumet for hver stemme (eller bruk demp/led/solo-knappene)",
   "expand": "Vis",
@@ -40,7 +40,7 @@
   "mute": "Demp",
   "openInNewTab": "Åpne i ny fane",
   "or": "eller",
-  "orUpload": "...eller last opp MIDI-fil",
+  "orUpload": "...eller last opp fil",
   "parts": "stemmer",
   "pause": "Pause",
   "piano_roll": "Pianorull",
@@ -49,6 +49,7 @@
   "preferred_instrument": "Foretrukket instrument",
   "reset": "Tilbakestill",
   "reset_tempo": "Tilbakestill tempo",
+  "musicxml_load_error": "Kunne ikke gjengi MusicXML-fil",
   "score": "Noter",
   "searchForComposerOrWork": "Søk: komponist/verk",
   "semitones": "halvtoner",
@@ -64,7 +65,7 @@
   "tracks": "Spor",
   "tracks_empty": "Ingen spor lastet",
   "transpose": "Transponer",
-  "upload": "Last opp MIDI",
+  "upload": "Last opp",
   "volume": "Volum"
 }
 
