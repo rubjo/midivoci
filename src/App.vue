@@ -239,68 +239,54 @@
         </PrimeInputGroup>
       </section>
 
-      <Transition name="fade" mode="out-in">
-        <div
-          v-if="!isLoaded"
-          key="empty"
-          class="empty-state flex flex-column align-items-center justify-content-center"
-        >
-          <IconHelp
-            v-if="!showHelp"
-            :size="64"
-            class="empty-state-icon cursor-pointer"
-            @click="showHelp = true"
-            style="stroke-width: 0.08rem"
-          />
-          <div v-else class="empty-state-inner">
-            <div class="empty-state-step">1. {{ t('empty_state_pick_or_upload') }}</div>
-            <div class="empty-state-step">2. {{ t('empty_state_volume') }}</div>
-            <div class="empty-state-step">3. {{ t('empty_state_press_play') }}</div>
-          </div>
+      <div
+        v-if="!isLoaded"
+        class="empty-state flex flex-column align-items-center justify-content-center"
+      >
+        <IconHelp
+          v-if="!showHelp"
+          :size="64"
+          class="empty-state-icon cursor-pointer"
+          @click="showHelp = true"
+          style="stroke-width: 0.08rem"
+        />
+        <div v-else class="empty-state-inner">
+          <div class="empty-state-step">1. {{ t('empty_state_pick_or_upload') }}</div>
+          <div class="empty-state-step">2. {{ t('empty_state_volume') }}</div>
+          <div class="empty-state-step">3. {{ t('empty_state_press_play') }}</div>
         </div>
-        <div v-else key="loaded">
-          <div v-if="currentFileMeta?.title" class="flex align-items-center justify-content-between">
-            <div class="text-center flex-1">
-              <h3 class="m-2">{{ currentFileMeta.title }}</h3>
-              <div>{{ currentFileMeta.composer }}</div>
-            </div>
-            <Button
-              variant="text"
-              severity="secondary"
-              :title="t('close')"
-              @click="clearCurrentTrack"
-            >
-              <IconX :size="16" />
-              <span class="hidden md:inline ml-1">{{ t('close') }}</span>
-            </Button>
-          </div>
+      </div>
 
-          <TransportControls
-            :is-loaded="isLoaded"
-            :is-playing="isPlaying"
-            :bpm="bpm"
-            :original-bpm="originalBpm"
-            :current-time="currentTime"
-            :duration="duration"
-            :transpose="transpose"
-            @toggle-play="togglePlay"
-            @stop="stop"
-            @set-tempo="setTempo"
-            @seek="seek"
-            @set-transpose="setTranspose"
-          />
+      <TransportControls
+        v-if="isLoaded"
+        :is-loaded="isLoaded"
+        :is-playing="isPlaying"
+        :bpm="bpm"
+        :original-bpm="originalBpm"
+        :current-time="currentTime"
+        :duration="duration"
+        :transpose="transpose"
+        :title="currentFileMeta?.title"
+        :composer="currentFileMeta?.composer"
+        @toggle-play="togglePlay"
+        @stop="stop"
+        @set-tempo="setTempo"
+        @seek="seek"
+        @set-transpose="setTranspose"
+        @close="clearCurrentTrack"
+      />
 
-          <ScoreView
-            v-if="midiUrl"
-            :midi-url="midiUrl"
-            :visualizer-url="visualizerUrl"
-            :current-time="currentTime"
-            :duration="duration"
-            :tracks="tracks"
-            @seek="seek"
-          />
+      <ScoreView
+        v-if="midiUrl"
+        :midi-url="midiUrl"
+        :visualizer-url="visualizerUrl"
+        :current-time="currentTime"
+        :duration="duration"
+        :tracks="tracks"
+        @seek="seek"
+      />
 
-          <TrackList
+      <TrackList
             v-if="tracks.length > 0"
             :tracks="tracks"
             :active-tracks="activeTracks"
@@ -319,8 +305,6 @@
           <YouTubePanel v-if="currentFileMeta?.youtube" :youtube-url="currentFileMeta.youtube" />
 
           <PdfPanel v-if="currentFileHasPdf" :pdf-url="currentPdfUrl" />
-        </div>
-      </Transition>
     </main>
   </div>
 </template>
@@ -661,15 +645,6 @@ function searchFiles(event) {
 
 :deep(.p-fileupload-basic-content > span:first-of-type) {
   display: none;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s ease;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
 }
 
 .track-info {

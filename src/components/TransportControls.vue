@@ -1,7 +1,24 @@
 <template>
-  <div
-    class="flex flex-wrap align-items-center gap-4 p-3 bg-surface-card border-1 surface-border border-round-lg"
-  >
+  <div class="flex flex-column gap-2">
+    <div v-if="title || composer" class="flex align-items-center justify-content-between">
+      <div>
+        <h3 class="m-0">{{ title }}</h3>
+        <div v-if="composer" class="text-sm text-color-secondary">{{ composer }}</div>
+      </div>
+      <Button
+        variant="text"
+        severity="secondary"
+        :title="t('close')"
+        @click="$emit('close')"
+      >
+        <IconX :size="16" />
+        <span class="hidden md:inline ml-1">{{ t('close') }}</span>
+      </Button>
+    </div>
+
+    <div
+      class="flex flex-wrap align-items-center gap-4 p-3 bg-surface-card border-1 surface-border border-round-lg"
+    >
     <div class="flex gap-1 align-items-center w-full md:w-auto">
       <Button
         :disabled="!isLoaded"
@@ -85,8 +102,9 @@
       </Button>
     </div>
   </div>
+</div>
 
-  <PrimeDialog
+<PrimeDialog
     v-model:visible="transposeDialogVisible"
     :header="t('transpose')"
     :modal="true"
@@ -135,6 +153,7 @@ import {
   IconRewindBackward10,
   IconRewindForward10,
   IconArrowsTransferUpDown,
+  IconX,
 } from '@tabler/icons-vue'
 
 import Button from 'primevue/button'
@@ -151,9 +170,11 @@ const props = defineProps({
   currentTime: Number,
   duration: Number,
   transpose: { type: Number, default: 0 },
+  title: { type: String, default: '' },
+  composer: { type: String, default: '' },
 })
 
-const emit = defineEmits(['togglePlay', 'stop', 'setTempo', 'seek', 'setTranspose'])
+const emit = defineEmits(['togglePlay', 'stop', 'setTempo', 'seek', 'setTranspose', 'close'])
 
 const transposeDialogVisible = ref(false)
 
