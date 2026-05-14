@@ -1,6 +1,6 @@
 {
   "app.created_by": "Lavet af",
-  "app.description": "En MIDI-øveafspiller med klaverrullevisualisering, flersporsstyring og tempojustering.",
+  "app.description": "En MIDI-øveafspiller med klaverrullevisualisering, flersporsstyring, tempojustering og transponering, med visning af noder og video.",
   "app.donations_welcome": "donationer velkomne!",
   "app.libraries": "Tak til",
   "app.midi_credit": "Med tilladelse fra John's MIDI File Choral Music —",

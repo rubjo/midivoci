@@ -1,6 +1,6 @@
 {
   "app.created_by": "Erstellt von",
-  "app.description": "Ein MIDI-Übungsplayer mit Klavierrollenvisualisierung, Mehrspursteuerung und Tempoanpassung.",
+  "app.description": "Ein MIDI-Übungsplayer mit Klavierrollenvisualisierung, Mehrspursteuerung, Tempoanpassung und Transponierung, mit Noten- und Videoanzeige.",
   "app.donations_welcome": "Spenden willkommen!",
   "app.libraries": "Dank an",
   "app.midi_credit": "Mit freundlicher Genehmigung von John's MIDI File Choral Music —",

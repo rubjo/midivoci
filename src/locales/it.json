@@ -1,6 +1,6 @@
 {
   "app.created_by": "Creato da",
-  "app.description": "Un lettore MIDI per prove con visualizzazione a rullo di pianoforte, controlli multitraccia e regolazione del tempo.",
+  "app.description": "Un lettore MIDI per prove con visualizzazione a rullo di pianoforte, controlli multitraccia, regolazione del tempo e trasposizione, con visualizzazione di spartiti e video.",
   "app.donations_welcome": "donazioni benvenute!",
   "app.libraries": "Ringraziamenti",
   "app.midi_credit": "Per gentile concessione di John's MIDI File Choral Music —",

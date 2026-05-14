@@ -1,6 +1,6 @@
 {
   "app.created_by": "Creado por",
-  "app.description": "Un reproductor de ensayos MIDI con visualización de piano roll, controles multipista y ajuste de tempo.",
+  "app.description": "Un reproductor de ensayos MIDI con visualización de piano roll, controles multipista, ajuste de tempo y transposición, con visualización de partituras y video.",
   "app.donations_welcome": "¡donaciones bienvenidas!",
   "app.libraries": "Agradecimientos",
   "app.midi_credit": "Cortesía de John's MIDI File Choral Music —",

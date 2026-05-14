@@ -1,6 +1,6 @@
 {
   "app.created_by": "Luonut",
-  "app.description": "MIDI-harjoitussoitin pianorullan visualisoinnilla, moniraitaohjauksella ja tempon säädöllä.",
+  "app.description": "MIDI-harjoitussoitin pianorullan visualisoinnilla, moniraitaohjauksella, tempon säädöllä ja transponoinnilla, nuotti- ja videonäytöllä.",
   "app.donations_welcome": "lahjoitukset tervetulleita!",
   "app.libraries": "Kiitokset",
   "app.midi_credit": "John's MIDI File Choral Music -sivuston luvalla —",
