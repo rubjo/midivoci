@@ -1,10 +1,14 @@
 <template>
   <div class="overflow-hidden bg-surface-card border-1 surface-border border-round-lg">
-    <div class="panel-header flex align-items-center justify-content-between p-3 border-bottom-1 surface-border">
-      <h3 class="text-sm font-medium text-color-secondary text-uppercase m-0">
+    <div
+      class="panel-header flex align-items-center justify-content-between p-3 border-bottom-1 surface-border"
+      @click="expanded = !expanded"
+    >
+      <h3 class="text-sm font-medium text-color-secondary text-uppercase m-0 flex align-items-center gap-1">
+        <IconPlaylist :size="16" />
         {{ t('tracks') }}
       </h3>
-      <div class="flex align-items-center gap-1">
+      <div class="flex align-items-center gap-1" @click.stop>
         <Button
           :severity="showNoteIndicators ? 'success' : ''"
           size="small"
@@ -276,6 +280,7 @@ import {
   IconMicrophone2,
   IconHeadphones,
   IconChevronDown,
+  IconPlaylist,
 } from '@tabler/icons-vue'
 import { instrumentList } from '../constants/instruments.js'
 import InstrumentIcon from './icons/InstrumentIcon.vue'

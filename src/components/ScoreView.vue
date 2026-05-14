@@ -1,10 +1,14 @@
 <template>
   <div class="bg-surface-card border-1 surface-border border-round-lg overflow-hidden">
-    <div class="panel-header flex align-items-center justify-content-between p-3 border-bottom-1 surface-border">
-      <h3 class="text-sm font-medium text-color-secondary text-uppercase m-0">
+    <div
+      class="panel-header flex align-items-center justify-content-between p-3 border-bottom-1 surface-border"
+      @click="visible = !visible"
+    >
+      <h3 class="text-sm font-medium text-color-secondary text-uppercase m-0 flex align-items-center gap-1">
+        <IconKeyboard :size="16" />
         {{ t('piano_roll') }}
       </h3>
-      <div class="flex align-items-center gap-1">
+      <div class="flex align-items-center gap-1" @click.stop>
         <Button
           v-if="midiUrl"
           size="small"
@@ -44,7 +48,7 @@
 import 'html-midi-player'
 import { ref, watch, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { IconChevronDown } from '@tabler/icons-vue'
+import { IconChevronDown, IconKeyboard } from '@tabler/icons-vue'
 
 import Button from 'primevue/button'
 

@@ -192,7 +192,7 @@
               <div class="midi-option pl-3">
                 <div class="midi-option-main flex flex-column gap-1">
                   <span class="midi-option-name font-semibold">{{ slotProps.option.label }}</span>
-                  <div class="flex gap-2">
+                  <div class="flex gap-2 flex-wrap">
                     <Tag severity="secondary" class="font-mono track-info">
                       <IconClock :size="12" />
                       {{ formatDuration(slotProps.option.duration) }}
@@ -624,5 +624,6 @@ function searchFiles(event) {
   padding: 0.25rem 0.4rem;
   border: 1px solid color-mix(in srgb, var(--text-muted) 15%, transparent);
   font-size: 0.7rem;
+  white-space: nowrap;
 }
 </style>

@@ -3,18 +3,24 @@
     v-if="embedUrl"
     class="youtube-panel bg-surface-card border-1 surface-border border-round-lg overflow-hidden"
   >
-    <div class="panel-header flex align-items-center justify-content-between p-3 border-bottom-1 surface-border">
-      <h3 class="text-sm font-medium text-color-secondary text-uppercase m-0">
+    <div
+      class="panel-header flex align-items-center justify-content-between p-3 border-bottom-1 surface-border"
+      @click="toggleExpanded"
+    >
+      <h3 class="text-sm font-medium text-color-secondary text-uppercase m-0 flex align-items-center gap-1">
+        <IconDeviceTv :size="16" />
         {{ t('live_performance_video') }}
       </h3>
-      <Button
-        size="small"
-        variant="text"
-        :title="expanded ? t('collapse') : t('expand')"
-        @click="toggleExpanded"
-      >
-        <IconChevronDown :size="16" class="chevron" :class="{ expanded: expanded }" />
-      </Button>
+      <div class="flex align-items-center gap-1" @click.stop>
+        <Button
+          size="small"
+          variant="text"
+          :title="expanded ? t('collapse') : t('expand')"
+          @click="toggleExpanded"
+        >
+          <IconChevronDown :size="16" class="chevron" :class="{ expanded: expanded }" />
+        </Button>
+      </div>
     </div>
     <div v-if="expanded" class="youtube-aspect-ratio-wrapper">
       <div class="youtube-aspect-ratio">
@@ -34,7 +40,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { IconChevronDown } from '@tabler/icons-vue'
+import { IconChevronDown, IconDeviceTv } from '@tabler/icons-vue'
 import Button from 'primevue/button'
 
 const { t } = useI18n()
