@@ -575,9 +575,12 @@ export function useMidiPlayer() {
     await parseMidi(buffer)
   }
 
-  async function loadMidiFromBuffer(buffer, blobUrl) {
+  async function loadMidiFromBuffer(buffer, blobUrl, meta = null) {
     midiUrl.value = blobUrl
     await parseMidi(buffer)
+    if (meta) {
+      currentFileMeta.value = meta
+    }
   }
 
   async function handleFileSelect(e) {
@@ -612,7 +615,8 @@ export function useMidiPlayer() {
       currentFileHasPdf.value = false
       const buffer = await file.arrayBuffer()
       const blobUrl = URL.createObjectURL(file)
-      await loadMidiFromBuffer(buffer, blobUrl)
+      const fileName = file.name.replace(/\.midi?$/i, '')
+      await loadMidiFromBuffer(buffer, blobUrl, { title: fileName, composer: '' })
     }
   }
 

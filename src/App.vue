@@ -268,7 +268,7 @@
         </div>
       </div>
 
-      <div v-if="isLoaded && currentFileMeta.title" class="text-center">
+      <div v-if="isLoaded && currentFileMeta?.title" class="text-center">
         <h3 class="m-2">{{ currentFileMeta.title }}</h3>
         <div>{{ currentFileMeta.composer }}</div>
       </div>
