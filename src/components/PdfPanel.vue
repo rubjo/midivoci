@@ -8,7 +8,7 @@
       @click="toggleExpanded"
     >
       <h3 class="text-sm font-medium text-color-secondary text-uppercase m-0 flex align-items-center gap-1">
-        <IconFileMusic :size="16" />
+        <IconMusic :size="16" />
         {{ t('score') }}
       </h3>
       <div class="flex align-items-center gap-1" @click.stop>
@@ -68,7 +68,7 @@ import {
   IconExternalLink,
   IconChevronLeft,
   IconChevronRight,
-  IconFileMusic,
+  IconMusic,
 } from '@tabler/icons-vue'
 import Button from 'primevue/button'
 import * as pdfjsLib from 'pdfjs-dist'
@@ -141,10 +141,15 @@ async function renderPage() {
   const page = await pdfDoc.getPage(pageNum.value)
   const container = pdfContainerRef.value
   if (!container) return
-  const viewport = page.getViewport({ scale: container.clientWidth / page.getViewport({ scale: 1 }).width })
+  const unscaled = page.getViewport({ scale: 1 })
+  const fitScale = container.clientWidth / unscaled.width
+  const dpr = window.devicePixelRatio || 1
+  const viewport = page.getViewport({ scale: fitScale * dpr })
   const canvas = canvasRef.value
   canvas.width = viewport.width
   canvas.height = viewport.height
+  canvas.style.width = `${container.clientWidth}px`
+  canvas.style.height = `${unscaled.height * fitScale}px`
   renderTask = page.render({ canvasContext: canvas.getContext('2d'), viewport })
   await renderTask.promise
 }
@@ -231,7 +236,6 @@ onUnmounted(() => {
 
 .pdf-canvas {
   display: block;
-  max-width: 100%;
 }
 
 .chevron {

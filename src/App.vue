@@ -257,6 +257,13 @@
         </div>
       </div>
 
+      <div
+        v-if="isLoaded && currentFileMeta?.composer"
+        class="px-3 pt-3 pb-1"
+      >
+        <span class="text-sm font-medium text-color-secondary">{{ currentFileMeta.composer }}: {{ currentFileMeta.title }}</span>
+      </div>
+
       <TransportControls
         v-if="isLoaded"
         :is-loaded="isLoaded"

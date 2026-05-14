@@ -584,7 +584,8 @@ export function useMidiPlayer() {
 
     try {
       await loadMidiFromUrl(midiBaseUrl + file)
-      currentFileMeta.value = item.meta || null
+      const meta = item.meta || {}
+      currentFileMeta.value = { ...meta, composer: item.composer, title: item.display }
       currentFileHasPdf.value = !!item.hasPdf
     } catch (err) {
       console.error('Failed to load MIDI file:', file, err)
