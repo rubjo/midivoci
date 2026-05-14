@@ -54,13 +54,13 @@ export function useMidiPlayer() {
 
   onUnmounted(() => disposeAll())
 
-  function ensureAudio() {
+  async function ensureAudio() {
     if (!audioCtx) {
       const ctx = createAudioContext()
       audioCtx = ctx.audioCtx
       masterGain = ctx.masterGain
     }
-    resumeAudioContext(audioCtx)
+    await resumeAudioContext(audioCtx)
   }
 
   function isTrackEffectivelyMuted(i) {
@@ -220,56 +220,60 @@ export function useMidiPlayer() {
   }
 
   async function parseMidi(buffer) {
-    disposeAll()
-    ensureAudio()
+    try {
+      resetTrackState()
+      await ensureAudio()
 
-    const parsed = parseMidiFile(buffer)
-    midi = parsed.midi
-    tracks.value = parsed.tracks
-    const preferredProgram = localStorage.getItem('midivox:preferred-instrument')
-    if (preferredProgram !== null) {
-      tracks.value.forEach((t) => {
-        t.program = Number(preferredProgram)
-      })
-    }
-    allNotes = parsed.allNotes
-    maxNoteDuration = parsed.maxNoteDuration
-    bpm.value = parsed.bpm
-    originalBpm.value = parsed.bpm
-    duration.value = parsed.duration
-    currentTime.value = 0
-    pausedAt = 0
-    prevMuted = tracks.value.map(() => false)
-
-    trackGains = createTrackGains(audioCtx, masterGain, midi.tracks.length)
-
-    instruments = []
-    for (let i = 0; i < midi.tracks.length; i++) {
-      if (midi.tracks[i].notes.length === 0) {
-        instruments.push(null)
-        continue
+      const parsed = parseMidiFile(buffer)
+      midi = parsed.midi
+      tracks.value = parsed.tracks
+      const preferredProgram = localStorage.getItem('midivox:preferred-instrument')
+      if (preferredProgram !== null) {
+        tracks.value.forEach((t) => {
+          t.program = Number(preferredProgram)
+        })
       }
-      const prog = tracks.value[i]?.program ?? 0
-      try {
-        instruments.push(await loadInstrument(audioCtx, prog, trackGains[i]))
-      } catch {
-        try {
-          instruments.push(await loadInstrument(audioCtx, 0, trackGains[i]))
-        } catch {
+      allNotes = parsed.allNotes
+      maxNoteDuration = parsed.maxNoteDuration
+      bpm.value = parsed.bpm
+      originalBpm.value = parsed.bpm
+      duration.value = parsed.duration
+      currentTime.value = 0
+      pausedAt = 0
+      prevMuted = tracks.value.map(() => false)
+
+      trackGains = createTrackGains(audioCtx, masterGain, midi.tracks.length)
+
+      instruments = []
+      for (let i = 0; i < midi.tracks.length; i++) {
+        if (midi.tracks[i].notes.length === 0) {
           instruments.push(null)
+          continue
+        }
+        const prog = tracks.value[i]?.program ?? 0
+        try {
+          instruments.push(await loadInstrument(audioCtx, prog, trackGains[i]))
+        } catch {
+          try {
+            instruments.push(await loadInstrument(audioCtx, 0, trackGains[i]))
+          } catch {
+            instruments.push(null)
+          }
         }
       }
-    }
 
-    isLoaded.value = true
-    refreshVisualizerBlob()
+      isLoaded.value = true
+      refreshVisualizerBlob()
+    } catch (err) {
+      console.error('parseMidi failed:', err)
+    }
   }
 
   async function play() {
     if (!midi || !isLoaded.value) return
 
     if (isPaused.value) {
-      ensureAudio()
+      await ensureAudio()
       playing = true
       isPlaying.value = true
       isPaused.value = false
@@ -278,7 +282,7 @@ export function useMidiPlayer() {
       return
     }
 
-    ensureAudio()
+    await ensureAudio()
     if (instruments.length === 0 && midi) {
       trackGains = createTrackGains(audioCtx, masterGain, midi.tracks.length)
       for (let i = 0; i < midi.tracks.length; i++) {
@@ -522,14 +526,15 @@ export function useMidiPlayer() {
     if (isLoaded.value) refreshVisualizerBlob()
   }
 
-  function disposeAll() {
+  function resetTrackState() {
     if (tempoTimeout) clearTimeout(tempoTimeout)
     if (visTimeout) clearTimeout(visTimeout)
     stopScheduler()
     if (rafId) cancelAnimationFrame(rafId)
-    closeAudioContext(audioCtx)
-    audioCtx = null
-    masterGain = null
+    stopAllInstruments(instruments)
+    trackGains.forEach((g) => {
+      try { g.disconnect() } catch {}
+    })
     trackGains = []
     instruments = []
     allNotes = []
@@ -553,6 +558,13 @@ export function useMidiPlayer() {
     }
   }
 
+  function disposeAll() {
+    resetTrackState()
+    closeAudioContext(audioCtx)
+    audioCtx = null
+    masterGain = null
+  }
+
   async function loadMidiFromUrl(url) {
     const response = await fetch(url)
     if (!response.ok) {
@@ -569,7 +581,7 @@ export function useMidiPlayer() {
   }
 
   async function handleFileSelect(e) {
-    ensureAudio()
+    await ensureAudio()
 
     // PrimeAutocomplete emits the value directly (as a string)
     // or as an object if option-value isn't used.
@@ -593,7 +605,7 @@ export function useMidiPlayer() {
   }
 
   async function handleUpload(e) {
-    ensureAudio()
+    await ensureAudio()
     const file = e.target.files[0]
     if (file) {
       currentFileMeta.value = null

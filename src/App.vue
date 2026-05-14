@@ -127,12 +127,11 @@
         <PrimeInputGroup>
           <PrimeAutocomplete
             ref="autocomplete"
+            v-model="autocompleteValue"
             :suggestions="suggestions"
             @complete="searchFiles"
             @focus="onAutocompleteFocus"
             @option-select="onOptionSelect"
-            showClear
-            @clear="suggestions = filteredGroups"
             option-label="label"
             option-group-label="label"
             option-group-children="items"
@@ -224,10 +223,20 @@
               </div>
             </template>
           </PrimeAutocomplete>
+          <Button
+            v-if="midiUrl"
+            size="small"
+            variant="text"
+            severity="secondary"
+            :title="t('close')"
+            @click="clearCurrentTrack"
+            class="-ml-1"
+          >
+            <IconX :size="16" />
+          </Button>
           <PrimeFileUpload
             mode="basic"
             accept=".mid,.midi"
-            :auto="true"
             :choose-label="t('orUpload')"
             @select="handleFileUpload"
             class="upload-inputgroup-btn"
@@ -327,6 +336,7 @@ import {
   IconUsers,
   IconDeviceTv,
   IconMusic,
+  IconX,
 } from '@tabler/icons-vue'
 import { nb_NO } from 'primelocale/js/nb_NO.js'
 import { en } from 'primelocale/js/en.js'
@@ -400,6 +410,7 @@ function setLocale(e) {
 setPrimeLocale(locale.value)
 
 const autocomplete = ref(null)
+const autocompleteValue = ref('')
 let autocompleteGuard = false
 
 const filterScore = ref(false)
@@ -428,6 +439,18 @@ function getFilteredSuggestions(query) {
       items: g.items.filter((it) => it._display.includes(q) || it._composer.includes(q)),
     }))
     .filter((g) => g.items.length > 0)
+}
+
+function clearCurrentTrack() {
+  stop()
+  autocompleteValue.value = ''
+  isLoaded.value = false
+  midiUrl.value = ''
+  currentFileMeta.value = null
+  currentFileHasPdf.value = false
+  tracks.value = []
+  suggestions.value = filteredGroups.value
+  nextTick(() => autocomplete.value?.show())
 }
 
 function onAutocompleteFocus() {
@@ -486,9 +509,15 @@ const projects = [
   { name: 'MBench', url: 'https://rubjo.github.io/m-bench/' },
 ]
 
-function handleFileUpload(e) {
+async function handleFileUpload(e) {
   const file = e.files?.[0]
-  if (file) handleUpload({ target: { files: [file] } })
+  if (file) {
+    try {
+      await handleUpload({ target: { files: [file] } })
+    } catch (err) {
+      console.error('File upload failed:', err)
+    }
+  }
 }
 
 function formatDuration(seconds) {

@@ -12,9 +12,11 @@ export function createAudioContext() {
   return { audioCtx, masterGain }
 }
 
-export function resumeAudioContext(audioCtx) {
+export async function resumeAudioContext(audioCtx) {
   if (audioCtx.state === 'suspended') {
-    audioCtx.resume()
+    try {
+      await audioCtx.resume()
+    } catch {}
   }
 }
 

@@ -6,7 +6,7 @@
     >
       <h3 class="text-sm font-medium text-color-secondary text-uppercase m-0 flex align-items-center gap-1">
         <IconPlaylist :size="16" />
-        {{ t('tracks') }}
+        {{ t('parts') }}
       </h3>
       <div class="flex align-items-center gap-1" @click.stop>
         <Button
