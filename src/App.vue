@@ -656,10 +656,8 @@ function searchFiles(event) {
   margin: 1rem 0;
 }
 
-.upload-inputgroup-btn {
-  input[type="file"] {
-    color: transparent;
-  }
+:deep(.p-fileupload-basic-content > span:first-of-type) {
+  display: none;
 }
 
 .track-info {
