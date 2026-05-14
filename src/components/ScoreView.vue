@@ -197,6 +197,6 @@ watch(
 }
 
 .chevron.expanded {
-  transform: rotate(180deg);
+  transform: scaleY(-1);
 }
 </style>
