@@ -24,7 +24,7 @@ jobs:
           node-version: '22'
 
       - name: Install dependencies
-        uses: bahmutov/npm-install@v1
+        run: npm ci --omit=optional
 
       - name: Build project
         run: npm run build
