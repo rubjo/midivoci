@@ -132,7 +132,7 @@
             @focus="onAutocompleteFocus"
             @option-select="onOptionSelect"
             showClear
-            @clear="suggestions = fileGroups"
+            @clear="suggestions = filteredGroups"
             option-label="label"
             option-group-label="label"
             option-group-children="items"
@@ -145,6 +145,20 @@
             fluid
             @update:model-value="handleFileSelect"
           >
+            <template #header>
+              <div class="flex gap-3 p-2 border-bottom-1 surface-border">
+                <div class="flex align-items-center gap-2">
+                  <PrimeToggleSwitch v-model="filterVideo" />
+                  <IconDeviceTv :size="14" class="text-color-secondary" />
+                  <span class="text-xs text-color-secondary">{{ t('live_performance_video') }}</span>
+                </div>
+                <div class="flex align-items-center gap-2">
+                  <PrimeToggleSwitch v-model="filterScore" />
+                  <IconMusic :size="14" class="text-color-secondary" />
+                  <span class="text-xs text-color-secondary">{{ t('score') }}</span>
+                </div>
+              </div>
+            </template>
             <template #item="slotProps">
               {{ slotProps.value ? metaLabel(slotProps.value) : t('searchForComposerOrWork') }}
             </template>
@@ -179,21 +193,29 @@
                 <div class="midi-option-main flex flex-column gap-1">
                   <span class="midi-option-name font-semibold">{{ slotProps.option.label }}</span>
                   <div class="flex gap-2">
-                    <Tag severity="secondary" class="text-xs font-mono track-info">
-                      <IconClock :size="12" class="mr-1" />
+                    <Tag severity="secondary" class="font-mono track-info">
+                      <IconClock :size="12" />
                       {{ formatDuration(slotProps.option.duration) }}
                     </Tag>
-                    <Tag severity="secondary" class="text-xs font-mono track-info">
-                      <IconUsers :size="12" class="mr-1" />
+                    <Tag severity="secondary" class="font-mono track-info">
+                      <IconUsers :size="12" />
                       {{ slotProps.option.numTracks }} {{ t('parts').toLowerCase() }}
                     </Tag>
                     <Tag
                       v-if="slotProps.option.youtube"
                       severity="info"
-                      class="text-xs font-mono track-info"
+                      class="font-mono track-info"
                     >
-                      <IconDeviceTv :size="12" class="mr-1" />
+                      <IconDeviceTv :size="12" />
                       {{ t('live_performance_video') }}
+                    </Tag>
+                    <Tag
+                      v-if="slotProps.option.hasPdf"
+                      severity="success"
+                      class="font-mono track-info"
+                    >
+                      <IconMusic :size="12" />
+                      {{ t('score') }}
                     </Tag>
                   </div>
                 </div>
@@ -278,12 +300,14 @@
       />
 
       <YouTubePanel v-if="currentFileMeta?.youtube" :youtube-url="currentFileMeta.youtube" />
+
+      <PdfPanel v-if="currentFileHasPdf" :pdf-url="currentPdfUrl" />
     </main>
   </div>
 </template>
 
 <script setup>
-import { ref, getCurrentInstance, computed, nextTick, onUnmounted } from 'vue'
+import { ref, getCurrentInstance, computed, nextTick, watch, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   IconSun,
@@ -295,6 +319,7 @@ import {
   IconClock,
   IconUsers,
   IconDeviceTv,
+  IconMusic,
 } from '@tabler/icons-vue'
 import { nb_NO } from 'primelocale/js/nb_NO.js'
 import { en } from 'primelocale/js/en.js'
@@ -312,6 +337,7 @@ import PrimeDialog from 'primevue/dialog'
 import PrimeDivider from 'primevue/divider'
 import PrimeFileUpload from 'primevue/fileupload'
 import PrimeAutocomplete from 'primevue/autocomplete'
+import PrimeToggleSwitch from 'primevue/toggleswitch'
 import Tag from 'primevue/tag'
 import PrimeInputGroup from 'primevue/inputgroup'
 
@@ -320,6 +346,7 @@ import TransportControls from './components/TransportControls.vue'
 import TrackList from './components/TrackList.vue'
 import ScoreView from './components/ScoreView.vue'
 import YouTubePanel from './components/YouTubePanel.vue'
+import PdfPanel from './components/PdfPanel.vue'
 
 const isTauri = !!window.__TAURI__
 
@@ -368,23 +395,45 @@ setPrimeLocale(locale.value)
 const autocomplete = ref(null)
 let autocompleteGuard = false
 
+const filterScore = ref(false)
+const filterVideo = ref(false)
+
+const filteredGroups = computed(() => {
+  return fileGroups.value
+    .map((group) => ({
+      ...group,
+      items: group.items.filter((item) => {
+        if (filterScore.value && !item.hasPdf) return false
+        if (filterVideo.value && !item.youtube) return false
+        return true
+      }),
+    }))
+    .filter((group) => group.items.length > 0)
+})
+
+function getFilteredSuggestions(query) {
+  const q = query?.toLowerCase().trim()
+  const groups = filteredGroups.value
+  if (!q) return groups
+  return groups
+    .map((g) => ({
+      ...g,
+      items: g.items.filter((it) => it._display.includes(q) || it._composer.includes(q)),
+    }))
+    .filter((g) => g.items.length > 0)
+}
+
 function onAutocompleteFocus() {
   if (autocompleteGuard) return
   const input = autocomplete.value?.$el?.querySelector('input')
-  const query = input?.value?.trim() || ''
-  if (!query) {
-    suggestions.value = fileGroups.value
-  } else {
-    const q = query.toLowerCase()
-    suggestions.value = fileGroups.value
-      .map((g) => ({
-        ...g,
-        items: g.items.filter((it) => it._display.includes(q) || it._composer.includes(q)),
-      }))
-      .filter((g) => g.items.length > 0)
-  }
+  suggestions.value = getFilteredSuggestions(input?.value)
   nextTick(() => autocomplete.value?.show())
 }
+
+watch([filterScore, filterVideo], () => {
+  const input = autocomplete.value?.$el?.querySelector('input')
+  suggestions.value = getFilteredSuggestions(input?.value)
+})
 
 function onOptionSelect() {
   suggestions.value = []
@@ -463,6 +512,7 @@ const {
   activeTracks,
   leadTrack,
   currentFileMeta,
+  currentFileHasPdf,
   transpose,
   setTranspose,
   handleFileSelect,
@@ -499,6 +549,7 @@ const fileGroups = computed(() => {
       numTracks: file.numTracks,
       duration: file.duration,
       youtube: !!file.meta?.youtube,
+      hasPdf: !!file.hasPdf,
       _display: file.display.toLowerCase(),
       _composer: (file.composer || '').toLowerCase(),
     })
@@ -511,23 +562,16 @@ const fileGroups = computed(() => {
   return result
 })
 
+const currentPdfUrl = computed(() => {
+  if (!midiUrl.value || !currentFileHasPdf.value) return ''
+  return midiUrl.value.replace(/\.mid$/, '.pdf')
+})
+
 const dataLoaded = computed(() => midiFileMeta.value.length > 0)
 const suggestions = ref([])
 
 function searchFiles(event) {
-  const query = event.query.toLowerCase().trim()
-  if (!query) {
-    suggestions.value = fileGroups.value
-    return
-  }
-  suggestions.value = fileGroups.value
-    .map((group) => ({
-      ...group,
-      items: group.items.filter(
-        (item) => item._display.includes(query) || item._composer.includes(query),
-      ),
-    }))
-    .filter((group) => group.items.length > 0)
+  suggestions.value = getFilteredSuggestions(event.query)
 }
 </script>
 
@@ -577,6 +621,8 @@ function searchFiles(event) {
 }
 
 .track-info {
-  border: 1px solid color-mix(in srgb, var(--text-muted) 20%, transparent);
+  padding: 0.25rem 0.4rem;
+  border: 1px solid color-mix(in srgb, var(--text-muted) 15%, transparent);
+  font-size: 0.7rem;
 }
 </style>

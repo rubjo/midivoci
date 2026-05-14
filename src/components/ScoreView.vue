@@ -1,6 +1,6 @@
 <template>
   <div class="bg-surface-card border-1 surface-border border-round-lg overflow-hidden">
-    <div class="flex align-items-center justify-content-between p-3 border-bottom-1 surface-border">
+    <div class="panel-header flex align-items-center justify-content-between p-3 border-bottom-1 surface-border">
       <h3 class="text-sm font-medium text-color-secondary text-uppercase m-0">
         {{ t('piano_roll') }}
       </h3>
@@ -8,11 +8,11 @@
         <Button
           v-if="midiUrl"
           size="small"
-          :title="visible ? 'Hide' : 'Show'"
+          variant="text"
+          :title="visible ? t('collapse') : t('expand')"
           @click="visible = !visible"
         >
-          <IconChevronUp v-if="visible" :size="16" />
-          <IconChevronDown v-else :size="16" />
+          <IconChevronDown :size="16" class="chevron" :class="{ expanded: visible }" />
         </Button>
       </div>
     </div>
@@ -44,7 +44,7 @@
 import 'html-midi-player'
 import { ref, watch, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { IconChevronUp, IconChevronDown } from '@tabler/icons-vue'
+import { IconChevronDown } from '@tabler/icons-vue'
 
 import Button from 'primevue/button'
 
@@ -186,5 +186,13 @@ watch(
   background: rgba(100, 116, 139, 0.5);
   pointer-events: none;
   z-index: 9;
+}
+
+.chevron {
+  transition: transform 0.2s;
+}
+
+.chevron.expanded {
+  transform: rotate(180deg);
 }
 </style>

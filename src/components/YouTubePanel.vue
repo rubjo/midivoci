@@ -3,7 +3,7 @@
     v-if="embedUrl"
     class="youtube-panel bg-surface-card border-1 surface-border border-round-lg overflow-hidden"
   >
-    <div class="flex align-items-center justify-content-between p-3 border-bottom-1 surface-border">
+    <div class="panel-header flex align-items-center justify-content-between p-3 border-bottom-1 surface-border">
       <h3 class="text-sm font-medium text-color-secondary text-uppercase m-0">
         {{ t('live_performance_video') }}
       </h3>

@@ -182,3 +182,7 @@ body {
 .surface-border {
   border-color: rgba(128, 128, 128, 0.25);
 }
+
+.panel-header {
+  background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-page) 100%);
+}

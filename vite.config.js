@@ -76,7 +76,10 @@ function midiFilePlugin() {
         }
       }
 
-      return { fileName, name, composer, naturalDisplay, numTracks, duration, meta }
+      const pdfPath = fullPath.replace(/\.mid$/, '.pdf')
+      const hasPdf = existsSync(pdfPath)
+
+      return { fileName, name, composer, naturalDisplay, numTracks, duration, meta, hasPdf }
     })
 
     const titleCounts = {}
@@ -117,6 +120,7 @@ function midiFilePlugin() {
         numTracks: f.numTracks,
         duration: f.duration,
         meta: f.meta,
+        hasPdf: f.hasPdf,
       }
     })
   }
