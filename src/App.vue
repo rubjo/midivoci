@@ -124,105 +124,120 @@
 
     <main>
       <section>
-        <PrimeInputGroup>
-          <PrimeAutocomplete
-            ref="autocomplete"
-            v-model="autocompleteValue"
-            :suggestions="suggestions"
-            @complete="searchFiles"
-            @focus="onAutocompleteFocus"
-            @option-select="onOptionSelect"
-            option-label="label"
-            option-group-label="label"
-            option-group-children="items"
-            option-value="value"
-            :placeholder="t('searchForComposerOrWork')"
-            class="w-full"
-            scroll-height="70vh"
-            :delay="300"
-            :loading="!dataLoaded"
-            fluid
-            @update:model-value="handleFileSelect"
-          >
-            <template #header>
-              <div class="flex gap-3 p-2 border-bottom-1 surface-border">
-                <div class="flex align-items-center gap-2">
-                  <PrimeToggleSwitch v-model="filterVideo" />
-                  <IconDeviceTv :size="14" class="text-color-secondary" />
-                  <span class="text-xs text-color-secondary">{{
-                    t('live_performance_video')
-                  }}</span>
-                </div>
-                <div class="flex align-items-center gap-2">
-                  <PrimeToggleSwitch v-model="filterScore" />
-                  <IconMusic :size="14" class="text-color-secondary" />
-                  <span class="text-xs text-color-secondary">{{ t('score') }}</span>
-                </div>
-              </div>
-            </template>
-            <template #item="slotProps">
-              {{ slotProps.value ? metaLabel(slotProps.value) : t('searchForComposerOrWork') }}
-            </template>
-            <template #optiongroup="slotProps">
-              <div class="midi-group-header flex align-items-center w-full">
-                <div class="flex align-items-center gap-2 flex-wrap flex-1 min-w-0 text-sm">
-                  <span>{{ slotProps.option.composerMeta?.name || slotProps.option.label }}</span>
-                  <span
-                    v-if="
-                      slotProps.option.composerMeta?.born || slotProps.option.composerMeta?.died
-                    "
-                  >
-                    ({{ slotProps.option.composerMeta?.born || '?' }}–{{
-                      slotProps.option.composerMeta?.died || '?'
-                    }})
-                  </span>
-                </div>
-                <a
-                  v-if="slotProps.option.composerMeta?.wikipedia"
-                  :href="slotProps.option.composerMeta.wikipedia"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="p-button p-1 flex-shrink-0"
-                  @click.stop
-                >
-                  <IconInfoCircle :size="14" style="vertical-align: middle" />
-                </a>
-              </div>
-            </template>
-            <template #option="slotProps">
-              <div class="midi-option pl-3">
-                <div class="midi-option-main flex flex-column gap-1">
-                  <span class="midi-option-name font-semibold">{{ slotProps.option.label }}</span>
-                  <div class="flex gap-2 flex-wrap">
-                    <Tag severity="secondary" class="font-mono track-info">
-                      <IconClock :size="12" />
-                      {{ formatDuration(slotProps.option.duration) }}
-                    </Tag>
-                    <Tag severity="secondary" class="font-mono track-info">
-                      <IconUsers :size="12" />
-                      {{ slotProps.option.numTracks }} {{ t('parts').toLowerCase() }}
-                    </Tag>
-                    <Tag
-                      v-if="slotProps.option.youtube"
-                      severity="info"
-                      class="font-mono track-info"
-                    >
-                      <IconDeviceTv :size="12" />
-                      {{ t('live_performance_video') }}
-                    </Tag>
-                    <Tag
-                      v-if="slotProps.option.hasPdf"
-                      severity="success"
-                      class="font-mono track-info"
-                    >
-                      <IconMusic :size="12" />
-                      {{ t('score') }}
-                    </Tag>
+        <div class="flex gap-2">
+          <PrimeInputGroup class="flex-1">
+            <PrimeAutocomplete
+              ref="autocomplete"
+              v-model="autocompleteValue"
+              :suggestions="suggestions"
+              @complete="searchFiles"
+              @focus="onAutocompleteFocus"
+              @option-select="onOptionSelect"
+              option-label="label"
+              option-group-label="label"
+              option-group-children="items"
+              option-value="value"
+              :placeholder="t('searchForComposerOrWork')"
+              class="w-full"
+              scroll-height="70vh"
+              :delay="300"
+              :loading="!dataLoaded"
+              fluid
+              @update:model-value="handleFileSelect"
+            >
+              <template #header>
+                <div class="flex gap-3 p-2 border-bottom-1 surface-border">
+                  <div class="flex align-items-center gap-2">
+                    <PrimeToggleSwitch v-model="filterVideo" />
+                    <IconDeviceTv :size="14" class="text-color-secondary" />
+                    <span class="text-xs text-color-secondary">{{
+                      t('live_performance_video')
+                    }}</span>
+                  </div>
+                  <div class="flex align-items-center gap-2">
+                    <PrimeToggleSwitch v-model="filterScore" />
+                    <IconMusic :size="14" class="text-color-secondary" />
+                    <span class="text-xs text-color-secondary">{{ t('score') }}</span>
                   </div>
                 </div>
-              </div>
-            </template>
-          </PrimeAutocomplete>
+              </template>
+              <template #item="slotProps">
+                {{ slotProps.value ? metaLabel(slotProps.value) : t('searchForComposerOrWork') }}
+              </template>
+              <template #optiongroup="slotProps">
+                <div class="midi-group-header flex align-items-center w-full">
+                  <div class="flex align-items-center gap-2 flex-wrap flex-1 min-w-0 text-sm">
+                    <span>{{ slotProps.option.composerMeta?.name || slotProps.option.label }}</span>
+                    <span
+                      v-if="
+                        slotProps.option.composerMeta?.born || slotProps.option.composerMeta?.died
+                      "
+                    >
+                      ({{ slotProps.option.composerMeta?.born || '?' }}–{{
+                        slotProps.option.composerMeta?.died || '?'
+                      }})
+                    </span>
+                  </div>
+                  <a
+                    v-if="slotProps.option.composerMeta?.wikipedia"
+                    :href="slotProps.option.composerMeta.wikipedia"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="p-button p-1 flex-shrink-0"
+                    @click.stop
+                  >
+                    <IconInfoCircle :size="14" style="vertical-align: middle" />
+                  </a>
+                </div>
+              </template>
+              <template #option="slotProps">
+                <div class="midi-option pl-3">
+                  <div class="midi-option-main flex flex-column gap-1">
+                    <span class="midi-option-name font-semibold">{{ slotProps.option.label }}</span>
+                    <div class="flex gap-2 flex-wrap">
+                      <Tag severity="secondary" class="font-mono track-info">
+                        <IconClock :size="12" />
+                        {{ formatDuration(slotProps.option.duration) }}
+                      </Tag>
+                      <Tag severity="secondary" class="font-mono track-info">
+                        <IconUsers :size="12" />
+                        {{ slotProps.option.numTracks }} {{ t('parts').toLowerCase() }}
+                      </Tag>
+                      <Tag
+                        v-if="slotProps.option.youtube"
+                        severity="info"
+                        class="font-mono track-info"
+                      >
+                        <IconDeviceTv :size="12" />
+                        {{ t('live_performance_video') }}
+                      </Tag>
+                      <Tag
+                        v-if="slotProps.option.hasPdf"
+                        severity="success"
+                        class="font-mono track-info"
+                      >
+                        <IconMusic :size="12" />
+                        {{ t('score') }}
+                      </Tag>
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </PrimeAutocomplete>
+            <PrimeFileUpload
+              mode="basic"
+              accept=".mid,.midi"
+              :choose-label="t('orUpload')"
+              @select="handleFileUpload"
+              class="upload-inputgroup-btn"
+              :disabled="langDropdownOpen"
+            >
+              <template #chooseicon>
+                <IconUpload :size="16" />
+                <span class="md:hidden">{{ t('upload') }}</span>
+              </template>
+            </PrimeFileUpload>
+          </PrimeInputGroup>
           <Button
             v-if="midiUrl"
             size="small"
@@ -230,24 +245,10 @@
             severity="secondary"
             :title="t('close')"
             @click="clearCurrentTrack"
-            class="-ml-1"
           >
             <IconX :size="16" />
           </Button>
-          <PrimeFileUpload
-            mode="basic"
-            accept=".mid,.midi"
-            :choose-label="t('orUpload')"
-            @select="handleFileUpload"
-            class="upload-inputgroup-btn"
-            :disabled="langDropdownOpen"
-          >
-            <template #chooseicon>
-              <IconUpload :size="16" />
-              <span class="md:hidden">{{ t('upload') }}</span>
-            </template>
-          </PrimeFileUpload>
-        </PrimeInputGroup>
+        </div>
       </section>
 
       <div
