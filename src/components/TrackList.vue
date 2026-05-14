@@ -271,7 +271,7 @@ import PrimeSlider from 'primevue/slider'
 import PrimeSelect from 'primevue/select'
 import PrimeMenu from 'primevue/menu'
 import PrimeToggleSwitch from 'primevue/toggleswitch'
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   IconHeartbeat,
@@ -288,9 +288,12 @@ import InstrumentIcon from './icons/InstrumentIcon.vue'
 const PREFERRED_INSTRUMENT_KEY = 'midivox:preferred-instrument'
 const COMPACT_MODE_KEY = 'midivox:compact-mode'
 
+const TRACKS_EXPANDED_KEY = 'midivox:tracks-panel-expanded'
+
 const { t } = useI18n()
 
-const expanded = ref(true)
+const expanded = ref(localStorage.getItem(TRACKS_EXPANDED_KEY) !== 'false')
+watch(expanded, (val) => localStorage.setItem(TRACKS_EXPANDED_KEY, String(val)))
 
 defineProps({
   tracks: { type: Array, default: () => [] },
