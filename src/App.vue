@@ -263,13 +263,13 @@
           <div>{{ currentFileMeta.composer }}</div>
         </div>
         <Button
-          size="small"
           variant="text"
           severity="secondary"
           :title="t('close')"
           @click="clearCurrentTrack"
         >
           <IconX :size="16" />
+          <span class="hidden md:inline ml-1">{{ t('close') }}</span>
         </Button>
       </div>
 

@@ -102,7 +102,7 @@ function midiFilePlugin() {
       }
     }
 
-    return fileData.map((f) => {
+    const expandedList = fileData.map((f) => {
       let display = f.naturalDisplay
       if (titleCounts[display] > 1) {
         const baseName = f.fileName
@@ -115,14 +115,15 @@ function midiFilePlugin() {
         fileName: f.fileName,
         name: f.name,
         composer: f.composer,
-        composerMeta: composerMetaMap[f.fileName.split('/')[0]] || null,
         display,
         numTracks: f.numTracks,
         duration: f.duration,
         meta: f.meta,
         hasPdf: f.hasPdf,
+        composerRef: f.fileName.split('/')[0],
       }
     })
+    return { composers: composerMetaMap, files: expandedList }
   }
 
   return {
@@ -139,11 +140,18 @@ function midiFilePlugin() {
       return `
 import { ref } from 'vue'
 const data = ref([])
+function normalize(raw) {
+  if (!raw) return []
+  if (Array.isArray(raw)) return raw
+  return raw.files.map(function(f) {
+    return Object.assign({}, f, { composerMeta: raw.composers[f.composerRef] || null })
+  })
+}
 if (import.meta.env.DEV) {
-  data.value = ${JSON.stringify(fileList)}
+  data.value = normalize(${JSON.stringify(fileList)})
 } else {
   const base = (import.meta.env.BASE_URL || '/') + 'midi/midi-files.json'
-  fetch(base).then(r => r.json()).then(d => { data.value = d })
+  fetch(base).then(function(r) { return r.json() }).then(function(d) { data.value = normalize(d) })
 }
 export const midiFileList = data
 export default data
