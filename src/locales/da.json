@@ -16,6 +16,11 @@
   "bulk_actions": "Massehandlinger",
   "cancel": "Annuller",
   "close": "Luk",
+  "close_track": "Luk spor",
+  "float_controls": "Svævekontroller",
+  "loop_on": "Loop on",
+  "loop_off": "Loop off",
+  "settings": "Indstillinger",
   "collapse": "Skjul",
   "compact_mode_off": "Deaktiver kompakt tilstand",
   "compact_mode_on": "Aktiver kompakt tilstand",
@@ -62,3 +67,5 @@
   "upload": "Upload",
   "volume": "Lydstyrke"
 }
+
+

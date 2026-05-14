@@ -30,6 +30,7 @@ export function useMidiPlayer() {
   const currentFileMeta = ref(null)
   const currentFileHasPdf = ref(false)
   const transpose = ref(0)
+  const loop = ref(false)
 
   let audioCtx = null
   let masterGain = null
@@ -358,14 +359,17 @@ export function useMidiPlayer() {
     if (!midi || !isLoaded.value) return
     const clamped = Math.max(0, Math.min(time, duration.value))
     currentTime.value = clamped
+    const ratio = (midi.header.tempos[0]?.bpm || 120) / bpm.value
+    pausedAt = clamped * ratio
     if (playing) {
       stopAllInstruments(instruments)
-      const ratio = (midi.header.tempos[0]?.bpm || 120) / bpm.value
-      pausedAt = clamped * ratio
       const now = audioCtx.currentTime
       startTime = now - pausedAt
       nextNoteIndex = binarySearchFirstGe(allNotes, currentTime.value)
       scheduler()
+    } else {
+      startTime = audioCtx.currentTime - pausedAt
+      nextNoteIndex = binarySearchFirstGe(allNotes, currentTime.value)
     }
   }
 
@@ -375,12 +379,25 @@ export function useMidiPlayer() {
     currentTime.value = elapsed / scheduleRatio
     activeTracks.value = computeActiveTracks(currentTime.value)
     if (elapsed >= duration.value * scheduleRatio) {
-      playing = false
-      isPlaying.value = false
-      isPaused.value = false
-      pausedAt = 0
-      currentTime.value = 0
-      activeTracks.value = new Map()
+      if (loop.value) {
+        stopAllInstruments(instruments)
+        pausedAt = 0
+        currentTime.value = 0
+        nextNoteIndex = 0
+        const ratio = (midi.header.tempos[0]?.bpm || 120) / bpm.value
+        scheduleRatio = ratio
+        startTime = audioCtx.currentTime
+        scheduler()
+        activeTracks.value = new Map()
+        rafId = requestAnimationFrame(animate)
+      } else {
+        playing = false
+        isPlaying.value = false
+        isPaused.value = false
+        pausedAt = 0
+        currentTime.value = 0
+        activeTracks.value = new Map()
+      }
       return
     }
     rafId = requestAnimationFrame(animate)
@@ -620,6 +637,10 @@ export function useMidiPlayer() {
     }
   }
 
+  function toggleLoop() {
+    loop.value = !loop.value
+  }
+
   return {
     midiUrl,
     tracks,
@@ -636,7 +657,9 @@ export function useMidiPlayer() {
     currentFileMeta,
     currentFileHasPdf,
     transpose,
+    loop,
     setTranspose,
+    toggleLoop,
     handleFileSelect,
     handleUpload,
     togglePlay,

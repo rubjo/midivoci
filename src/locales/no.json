@@ -16,6 +16,11 @@
   "bulk_actions": "Massehandlinger",
   "cancel": "Avbryt",
   "close": "Lukk",
+  "close_track": "Lukk spor",
+  "float_controls": "Flytende kontroller",
+  "loop_on": "Loop on",
+  "loop_off": "Loop off",
+  "settings": "Innstillinger",
   "collapse": "Skjul",
   "compact_mode_off": "Slå av kompakt visning",
   "compact_mode_on": "Slå på kompakt visning",
@@ -62,3 +67,5 @@
   "upload": "Last opp MIDI",
   "volume": "Volum"
 }
+
+

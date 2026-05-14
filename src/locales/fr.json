@@ -16,6 +16,11 @@
   "bulk_actions": "Actions groupées",
   "cancel": "Annuler",
   "close": "Fermer",
+  "close_track": "Fermer le morceau",
+  "float_controls": "Contrôles flottants",
+  "loop_on": "Loop on",
+  "loop_off": "Loop off",
+  "settings": "Paramètres",
   "collapse": "Réduire",
   "compact_mode_off": "Désactiver le mode compact",
   "compact_mode_on": "Activer le mode compact",
@@ -62,3 +67,5 @@
   "upload": "Télécharger",
   "volume": "Volume"
 }
+
+

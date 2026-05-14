@@ -16,6 +16,11 @@
   "bulk_actions": "Massenaktionen",
   "cancel": "Abbrechen",
   "close": "Schließen",
+  "close_track": "Titel schließen",
+  "float_controls": "Schwebende Steuerung",
+  "loop_on": "Loop on",
+  "loop_off": "Loop off",
+  "settings": "Einstellungen",
   "collapse": "Einklappen",
   "compact_mode_off": "Kompaktmodus deaktivieren",
   "compact_mode_on": "Kompaktmodus aktivieren",
@@ -62,3 +67,5 @@
   "upload": "Hochladen",
   "volume": "Lautstärke"
 }
+
+

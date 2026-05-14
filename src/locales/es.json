@@ -16,6 +16,11 @@
   "bulk_actions": "Acciones masivas",
   "cancel": "Cancelar",
   "close": "Cerrar",
+  "close_track": "Cerrar pista",
+  "float_controls": "Controles flotantes",
+  "loop_on": "Loop on",
+  "loop_off": "Loop off",
+  "settings": "Ajustes",
   "collapse": "Colapsar",
   "compact_mode_off": "Desactivar modo compacto",
   "compact_mode_on": "Activar modo compacto",
@@ -62,3 +67,5 @@
   "upload": "Subir",
   "volume": "Volumen"
 }
+
+

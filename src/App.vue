@@ -1,5 +1,5 @@
 <template>
-  <div class="app" :data-theme="theme">
+  <div :class="['app', { 'has-floating': isFloating }]" :data-theme="theme">
     <header class="app-header">
       <div class="flex align-items-center gap-2 cursor-pointer" @click="infoDialogVisible = true">
         <img src="./assets/logo.png" alt="MidiVox" class="header-logo" />
@@ -89,12 +89,7 @@
             </h4>
             <p class="text-sm">
               {{ t('app.sheet_music_credit') }}
-              <a
-                href="https://imslp.org/"
-                target="_blank"
-                rel="noopener noreferrer"
-                >imslp.org</a
-              >
+              <a href="https://imslp.org/" target="_blank" rel="noopener noreferrer">imslp.org</a>
               {{ t('app.sheet_music_sources') }}
             </p>
 
@@ -284,12 +279,16 @@
         :transpose="transpose"
         :title="currentFileMeta?.title"
         :composer="currentFileMeta?.composer"
+        :is-floating="isFloating"
+        :loop="loop"
         @toggle-play="togglePlay"
         @stop="stop"
         @set-tempo="setTempo"
         @seek="seek"
         @set-transpose="setTranspose"
         @close="clearCurrentTrack"
+        @toggle-float="toggleFloat"
+        @toggle-loop="toggleLoop"
       />
 
       <ScoreView
@@ -303,24 +302,24 @@
       />
 
       <TrackList
-            v-if="tracks.length > 0"
-            :tracks="tracks"
-            :active-tracks="activeTracks"
-            :lead-track="leadTrack"
-            :show-note-indicators="showNoteIndicators"
-            @set-track-volume="setTrackVolume"
-            @set-track-instrument="setTrackInstrument"
-            @set-all-track-volumes="setAllTrackVolumes"
-            @set-all-track-instruments="setAllTrackInstruments"
-            @set-track-muted="setTrackMuted"
-            @set-track-solo="setTrackSolo"
-            @set-track-lead="setTrackLead"
-            @toggle-note-indicators="showNoteIndicators = !showNoteIndicators"
-          />
+        v-if="tracks.length > 0"
+        :tracks="tracks"
+        :active-tracks="activeTracks"
+        :lead-track="leadTrack"
+        :show-note-indicators="showNoteIndicators"
+        @set-track-volume="setTrackVolume"
+        @set-track-instrument="setTrackInstrument"
+        @set-all-track-volumes="setAllTrackVolumes"
+        @set-all-track-instruments="setAllTrackInstruments"
+        @set-track-muted="setTrackMuted"
+        @set-track-solo="setTrackSolo"
+        @set-track-lead="setTrackLead"
+        @toggle-note-indicators="showNoteIndicators = !showNoteIndicators"
+      />
 
-          <YouTubePanel v-if="currentFileMeta?.youtube" :youtube-url="currentFileMeta.youtube" />
+      <YouTubePanel v-if="currentFileMeta?.youtube" :youtube-url="currentFileMeta.youtube" />
 
-          <PdfPanel v-if="currentFileHasPdf" :pdf-url="currentPdfUrl" />
+      <PdfPanel v-if="currentFileHasPdf" :pdf-url="currentPdfUrl" />
     </main>
   </div>
 </template>
@@ -339,7 +338,6 @@ import {
   IconUsers,
   IconDeviceTv,
   IconMusic,
-  IconX,
 } from '@tabler/icons-vue'
 import { nb_NO } from 'primelocale/js/nb_NO.js'
 import { en } from 'primelocale/js/en.js'
@@ -478,6 +476,13 @@ function onOptionSelect() {
   setTimeout(() => document.activeElement?.blur(), 50)
 }
 
+const isFloating = ref(localStorage.getItem('floatControls') === 'true')
+
+function toggleFloat() {
+  isFloating.value = !isFloating.value
+  localStorage.setItem('floatControls', String(isFloating.value))
+}
+
 const theme = ref(localStorage.getItem('theme') || 'light')
 const isDark = ref(theme.value === 'dark')
 document.documentElement.setAttribute('data-theme', theme.value)
@@ -553,7 +558,9 @@ const {
   currentFileMeta,
   currentFileHasPdf,
   transpose,
+  loop,
   setTranspose,
+  toggleLoop,
   handleFileSelect,
   handleUpload,
   togglePlay,
@@ -668,5 +675,9 @@ function searchFiles(event) {
   border: 1px solid color-mix(in srgb, var(--text-muted) 15%, transparent);
   font-size: 0.7rem;
   white-space: nowrap;
+}
+
+.has-floating {
+  padding-bottom: 200px;
 }
 </style>

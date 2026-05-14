@@ -16,6 +16,11 @@
   "bulk_actions": "Bulk actions",
   "cancel": "Cancel",
   "close": "Close",
+  "close_track": "Close track",
+  "settings": "Settings",
+  "float_controls": "Float controls",
+  "loop_on": "Loop on",
+  "loop_off": "Loop off",
   "collapse": "Collapse",
   "compact_mode_off": "Disable compact mode",
   "compact_mode_on": "Enable compact mode",
@@ -62,3 +67,5 @@
   "upload": "Upload",
   "volume": "Volume"
 }
+
+

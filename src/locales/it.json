@@ -16,6 +16,11 @@
   "bulk_actions": "Azioni multiple",
   "cancel": "Annulla",
   "close": "Chiudi",
+  "close_track": "Chiudi traccia",
+  "float_controls": "Controlli fluttuanti",
+  "loop_on": "Loop on",
+  "loop_off": "Loop off",
+  "settings": "Impostazioni",
   "collapse": "Comprimi",
   "compact_mode_off": "Disattiva modalità compatta",
   "compact_mode_on": "Attiva modalità compatta",
@@ -62,3 +67,5 @@
   "upload": "Carica",
   "volume": "Volume"
 }
+
+

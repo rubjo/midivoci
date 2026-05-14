@@ -1,144 +1,178 @@
 <template>
-  <div class="flex flex-column gap-2">
-    <div
-      class="flex flex-wrap align-items-center gap-3 p-3 bg-surface-card border-1 surface-border border-round-lg"
-    >
-      <div
-        v-if="title || composer"
-        class="w-full flex align-items-center justify-content-between lg:justify-content-start"
-      >
-        <div>
-          <h3 class="m-0 my-1" style="line-height: 1.2">{{ title }}</h3>
-          <div v-if="composer" class="text-sm text-color-secondary">{{ composer }}</div>
+  <div :class="['transport-wrapper', { 'transport-floating': isFloating }]">
+    <div class="transport-bar">
+      <div class="transport-header">
+        <TrackMeta :title="title" :composer="composer" />
+      </div>
+
+      <div class="transport-progress">
+        <div class="flex align-items-center gap-2">
+          <PrimeSlider
+            :min="0"
+            :max="duration || 1"
+            :step="0.1"
+            :model-value="currentTime"
+            @update:model-value="$emit('seek', $event)"
+            class="flex-1"
+          />
+          <span class="transport-time"
+            >{{ formatTime(currentTime) }} / {{ formatTime(duration) }}</span
+          >
         </div>
-        <Button class="ml-2 lg:ml-4" size="small" :title="t('close')" @click="$emit('close')">
-          <IconX :size="16" />
-          <span class="hidden md:inline ml-1">{{ t('close') }}</span>
-        </Button>
       </div>
 
-      <div class="flex gap-1 align-items-center w-full md:w-auto">
-        <Button
-          :disabled="!isLoaded"
-          :title="t('skip_back')"
-          class="flex-1 md:flex-none"
-          @click="skipBack"
-        >
-          <IconRewindBackward10 :size="18" />
-        </Button>
-        <Button
-          :disabled="!isLoaded"
-          :title="isPlaying ? t('pause') : t('play')"
-          class="flex-1 md:flex-none"
-          @click="$emit('togglePlay')"
-        >
-          <IconPlayerPlayFilled v-if="!isPlaying" :size="18" />
-          <IconPlayerPauseFilled v-else :size="18" />
-        </Button>
-        <Button
-          :disabled="!isLoaded"
-          :title="t('skip_forward')"
-          class="flex-1 md:flex-none"
-          @click="skipForward"
-        >
-          <IconRewindForward10 :size="18" />
-        </Button>
-        <Button
-          :disabled="!isLoaded"
-          :title="t('stop')"
-          class="flex-1 md:flex-none"
-          @click="$emit('stop')"
-        >
-          <IconPlayerStopFilled :size="18" />
-        </Button>
-        <span class="text-sm font-mono text-color-primary ml-2" style="white-space: nowrap">
-          {{ formatTime(currentTime) }} / {{ formatTime(duration) }}
-        </span>
-      </div>
-
-      <div class="flex align-items-center gap-2 w-full md:w-20rem md:ml-auto">
-        <label
-          class="text-sm font-medium text-color-secondary text-uppercase label flex-shrink-0"
-          style="white-space: nowrap"
-          >{{ t('tempo') }}</label
-        >
-        <Button size="small" class="flex-shrink-0" @click="changeTempoBy(-5)" :disabled="!isLoaded"
-          >-5</Button
-        >
-        <PrimeSlider
-          :min="25"
-          :max="300"
-          class="flex-1 md:max-w-10rem"
-          :model-value="originalBpm ? Math.round((bpm / originalBpm) * 100) : 100"
-          @update:model-value="
-            originalBpm
-              ? $emit('setTempo', (parseFloat($event) / 100) * originalBpm)
-              : $emit('setTempo', $event)
-          "
-        />
-        <Button size="small" class="flex-shrink-0" @click="changeTempoBy(5)" :disabled="!isLoaded"
-          >+5</Button
-        >
-        <span
-          class="text-sm font-medium text-color-primary font-mono flex-shrink-0"
-          :class="{ 'cursor-pointer text-decoration-line underline hover:text-primary': canReset }"
-          style="white-space: nowrap"
-          @click="resetTempo"
-        >
-          {{ originalBpm ? Math.round((bpm / originalBpm) * 100) + '%' : Math.round(bpm) }}
-        </span>
-        <Button
-          :disabled="!isLoaded"
-          size="small"
-          class="flex-shrink-0"
-          :title="t('transpose')"
-          :aria-label="t('transpose')"
-          @click="transposeDialogVisible = true"
-          :severity="transpose ? 'danger' : undefined"
-        >
-          <IconArrowsTransferUpDown :size="16" />
-        </Button>
+      <div class="transport-buttons">
+        <div class="transport-buttons-inner">
+          <Button
+            :disabled="!isLoaded"
+            :title="t('skip_back')"
+            :severity="isFloating ? 'contrast' : ''"
+            :variant="isFloating ? 'text' : 'filled'"
+            :size="isFloating ? 'small' : 'normal'"
+            @click="skipBack"
+          >
+            <IconRewindBackward10 :size="18" />
+          </Button>
+          <Button
+            :disabled="!isLoaded"
+            :title="isPlaying ? t('pause') : t('play')"
+            :severity="isFloating ? 'contrast' : ''"
+            :variant="isFloating ? 'text' : 'filled'"
+            :size="isFloating ? 'small' : 'normal'"
+            @click="$emit('togglePlay')"
+          >
+            <IconPlayerPlayFilled v-if="!isPlaying" :size="18" />
+            <IconPlayerPauseFilled v-else :size="18" />
+          </Button>
+          <Button
+            :disabled="!isLoaded"
+            :title="t('stop')"
+            :severity="isFloating ? 'contrast' : ''"
+            :variant="isFloating ? 'text' : 'filled'"
+            :size="isFloating ? 'small' : 'normal'"
+            @click="$emit('stop')"
+          >
+            <IconPlayerStopFilled :size="18" />
+          </Button>
+          <Button
+            :disabled="!isLoaded"
+            :title="t('skip_forward')"
+            :severity="isFloating ? 'contrast' : ''"
+            :variant="isFloating ? 'text' : 'filled'"
+            :size="isFloating ? 'small' : 'normal'"
+            @click="skipForward"
+          >
+            <IconRewindForward10 :size="18" />
+          </Button>
+          <Button
+            :disabled="!isLoaded"
+            :title="loop ? t('loop_on') : t('loop_off')"
+            :severity="loop ? 'success' : isFloating ? 'contrast' : undefined"
+            :variant="isFloating ? 'text' : 'filled'"
+            :size="isFloating ? 'small' : 'normal'"
+            @click="$emit('toggleLoop')"
+          >
+            <IconRepeat :size="18" />
+          </Button>
+          <Button
+            :title="t('close_track')"
+            :severity="isFloating ? 'contrast' : ''"
+            :variant="isFloating ? 'text' : 'filled'"
+            :size="isFloating ? 'small' : 'normal'"
+            @click="$emit('close')"
+          >
+            <IconPlayerEjectFilled :size="18" />
+          </Button>
+          <Button
+            :title="t('settings')"
+            :severity="isFloating ? 'contrast' : ''"
+            :variant="isFloating ? 'text' : 'filled'"
+            :size="isFloating ? 'small' : 'normal'"
+            @click="settingsPopover.toggle($event)"
+          >
+            <IconSettings :size="18" />
+          </Button>
+        </div>
       </div>
     </div>
+
+    <Popover ref="settingsPopover" class="transport-settings">
+      <div class="settings-content">
+        <div class="settings-section">
+          <Button
+            severity="secondary"
+            class="w-full"
+            @click="($emit('close'), settingsPopover.hide())"
+          >
+            <IconPlayerEjectFilled :size="16" />
+            <span>{{ t('close_track') }}</span>
+          </Button>
+        </div>
+
+        <hr class="settings-divider" />
+
+        <div class="settings-section">
+          <span class="settings-label">{{ t('tempo') }}</span>
+          <div class="settings-slider-row p-2">
+            <Button size="small" @click="changeTempoBy(-5)" :disabled="!isLoaded">−5</Button>
+            <PrimeSlider
+              :min="25"
+              :max="300"
+              :model-value="tempoPercent"
+              @update:model-value="handleTempoSlider"
+              class="flex-1"
+            />
+            <Button size="small" @click="changeTempoBy(5)" :disabled="!isLoaded">+5</Button>
+          </div>
+          <div class="settings-sub-row">
+            <span>{{ tempoPercent }}%</span>
+            <Button v-if="canReset" severity="secondary" size="small" @click="resetTempo">
+              {{ t('reset') }}
+            </Button>
+          </div>
+        </div>
+
+        <hr class="settings-divider" />
+
+        <div class="settings-section">
+          <span class="settings-label">{{ t('transpose') }}</span>
+          <div class="settings-slider-row p-2">
+            <PrimeSlider
+              :min="-12"
+              :max="12"
+              :step="1"
+              :model-value="transpose"
+              @update:model-value="$emit('setTranspose', $event)"
+              class="flex-1"
+            />
+          </div>
+          <div class="settings-sub-row">
+            <span>{{ transposeLabel }}</span>
+            <Button
+              v-if="transpose"
+              severity="secondary"
+              size="small"
+              @click="$emit('setTranspose', 0)"
+            >
+              {{ t('reset') }}
+            </Button>
+          </div>
+        </div>
+
+        <hr class="settings-divider" />
+
+        <div class="settings-section">
+          <div class="settings-row">
+            <span>{{ t('float_controls') }}</span>
+            <PrimeToggleSwitch
+              :model-value="isFloating"
+              @update:model-value="($emit('toggleFloat'), settingsPopover.hide())"
+            />
+          </div>
+        </div>
+      </div>
+    </Popover>
   </div>
-
-  <PrimeDialog
-    v-model:visible="transposeDialogVisible"
-    :header="t('transpose')"
-    :modal="true"
-    :draggable="false"
-    :style="{ width: '300px' }"
-    class="transpose-dialog"
-  >
-    <div class="flex flex-column gap-4 p-2">
-      <PrimeSlider
-        :min="-12"
-        :max="12"
-        :step="1"
-        class="w-full"
-        :model-value="transpose"
-        @update:model-value="$emit('setTranspose', $event)"
-      />
-      <div class="text-center">
-        {{ transposeLabel }}
-      </div>
-    </div>
-    <template #footer>
-      <div class="flex gap-2 justify-content-center">
-        <Button
-          severity="secondary"
-          variant="outlined"
-          @click="emit('setTranspose', 0)"
-          :disabled="!transpose"
-        >
-          {{ t('reset') }}
-        </Button>
-        <Button severity="secondary" variant="outlined" @click="transposeDialogVisible = false">
-          {{ t('close') }}
-        </Button>
-      </div>
-    </template>
-  </PrimeDialog>
 </template>
 
 <script setup>
@@ -150,13 +184,16 @@ import {
   IconPlayerStopFilled,
   IconRewindBackward10,
   IconRewindForward10,
-  IconArrowsTransferUpDown,
-  IconX,
+  IconRepeat,
+  IconSettings,
+  IconPlayerEjectFilled,
 } from '@tabler/icons-vue'
 
+import TrackMeta from './TrackMeta.vue'
 import Button from 'primevue/button'
 import PrimeSlider from 'primevue/slider'
-import PrimeDialog from 'primevue/dialog'
+import Popover from 'primevue/popover'
+import PrimeToggleSwitch from 'primevue/toggleswitch'
 
 const { t } = useI18n()
 
@@ -170,18 +207,35 @@ const props = defineProps({
   transpose: { type: Number, default: 0 },
   title: { type: String, default: '' },
   composer: { type: String, default: '' },
+  isFloating: Boolean,
+  loop: Boolean,
 })
 
-const emit = defineEmits(['togglePlay', 'stop', 'setTempo', 'seek', 'setTranspose', 'close'])
+const emit = defineEmits([
+  'togglePlay',
+  'stop',
+  'setTempo',
+  'seek',
+  'setTranspose',
+  'close',
+  'toggleFloat',
+  'toggleLoop',
+])
 
-const transposeDialogVisible = ref(false)
+const settingsPopover = ref()
 
 const canReset = computed(
   () => props.originalBpm && Math.round(props.bpm) !== Math.round(props.originalBpm),
 )
 
+const tempoPercent = computed(() => {
+  if (!props.originalBpm) return 100
+  return Math.round((props.bpm / props.originalBpm) * 100)
+})
+
 const transposeLabel = computed(() => {
   const v = props.transpose
+  if (v === 0) return '0'
   const prefix = v > 0 ? '+' : ''
   return `${prefix}${v} ${t('semitones')}`
 })
@@ -192,9 +246,13 @@ function resetTempo() {
 
 function changeTempoBy(delta) {
   if (!props.originalBpm) return
-  const currentPct = Math.round((props.bpm / props.originalBpm) * 100)
-  const newPct = Math.max(25, Math.min(300, currentPct + delta))
+  const newPct = Math.max(25, Math.min(300, tempoPercent.value + delta))
   emit('setTempo', (newPct / 100) * props.originalBpm)
+}
+
+function handleTempoSlider(val) {
+  if (!props.originalBpm) return
+  emit('setTempo', (val / 100) * props.originalBpm)
 }
 
 function skipBack() {
@@ -212,3 +270,137 @@ function formatTime(seconds) {
   return `${m}:${s.toString().padStart(2, '0')}`
 }
 </script>
+
+<style scoped>
+.transport-wrapper {
+  transition: all 0.3s ease;
+  &.transport-floating {
+    margin: 0 1rem;
+  }
+}
+
+.transport-bar {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition:
+    background 0.3s,
+    border-radius 0.3s,
+    box-shadow 0.3s;
+}
+
+.transport-floating {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 0.75rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+.transport-floating .transport-bar {
+  border-radius: 100px;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.25);
+  border: none;
+  gap: 0;
+  background: color-mix(in srgb, var(--extreme) 50%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  max-width: 500px;
+  width: 100%;
+  padding: 0.25rem 1.5rem;
+}
+
+.transport-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 0.3rem 0;
+}
+
+.transport-progress {
+  padding: 0.1rem 0 0.25rem 0;
+}
+
+.transport-progress :deep(.p-slider .p-slider-handle) {
+  display: none;
+}
+
+.transport-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.transport-buttons-inner {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.transport-time {
+  font-size: 0.75rem;
+  font-family: 'Victor Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Settings Popover */
+.settings-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 240px;
+}
+
+.settings-section {
+  padding: 0.5rem 0.25rem;
+}
+
+.settings-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.settings-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.settings-sub-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.settings-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 0;
+  opacity: 0.5;
+}
+</style>

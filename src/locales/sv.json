@@ -16,6 +16,11 @@
   "bulk_actions": "Massåtgärder",
   "cancel": "Avbryt",
   "close": "Stäng",
+  "close_track": "Stäng spår",
+  "float_controls": "Flytande kontroller",
+  "loop_on": "Loop on",
+  "loop_off": "Loop off",
+  "settings": "Inställningar",
   "collapse": "Dölj",
   "compact_mode_off": "Inaktivera kompakt läge",
   "compact_mode_on": "Aktivera kompakt läge",
@@ -62,3 +67,5 @@
   "upload": "Ladda upp",
   "volume": "Volym"
 }
+
+

@@ -3,6 +3,8 @@
 :root {
   --bg-page: #f9fafb;
   --bg-card: #fff;
+  --bg-glass: rgba(255, 255, 255, 0.85);
+  --bg-glass-float: rgba(255, 255, 255, 0.9);
   --border: #e5e7eb;
   --border-light: #f3f4f6;
   --text-primary: #111827;
@@ -12,6 +14,7 @@
   --btn-border: #e5e7eb;
   --btn-hover: #f3f4f6;
   --p-list-option-focus-background: #fafafa !important;
+  --extreme: #fff;
 }
 
 [data-theme='dark'] {
@@ -25,10 +28,13 @@
   --btn-bg: #243244;
   --btn-border: #36465a;
   --btn-hover: #2e3e52;
+  --bg-glass: rgba(36, 50, 68, 0.85);
+  --bg-glass-float: rgba(0, 0, 0, 0.85);
   --p-form-field-background: var(--btn-bg) !important;
   --p-slider-handle-content-background: #d8dee9;
   --p-slider-handle-content-hover-background: #ffffff;
   --p-list-option-focus-background: #1c1d1f !important;
+  --extreme: #000;
 }
 
 [data-theme='dark'] .note {
@@ -149,7 +155,13 @@ body {
   margin-left: -1px;
 }
 
-.p-button:not(.p-button-success, .p-button-warn, .p-button-danger, .p-button-info) {
+.p-button:not(
+  .p-button-success,
+  .p-button-warn,
+  .p-button-danger,
+  .p-button-info,
+  .p-button-contrast
+) {
   background: var(--p-select-background) !important;
   border: 1px solid var(--p-form-field-border-color) !important;
   color: var(--p-select-color) !important;
