@@ -150,7 +150,9 @@
                 <div class="flex align-items-center gap-2">
                   <PrimeToggleSwitch v-model="filterVideo" />
                   <IconDeviceTv :size="14" class="text-color-secondary" />
-                  <span class="text-xs text-color-secondary">{{ t('live_performance_video') }}</span>
+                  <span class="text-xs text-color-secondary">{{
+                    t('live_performance_video')
+                  }}</span>
                 </div>
                 <div class="flex align-items-center gap-2">
                   <PrimeToggleSwitch v-model="filterScore" />
@@ -257,11 +259,9 @@
         </div>
       </div>
 
-      <div
-        v-if="isLoaded && currentFileMeta?.composer"
-        class="px-3 pt-3 pb-1"
-      >
-        <span class="text-sm font-medium text-color-secondary">{{ currentFileMeta.composer }}: {{ currentFileMeta.title }}</span>
+      <div v-if="isLoaded && currentFileMeta.title" class="text-center">
+        <h3 class="m-2">{{ currentFileMeta.title }}</h3>
+        <div>{{ currentFileMeta.composer }}</div>
       </div>
 
       <TransportControls

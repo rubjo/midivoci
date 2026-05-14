@@ -36,7 +36,7 @@
       >
         <IconPlayerStopFilled :size="18" />
       </Button>
-      <span class="text-sm font-mono text-color-secondary ml-2" style="white-space: nowrap">
+      <span class="text-sm font-mono text-color-primary ml-2" style="white-space: nowrap">
         {{ formatTime(currentTime) }} / {{ formatTime(duration) }}
       </span>
     </div>
