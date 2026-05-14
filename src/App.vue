@@ -656,6 +656,12 @@ function searchFiles(event) {
   margin: 1rem 0;
 }
 
+.upload-inputgroup-btn {
+  input[type="file"] {
+    color: transparent;
+  }
+}
+
 .track-info {
   padding: 0.25rem 0.4rem;
   border: 1px solid color-mix(in srgb, var(--text-muted) 15%, transparent);
