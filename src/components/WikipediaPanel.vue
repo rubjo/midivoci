@@ -36,8 +36,15 @@
       </div>
     </div>
     <div v-if="expanded" class="px-3 pb-3 leading-normal">
-      <h3 class="mb-2 mt-0">{{ pageTitle }}</h3>
-      <p class="m-0 wikipedia-summary">{{ summary }}</p>
+      <div
+        :class="{ 'wikipedia-summary': summary.replace(/<[^>]+>/g, '').length > 600 }"
+      >
+        <div v-if="showFull || summary.replace(/<[^>]+>/g, '').length <= 2000" v-html="summary"></div>
+        <template v-else>
+          <div v-text="summary.replace(/<[^>]+>/g, '').slice(0, 2000)"></div>
+          <a class="text-sm font-medium text-primary cursor-pointer" @click="showFull = true">{{ t('wikipedia_more') }}</a>
+        </template>
+      </div>
     </div>
   </div>
 </template>
@@ -63,6 +70,9 @@ const summary = ref('')
 const pageTitle = ref('')
 const foundLang = ref('en')
 const loading = ref(false)
+const showFull = ref(false)
+
+watch(summary, () => { showFull.value = false })
 
 function toggleExpanded() {
   expanded.value = !expanded.value
@@ -87,7 +97,6 @@ async function searchWikipedia(lang, term) {
     `gsrlimit=1&` +
     `prop=extracts&` +
     `exintro&` +
-    `explaintext&` +
     `format=json&` +
     `origin=*`
 
@@ -101,13 +110,6 @@ async function searchWikipedia(lang, term) {
     }
   }
   return null
-}
-
-function isExactMatch(searchTerm, title) {
-  const words = searchTerm.split(' ').filter((w) => w.length > 2)
-  if (!words.length) return false
-  const t = title.toLowerCase()
-  return words.every((w) => t.includes(w.toLowerCase()))
 }
 
 async function fetchSummary() {
@@ -125,9 +127,15 @@ async function fetchSummary() {
     for (const lang of langs) {
       let result = await searchWikipedia(lang, searchTerm)
       if (!result && props.composer) {
-        result = await searchWikipedia(lang, `${props.composer} composer`)
+        result = await searchWikipedia(lang, `${props.composer} ${t('wikipedia_composer')}`)
       }
-      if (result && (lang === 'en' || isExactMatch(searchTerm, result.title))) {
+      if (result) {
+        const surname = props.composer?.split(',')[0]?.trim()
+        if (surname && !result.title.toLowerCase().includes(surname.toLowerCase())) {
+          result = null
+        }
+      }
+      if (result) {
         summary.value = result.summary
         pageTitle.value = result.title
         foundLang.value = lang

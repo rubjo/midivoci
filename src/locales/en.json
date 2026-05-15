@@ -17,6 +17,8 @@
   "pan_left": "L",
   "pan_center": "C",
   "pan_right": "R",
+  "wikipedia_composer": "composer",
+  "wikipedia_more": "more…",
   "bpm": "BPM",
   "bulk_actions": "Bulk actions",
   "cancel": "Cancel",
