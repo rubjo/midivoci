@@ -347,8 +347,12 @@ function formatTime(seconds) {
   align-items: center;
   gap: 0.25rem;
   button {
-    padding: 0 0.4rem;
+    padding: 0.5rem;
   }
+}
+
+.transport-floating .transport-buttons-inner button {
+  padding: 0 0.4rem;
 }
 
 .transport-time {

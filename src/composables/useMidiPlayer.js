@@ -37,7 +37,6 @@ export function useMidiPlayer() {
   let trackGains = []
   let midi = null
   let instruments = []
-  let prevMuted = []
   let allNotes = []
   let maxNoteDuration = 0
   let startTime = 0
@@ -257,8 +256,6 @@ export function useMidiPlayer() {
       duration.value = parsed.duration
       currentTime.value = 0
       pausedAt = 0
-      prevMuted = tracks.value.map(() => false)
-
       trackGains = createTrackGains(audioCtx, masterGain, midi.tracks.length)
       await loadAllInstruments()
 
@@ -476,10 +473,6 @@ export function useMidiPlayer() {
 
   function setTrackSolo(index, value) {
     if (value) {
-      const wasAnySolo = tracks.value.some((t) => t.solo)
-      if (!wasAnySolo) {
-        prevMuted = tracks.value.map((t) => t.muted)
-      }
       tracks.value[index].muted = false
       tracks.value[index].solo = true
       tracks.value.forEach((t, i) => {
@@ -487,10 +480,9 @@ export function useMidiPlayer() {
       })
     } else {
       tracks.value[index].solo = false
-      const anySolo = tracks.value.some((t) => t.solo)
-      if (!anySolo) {
-        tracks.value.forEach((t, i) => {
-          t.muted = prevMuted[i] ?? false
+      if (!tracks.value.some((t) => t.solo)) {
+        tracks.value.forEach((t) => {
+          t.muted = false
         })
       } else {
         tracks.value[index].muted = true
@@ -509,10 +501,17 @@ export function useMidiPlayer() {
     const pos = leads.indexOf(index)
     if (pos >= 0) {
       leads.splice(pos, 1)
-      if (tracks.value[index]) tracks.value[index].volume = 100
     } else {
       leads.push(index)
-      if (tracks.value[index]) tracks.value[index].volume = 100
+      const track = tracks.value[index]
+      if (track) {
+        track.solo = false
+        track.muted = false
+        track.volume = 100
+      }
+      tracks.value.forEach((t, i) => {
+        if (i !== index && t.solo) t.solo = false
+      })
     }
     leadTrack.value = leads
     if (leads.length > 0) {

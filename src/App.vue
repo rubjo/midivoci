@@ -3,7 +3,12 @@
     <header class="app-header">
       <div class="flex align-items-center gap-2 cursor-pointer" @click="infoDialogVisible = true">
         <img src="./assets/logo.png" alt="MidiVox" class="header-logo" />
-        <h1>{{ t('app.title') }}</h1>
+        <div class="app-title-wrapper">
+          <h1>
+            {{ t('app.title') }}<span class="subtitle-desktop">&nbsp;{{ t('app.subtitle') }}</span>
+          </h1>
+          <span class="subtitle-mobile">{{ t('app.subtitle') }}</span>
+        </div>
       </div>
       <div class="header-actions">
         <div @click.stop>
@@ -220,10 +225,7 @@
                       <IconUsers :size="12" />
                       {{ slotProps.option.numTracks }} {{ t('parts').toLowerCase() }}
                     </Tag>
-                    <Tag
-                      severity="secondary"
-                      class="font-mono track-info"
-                    >
+                    <Tag severity="secondary" class="font-mono track-info">
                       {{ slotProps.option.format === 'musicxml' ? 'MusicXML' : 'MIDI' }}
                     </Tag>
                     <Tag
@@ -240,7 +242,11 @@
                       class="font-mono track-info"
                     >
                       <IconMusic :size="12" />
-                      {{ t('score') }}
+                      {{
+                        slotProps.option.format === 'musicxml'
+                          ? t('score_interactive')
+                          : t('score_pdf')
+                      }}
                     </Tag>
                   </div>
                 </div>
@@ -623,7 +629,7 @@ function formatDuration(seconds) {
   if (!seconds || typeof seconds !== 'number') return '?'
   const mins = Math.floor(seconds / 60)
   const secs = Math.floor(seconds % 60)
-  return `${mins}:${secs.toString().padStart(2, '0')} mins`
+  return `${mins}:${secs.toString().padStart(2, '0')} min`
 }
 
 function metaLabel(fileName) {
@@ -739,8 +745,41 @@ function searchFiles(event) {
 
 <style scoped>
 .header-logo {
-  width: 34px;
-  height: 34px;
+  width: 42px;
+  height: 42px;
+  margin: -4px 0;
+}
+
+.app-title-wrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  line-height: 1rem;
+}
+
+.subtitle-desktop {
+  display: inline;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+.subtitle-mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .app-title-wrapper {
+    flex-direction: column;
+    gap: 0;
+  }
+  .subtitle-desktop {
+    display: none;
+  }
+  .subtitle-mobile {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+  }
 }
 
 .info-dialog-banner {

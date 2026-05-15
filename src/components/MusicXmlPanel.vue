@@ -373,6 +373,7 @@ watch(expanded, (val) => {
       if (!vrv) {
         initVerovio()
       } else {
+        renderScore()
         updateCursor(props.currentTime)
       }
     })

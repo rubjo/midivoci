@@ -98,12 +98,25 @@
               :model-value="track.program"
               @update:model-value="$emit('setTrackInstrument', index, $event)"
               :options="instrumentList"
-              option-label="name"
+              :option-label="(opt) => t(`instrument_${opt.program}`)"
               option-value="program"
               size="small"
               class="w-full md:w-14rem"
               scroll-height="50vh"
-            />
+            >
+              <template #value="slotProps">
+                <div class="flex align-items-center gap-2">
+                  <InstrumentIcon :program="track.program" :size="16" />
+                  <span>{{ t(`instrument_${track.program}`) }}</span>
+                </div>
+              </template>
+              <template #option="slotProps">
+                <div class="flex align-items-center gap-2">
+                  <InstrumentIcon :program="slotProps.option.program" :size="16" />
+                  <span>{{ t(`instrument_${slotProps.option.program}`) }}</span>
+                </div>
+              </template>
+            </PrimeSelect>
           </div>
         </div>
         <div class="flex gap-1 w-full md:w-auto md:ml-auto">
@@ -163,7 +176,7 @@
                 :model-value="track.program"
                 @update:model-value="$emit('setTrackInstrument', index, $event)"
                 :options="instrumentList"
-                option-label="name"
+                :option-label="(opt) => t(`instrument_${opt.program}`)"
                 option-value="program"
                 size="small"
                 scroll-height="50vh"
@@ -174,6 +187,12 @@
                     :size="16"
                     style="display: block; margin: 0 auto"
                   />
+                </template>
+                <template #option="slotProps">
+                  <div class="flex align-items-center gap-2">
+                    <InstrumentIcon :program="slotProps.option.program" :size="16" />
+                    <span>{{ t(`instrument_${slotProps.option.program}`) }}</span>
+                  </div>
                 </template>
               </PrimeSelect>
             </div>
@@ -243,11 +262,24 @@
       <PrimeSelect
         v-model="bulkInstrument"
         :options="instrumentList"
-        option-label="name"
+        :option-label="(opt) => t(`instrument_${opt.program}`)"
         option-value="program"
         class="w-full"
         scroll-height="400px"
-      />
+      >
+        <template #value="slotProps">
+          <div class="flex align-items-center gap-2">
+            <InstrumentIcon :program="slotProps.value" :size="16" />
+            <span>{{ t(`instrument_${slotProps.value}`) }}</span>
+          </div>
+        </template>
+        <template #option="slotProps">
+          <div class="flex align-items-center gap-2">
+            <InstrumentIcon :program="slotProps.option.program" :size="16" />
+            <span>{{ t(`instrument_${slotProps.option.program}`) }}</span>
+          </div>
+        </template>
+      </PrimeSelect>
       <div class="flex align-items-center gap-2">
         <PrimeToggleSwitch v-model="saveAsPreferred" input-id="pref-instrument" />
         <label for="pref-instrument" class="text-sm text-color-secondary">{{
