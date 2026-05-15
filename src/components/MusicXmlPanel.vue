@@ -14,13 +14,15 @@
         {{ t('score') }}
       </h3>
       <div class="flex align-items-center gap-1" @click.stop>
-        <Button size="small" variant="text" :disabled="zoomPercent <= 50" @click="zoomOut">
-          <IconMinus :size="14" />
-        </Button>
-        <span class="text-xs text-color-secondary zoom-label">{{ zoomPercent }}%</span>
-        <Button size="small" variant="text" :disabled="zoomPercent >= 150" @click="zoomIn">
-          <IconPlus :size="14" />
-        </Button>
+        <template v-if="expanded">
+          <Button size="small" variant="text" :disabled="zoomPercent <= 50" @click="zoomOut">
+            <IconMinus :size="14" />
+          </Button>
+          <span class="text-xs text-color-secondary zoom-label">{{ zoomPercent }}%</span>
+          <Button size="small" variant="text" :disabled="zoomPercent >= 150" @click="zoomIn">
+            <IconPlus :size="14" />
+          </Button>
+        </template>
         <Button
           size="small"
           variant="text"
@@ -62,6 +64,8 @@ import Button from 'primevue/button'
 const { t } = useI18n()
 
 const EXPANDED_KEY = 'midivox:musicxml-panel-expanded'
+const ZOOM_KEY = 'midivox:musicxml-zoom'
+const SAVED_ZOOM = parseInt(localStorage.getItem(ZOOM_KEY), 10)
 
 const props = defineProps({
   xmlContent: { type: String, default: '' },
@@ -79,7 +83,7 @@ const error = ref(false)
 const hoverX = ref(-1)
 const hoverY = ref(0)
 const hoverHeight = ref(0)
-const zoomPercent = ref(100)
+const zoomPercent = ref(SAVED_ZOOM >= 50 && SAVED_ZOOM <= 150 ? SAVED_ZOOM : 100)
 
 let vrv = null
 let verovioModulePromise = null
@@ -379,6 +383,10 @@ watch(expanded, (val) => {
       }
     })
   }
+})
+
+watch(zoomPercent, (val) => {
+  localStorage.setItem(ZOOM_KEY, String(val))
 })
 
 watch(
