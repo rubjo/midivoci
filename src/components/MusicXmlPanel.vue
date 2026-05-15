@@ -3,16 +3,22 @@
     v-if="xmlContent"
     class="musicxml-panel bg-surface-card border-1 surface-border border-round-lg overflow-hidden"
   >
-    <div
-      class="panel-header flex align-items-center justify-content-between p-3 surface-border"
+      <div class="panel-header flex align-items-center justify-content-between p-3 surface-border"
       @click="toggleExpanded"
     >
-      <h3
-        class="text-sm font-medium text-color-secondary text-uppercase m-0 flex align-items-center gap-1"
-      >
-        <IconMusic :size="16" />
-        {{ t('score_interactive') }}
-      </h3>
+      <div class="flex flex-column gap-1 min-w-0">
+        <h3
+          class="text-sm font-medium text-color-secondary text-uppercase m-0 flex align-items-center gap-1"
+        >
+          <IconMusic :size="16" />
+          {{ t('score_interactive') }}
+        </h3>
+        <div v-if="xmlMeta.composer || xmlMeta.rights" class="flex gap-2 text-xs text-color-secondary">
+          <span v-if="xmlMeta.composer">{{ xmlMeta.composer }}</span>
+          <span v-if="xmlMeta.composer && xmlMeta.rights" class="text-color-muted">|</span>
+          <span v-if="xmlMeta.rights" class="truncate" style="max-width: 200px">{{ xmlMeta.rights }}</span>
+        </div>
+      </div>
       <div class="flex align-items-center gap-1" @click.stop>
         <template v-if="expanded">
           <Button size="small" variant="text" :disabled="zoomPercent <= 50" @click="zoomOut">
@@ -57,7 +63,7 @@
 </template>
 
 <script setup>
-import { ref, watch, nextTick, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { IconChevronDown, IconMusic, IconMinus, IconPlus } from '@tabler/icons-vue'
 import Button from 'primevue/button'
@@ -72,6 +78,7 @@ const props = defineProps({
   xmlContent: { type: String, default: '' },
   currentTime: { type: Number, default: -1 },
   duration: { type: Number, default: 0 },
+  fileMeta: { type: Object, default: null },
 })
 
 const emit = defineEmits(['seek', 'midiReady'])
@@ -85,6 +92,19 @@ const hoverX = ref(-1)
 const hoverY = ref(0)
 const hoverHeight = ref(0)
 const zoomPercent = ref(SAVED_ZOOM >= 50 && SAVED_ZOOM <= 150 ? SAVED_ZOOM : 100)
+
+const xmlMeta = computed(() => {
+  const xml = props.xmlContent
+  const meta = { composer: null, rights: null }
+  if (xml) {
+    const compMatch = xml.match(/<creator\s+type="composer">([^<]+)<\/creator>/i)
+    if (compMatch) meta.composer = compMatch[1]
+    const rightsMatch = xml.match(/<rights>([^<]+)<\/rights>/i)
+    if (rightsMatch) meta.rights = rightsMatch[1]
+  }
+  if (!meta.composer && props.fileMeta?.composer) meta.composer = props.fileMeta.composer
+  return meta
+})
 
 let vrv = null
 let verovioModulePromise = null

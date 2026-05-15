@@ -3,16 +3,22 @@
     v-if="pdfUrl"
     class="pdf-panel bg-surface-card border-1 surface-border border-round-lg overflow-hidden"
   >
-    <div
-      class="panel-header flex align-items-center justify-content-between p-3 surface-border"
+      <div class="panel-header flex align-items-center justify-content-between p-3 surface-border"
       @click="toggleExpanded"
     >
-      <h3
-        class="text-sm font-medium text-color-secondary text-uppercase m-0 flex align-items-center gap-1"
-      >
-        <IconMusic :size="16" />
-        {{ t('score_pdf') }}
-      </h3>
+      <div class="flex flex-column gap-1">
+        <h3
+          class="text-sm font-medium text-color-secondary text-uppercase m-0 flex align-items-center gap-1"
+        >
+          <IconMusic :size="16" />
+          {{ t('score_pdf') }}
+        </h3>
+        <div v-if="pdfMeta" class="flex gap-2 text-xs text-color-secondary">
+          <span v-if="pdfMeta.author">{{ pdfMeta.author }}</span>
+          <span v-if="pdfMeta.author && pdfMeta.creator" class="text-color-muted">|</span>
+          <span v-if="pdfMeta.creator">{{ pdfMeta.creator }}</span>
+        </div>
+      </div>
       <div class="flex align-items-center gap-1" @click.stop>
         <template v-if="expanded && numPages > 0">
           <Button
@@ -93,6 +99,7 @@ const canvasRef = ref(null)
 
 const pageNum = ref(1)
 const numPages = ref(0)
+const pdfMeta = ref(null)
 
 let pdfDoc = null
 let renderTask = null
@@ -129,9 +136,16 @@ async function loadPdf(url) {
   }
   numPages.value = 0
   pageNum.value = 1
+  pdfMeta.value = null
   try {
     pdfDoc = await pdfjsLib.getDocument(url).promise
     numPages.value = pdfDoc.numPages
+    const meta = await pdfDoc.getMetadata()
+    const info = meta.info || {}
+    pdfMeta.value = {
+      author: info.Author || null,
+      creator: info.Creator || null,
+    }
     await renderPage()
   } catch (err) {
     console.error('Failed to load PDF:', err)
