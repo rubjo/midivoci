@@ -83,27 +83,6 @@
           >
             <IconPlayerEject :size="24" />
           </Button>
-          <a
-            v-if="composer"
-            :href="suggestUrl"
-            target="_blank"
-            rel="noopener noreferrer"
-            :title="t('suggest_resource')"
-            :class="[
-              'flex align-items-center justify-content-center',
-              isFloating
-                ? 'p-button p-button-text p-button-contrast p-button-sm'
-                : 'p-button p-button-filled p-button-normal',
-            ]"
-            :style="{
-              padding: isFloating ? '0 0.4rem' : '0.5rem',
-              borderRadius: 'var(--border-radius)',
-              textDecoration: 'none',
-              color: isFloating ? 'var(--text-color)' : 'var(--primary-color)',
-            }"
-          >
-            <IconExternalLink :size="24" />
-          </a>
           <Button
             :title="t('settings')"
             :severity="isFloating ? 'contrast' : ''"

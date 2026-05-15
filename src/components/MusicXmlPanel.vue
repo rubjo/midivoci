@@ -13,9 +13,11 @@
           <IconMusic :size="16" />
           {{ t('score_interactive') }}
         </h3>
-        <div v-if="xmlMeta.composer || xmlMeta.rights" class="flex gap-2 text-xs text-color-secondary">
-          <span v-if="xmlMeta.composer">{{ xmlMeta.composer }}</span>
-          <span v-if="xmlMeta.composer && xmlMeta.rights" class="text-color-muted">|</span>
+        <div v-if="xmlMeta.creators.length || xmlMeta.rights" class="flex gap-2 text-xs text-color-secondary flex-wrap">
+          <template v-for="(c, i) in xmlMeta.creators" :key="c.type">
+            <span>{{ c.value }}</span>
+            <span v-if="i < xmlMeta.creators.length - 1 || xmlMeta.rights" class="text-color-muted">|</span>
+          </template>
           <span v-if="xmlMeta.rights" class="truncate" style="max-width: 200px">{{ xmlMeta.rights }}</span>
         </div>
       </div>
@@ -95,14 +97,18 @@ const zoomPercent = ref(SAVED_ZOOM >= 50 && SAVED_ZOOM <= 150 ? SAVED_ZOOM : 100
 
 const xmlMeta = computed(() => {
   const xml = props.xmlContent
-  const meta = { composer: null, rights: null }
+  const meta = { creators: [], rights: null }
   if (xml) {
-    const compMatch = xml.match(/<creator\s+type="composer">([^<]+)<\/creator>/i)
-    if (compMatch) meta.composer = compMatch[1]
+    const iterator = xml.matchAll(/<creator\s+type="([^"]+)">([^<]+)<\/creator>/gi)
+    for (const m of iterator) {
+      meta.creators.push({ type: m[1], value: m[2] })
+    }
     const rightsMatch = xml.match(/<rights>([^<]+)<\/rights>/i)
     if (rightsMatch) meta.rights = rightsMatch[1]
   }
-  if (!meta.composer && props.fileMeta?.composer) meta.composer = props.fileMeta.composer
+  if (!meta.creators.some((c) => c.type === 'composer') && props.fileMeta?.composer) {
+    meta.creators.unshift({ type: 'composer', value: props.fileMeta.composer })
+  }
   return meta
 })
 
@@ -110,6 +116,7 @@ let vrv = null
 let verovioModulePromise = null
 let timemapEntries = []
 let measures = []
+let timepoints = []
 
 async function getVerovio() {
   if (vrv) return vrv
@@ -260,6 +267,30 @@ function buildData(rawTimemap) {
   })
 
   refreshRects()
+  buildTimepoints()
+}
+
+function buildTimepoints() {
+  timepoints = []
+  timemapEntries.forEach((entry) => {
+    if (entry.tstamp == null) return
+    const measure = measures[entry.measureEntry]
+    if (!measure) return
+    let x = null
+    if (entry.rectNotes.length) {
+      x = entry.rectNotes[0].left
+    } else if (measure.rectMeasure) {
+      x = measure.rectMeasure.left
+    }
+    if (x != null) {
+      timepoints.push({
+        timestamp: entry.tstamp,
+        x,
+        systemTop: measure.rectSystem.top,
+        systemHeight: measure.rectSystem.height,
+      })
+    }
+  })
 }
 
 function refreshRects() {
@@ -304,65 +335,73 @@ function refreshRects() {
   })
 }
 
-function findMeasureIndex(ms) {
-  for (let i = 0; i < measures.length; i++) {
-    if (
-      ms >= measures[i].timestamp &&
-      (i === measures.length - 1 || ms < measures[i + 1].timestamp)
-    ) {
-      return i
-    }
-  }
-  return 0
-}
-
 function updateCursor(time) {
   const cursor = cursorRef.value
-  if (!cursor || !vrv || !props.duration || time < 0) {
+  if (!cursor || !vrv || !props.duration || time < 0 || !timepoints.length) {
     if (cursor) cursor.style.display = 'none'
     return
   }
-  if (!measures.length) return
   cursor.style.display = 'block'
 
   const ms = time * 1000
-  const mi = findMeasureIndex(ms)
-  const measure = measures[mi]
-  if (!measure) return
+  let before = timepoints[0]
+  let after = timepoints[timepoints.length - 1]
+  for (let i = 0; i < timepoints.length - 1; i++) {
+    if (ms >= timepoints[i].timestamp && ms < timepoints[i + 1].timestamp) {
+      before = timepoints[i]
+      after = timepoints[i + 1]
+      break
+    }
+  }
 
-  const offset = ms - measure.timestamp
-  const ratio = measure.duration > 0 ? Math.min(1, Math.max(0, offset / measure.duration)) : 0
-  const rectMeasure = measure.rectMeasure
-  const rectSystem = measure.rectSystem
+  const range = after.timestamp - before.timestamp
+  const ratio = range > 0 ? Math.min(1, Math.max(0, (ms - before.timestamp) / range)) : 0
+  const cx = Math.round(before.x + ratio * (after.x - before.x))
 
-  const cx = rectMeasure.left + Math.round(ratio * rectMeasure.width)
-  const cy = rectSystem.top
-  const ch = rectSystem.height
-
-  cursor.style.transform = `translate(${cx}px, ${cy}px)`
-  cursor.style.height = `${ch}px`
+  cursor.style.transform = `translate(${cx}px, ${before.systemTop}px)`
+  cursor.style.height = `${before.systemHeight}px`
   cursor.style.width = '2px'
 }
 
 function handleContainerClick(e) {
   const container = containerRef.value
-  if (!container || !measures.length) return
+  if (!container || !timepoints.length) return
   const containerRect = container.getBoundingClientRect()
   const clickX = e.clientX - containerRect.left
   const clickY = e.clientY - containerRect.top
-  for (const measure of measures) {
-    const sysTop = measure.rectSystem.top
-    const sysBottom = sysTop + measure.rectSystem.height
+
+  let systemTop = 0
+  let systemHeight = 0
+  for (const m of measures) {
+    const sysTop = m.rectSystem.top
+    const sysBottom = sysTop + m.rectSystem.height
     if (clickY >= sysTop && clickY <= sysBottom) {
-      const ml = measure.rectMeasure.left
-      const mr = ml + measure.rectMeasure.width
-      if (clickX >= ml && clickX <= mr) {
-        const ratio = (clickX - ml) / measure.rectMeasure.width
-        const totalMs = measure.timestamp + Math.min(1, Math.max(0, ratio)) * measure.duration
-        emit('seek', totalMs / 1000)
-        return
-      }
+      systemTop = sysTop
+      systemHeight = m.rectSystem.height
+      break
     }
+  }
+  if (!systemHeight) return
+
+  const inSystem = timepoints.filter((tp) => tp.systemTop === systemTop)
+  if (inSystem.length < 2) return
+
+  for (let i = 0; i < inSystem.length - 1; i++) {
+    const a = inSystem[i]
+    const b = inSystem[i + 1]
+    if (clickX >= a.x && clickX <= b.x) {
+      const range = b.x - a.x
+      const ratio = range > 0 ? Math.min(1, Math.max(0, (clickX - a.x) / range)) : 0
+      const ms = a.timestamp + ratio * (b.timestamp - a.timestamp)
+      emit('seek', ms / 1000)
+      return
+    }
+  }
+
+  if (clickX < inSystem[0].x) {
+    emit('seek', inSystem[0].timestamp / 1000)
+  } else {
+    emit('seek', inSystem[inSystem.length - 1].timestamp / 1000)
   }
 }
 
@@ -388,15 +427,21 @@ function handleHover(e) {
 
 function autoScroll(time) {
   const container = bodyRef.value
-  if (!container || !props.duration || !measures.length) return
+  if (!container || !props.duration || !timepoints.length) return
   const ms = time * 1000
-  const mi = findMeasureIndex(ms)
-  const measure = measures[mi]
-  if (!measure) return
-  const offset = ms - measure.timestamp
-  const ratio = measure.duration > 0 ? Math.min(1, Math.max(0, offset / measure.duration)) : 0
-  const cursorContentX = measure.rectMeasure.left + Math.round(ratio * measure.rectMeasure.width)
-  container.scrollLeft = cursorContentX - container.clientWidth / 2
+  let before = timepoints[0]
+  let after = timepoints[timepoints.length - 1]
+  for (let i = 0; i < timepoints.length - 1; i++) {
+    if (ms >= timepoints[i].timestamp && ms < timepoints[i + 1].timestamp) {
+      before = timepoints[i]
+      after = timepoints[i + 1]
+      break
+    }
+  }
+  const range = after.timestamp - before.timestamp
+  const ratio = range > 0 ? Math.min(1, Math.max(0, (ms - before.timestamp) / range)) : 0
+  const cx = before.x + ratio * (after.x - before.x)
+  container.scrollLeft = cx - container.clientWidth / 2
 }
 
 function toggleExpanded() {
