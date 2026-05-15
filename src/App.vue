@@ -346,6 +346,7 @@
         :xml-content="musicXmlContent"
         :current-time="currentTime"
         :duration="duration"
+        :file-meta="currentFileMeta"
         @seek="seek"
         @midi-ready="handleMidiReady"
       />
