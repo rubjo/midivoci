@@ -126,13 +126,25 @@ async function fetchSummary() {
   try {
     for (const lang of langs) {
       let result = await searchWikipedia(lang, searchTerm)
+      let isTitleSearch = !!result
       if (!result && props.composer) {
         result = await searchWikipedia(lang, `${props.composer} ${t('wikipedia_composer')}`)
       }
       if (result) {
-        const surname = props.composer?.split(',')[0]?.trim()
-        if (surname && !result.title.toLowerCase().includes(surname.toLowerCase())) {
-          result = null
+        if (!isTitleSearch) {
+          const surname = props.composer?.split(',')[0]?.trim()
+          if (surname && !result.title.toLowerCase().includes(surname.toLowerCase())) {
+            result = null
+          }
+        }
+      }
+      if (result && isTitleSearch && props.title) {
+        const titleWords = props.title.match(/\w{3,}/g)
+        if (titleWords) {
+          const t = result.title.toLowerCase()
+          if (!titleWords.every((w) => t.includes(w.toLowerCase()))) {
+            result = null
+          }
         }
       }
       if (result) {
