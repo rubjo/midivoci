@@ -72,11 +72,22 @@ function midiFilePlugin() {
           if (xmlText) {
             const partCount = xmlText.match(/<score-part\b/g)
             if (partCount) numTracks = partCount.length
-            const dMatch = xmlText.match(/<divisions>(\d+)<\/divisions>/)
-            const divisions = dMatch ? parseInt(dMatch[1]) : 1
-            const durs = [...xmlText.matchAll(/<duration>(\d+)<\/duration>/g)]
-            const totalDur = durs.reduce((s, m) => s + parseInt(m[1]), 0)
-            if (divisions > 0) duration = (totalDur / divisions) * 0.5
+            const partMatches = [...xmlText.matchAll(/<part[^>]*>([\s\S]*?)<\/part>/g)]
+            let partDur = 0
+            let partDiv = 0
+            for (const pm of partMatches) {
+              const content = pm[1]
+              const durs = [...content.matchAll(/<duration>(\d+)<\/duration>/g)]
+              if (durs.length > 0) {
+                partDur = durs.reduce((s, m) => s + parseInt(m[1]), 0)
+                const dMatch = content.match(/<divisions>(\d+)<\/divisions>/)
+                partDiv = dMatch ? parseInt(dMatch[1]) : 1
+                break
+              }
+            }
+            const tempoMatch = xmlText.match(/<sound[^>]*\stempo\s*=\s*"([^"]+)"/i)
+            const bpm = tempoMatch ? parseFloat(tempoMatch[1]) : 120
+            if (partDiv > 0) duration = (partDur / partDiv) * (60 / bpm)
           }
         } catch (e) {
           // leave defaults (0)
