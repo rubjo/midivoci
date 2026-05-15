@@ -476,10 +476,13 @@ function getFilteredSuggestions(query) {
   const q = query?.toLowerCase().trim()
   const groups = filteredGroups.value
   if (!q) return groups
+  const words = q.split(/\s+/).filter(Boolean)
   return groups
     .map((g) => ({
       ...g,
-      items: g.items.filter((it) => it._display.includes(q) || it._composer.includes(q)),
+      items: g.items.filter((it) =>
+        words.every((w) => it._display.includes(w) || it._composer.includes(w)),
+      ),
     }))
     .filter((g) => g.items.length > 0)
 }
