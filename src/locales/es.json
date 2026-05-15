@@ -51,6 +51,8 @@
   "reset_tempo": "Restablecer tempo",
   "musicxml_load_error": "No se pudo renderizar el archivo MusicXML",
   "score": "Partitura",
+  "score_pdf": "Partitura (PDF)",
+  "score_interactive": "Partitura (interactiva)",
   "searchForComposerOrWork": "Buscar compositor u obra",
   "semitones": "semitonos",
   "set_instrument_all": "Establecer instrumento para todas las pistas",

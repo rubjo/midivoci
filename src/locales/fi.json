@@ -51,6 +51,8 @@
   "reset_tempo": "Palauta tempo",
   "musicxml_load_error": "MusicXML-tiedoston renderöinti epäonnistui",
   "score": "Nuotit",
+  "score_pdf": "Nuotit (PDF)",
+  "score_interactive": "Nuotit (interaktiiviset)",
   "searchForComposerOrWork": "Etsi säveltäjää tai teosta",
   "semitones": "puolisävelaskelta",
   "set_instrument_all": "Aseta soitin kaikille raidoille",

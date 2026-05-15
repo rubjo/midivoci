@@ -51,6 +51,8 @@
   "reset_tempo": "Reimposta tempo",
   "musicxml_load_error": "Impossibile visualizzare il file MusicXML",
   "score": "Spartito",
+  "score_pdf": "Spartito (PDF)",
+  "score_interactive": "Spartito (interattivo)",
   "searchForComposerOrWork": "Cerca compositore o opera",
   "semitones": "semitoni",
   "set_instrument_all": "Imposta strumento per tutte le tracce",

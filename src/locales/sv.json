@@ -51,6 +51,8 @@
   "reset_tempo": "Återställ tempo",
   "musicxml_load_error": "Kunde inte rendera MusicXML-fil",
   "score": "Noter",
+  "score_pdf": "Noter (PDF)",
+  "score_interactive": "Noter (interaktiv)",
   "searchForComposerOrWork": "Sök efter kompositör eller verk",
   "semitones": "halvtoner",
   "set_instrument_all": "Ställ in instrument för alla spår",

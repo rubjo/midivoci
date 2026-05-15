@@ -51,6 +51,8 @@
   "reset_tempo": "Tempo zurücksetzen",
   "musicxml_load_error": "MusicXML-Datei konnte nicht gerendert werden",
   "score": "Partitur",
+  "score_pdf": "Partitur (PDF)",
+  "score_interactive": "Partitur (interaktiv)",
   "searchForComposerOrWork": "Nach Komponist oder Werk suchen",
   "semitones": "Halbtöne",
   "set_instrument_all": "Instrument für alle Spuren setzen",

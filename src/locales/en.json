@@ -51,6 +51,8 @@
   "reset_tempo": "Reset tempo",
   "musicxml_load_error": "Could not render MusicXML file",
   "score": "Score",
+  "score_pdf": "Score (PDF)",
+  "score_interactive": "Score (interactive)",
   "searchForComposerOrWork": "Search: composer/work",
   "semitones": "semitones",
   "set_instrument_all": "Set instrument for all tracks",

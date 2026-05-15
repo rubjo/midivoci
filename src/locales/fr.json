@@ -51,6 +51,8 @@
   "reset_tempo": "Réinitialiser le tempo",
   "musicxml_load_error": "Impossible de rendre le fichier MusicXML",
   "score": "Partition",
+  "score_pdf": "Partition (PDF)",
+  "score_interactive": "Partition (interactive)",
   "searchForComposerOrWork": "Rechercher un compositeur ou une œuvre",
   "semitones": "demi-tons",
   "set_instrument_all": "Définir l'instrument pour toutes les pistes",

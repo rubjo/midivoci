@@ -11,7 +11,7 @@
         class="text-sm font-medium text-color-secondary text-uppercase m-0 flex align-items-center gap-1"
       >
         <IconMusic :size="16" />
-        {{ t('score') }}
+        {{ t('score_interactive') }}
       </h3>
       <div class="flex align-items-center gap-1" @click.stop>
         <template v-if="expanded">

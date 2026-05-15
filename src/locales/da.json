@@ -51,6 +51,8 @@
   "reset_tempo": "Nulstil tempo",
   "musicxml_load_error": "Kunne ikke gengive MusicXML-fil",
   "score": "Noder",
+  "score_pdf": "Noder (PDF)",
+  "score_interactive": "Noder (interaktiv)",
   "searchForComposerOrWork": "Søg efter komponist eller værk",
   "semitones": "halvtoner",
   "set_instrument_all": "Sæt instrument for alle spor",
