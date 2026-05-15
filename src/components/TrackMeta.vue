@@ -1,7 +1,8 @@
 <template>
   <div ref="containerRef" class="track-meta">
     <div ref="contentRef" class="track-meta-content">
-      <span class="track-meta-composer">{{ composer }}</span><span v-if="composer && title">: </span><span class="track-meta-title">{{ title }}</span>
+      <span class="track-meta-composer">{{ composer }}</span
+      ><span v-if="composer && title">: </span><span class="track-meta-title">{{ title }}</span>
     </div>
   </div>
 </template>

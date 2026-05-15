@@ -1,10 +1,12 @@
 <template>
   <div class="overflow-hidden bg-surface-card border-1 surface-border border-round-lg">
     <div
-      class="panel-header flex align-items-center justify-content-between p-3 border-bottom-1 surface-border"
+      class="panel-header flex align-items-center justify-content-between p-3 surface-border"
       @click="expanded = !expanded"
     >
-      <h3 class="text-sm font-medium text-color-secondary text-uppercase m-0 flex align-items-center gap-1">
+      <h3
+        class="text-sm font-medium text-color-secondary text-uppercase m-0 flex align-items-center gap-1"
+      >
         <IconPlaylist :size="16" />
         {{ tracks.length }} {{ t('parts') }}
       </h3>
@@ -43,135 +45,57 @@
     </div>
 
     <template v-if="expanded">
-    <div
-      v-for="(track, index) in tracks"
-      :key="index"
-      class="track-item flex flex-wrap p-3 border-bottom-1 surface-border hover-surface gap-1 md:flex-nowrap md:align-items-center"
-      :class="{ 'track-active': showNoteIndicators && activeTracks?.has(index) }"
-    >
       <div
-        class="flex align-items-center justify-content-between md:justify-content-start w-full md:flex-1 gap-1"
+        v-for="(track, index) in tracks"
+        :key="index"
+        class="track-item flex flex-wrap p-3 border-bottom-1 surface-border hover-surface gap-1 md:flex-nowrap md:align-items-center"
+        :class="{ 'track-active': showNoteIndicators && activeTracks?.has(index) }"
       >
-        <span class="font-medium text-sm text-color-primary">{{
-          track.name || `Track ${index + 1}`
-        }}</span>
-        <span
-          v-if="showNoteIndicators"
-          class="flex align-items-center gap-1 text-xs font-mono text-color-secondary"
-        >
-          <template v-if="activeTracks?.has(index)">
-            <span class="text-green-500" style="font-size: 1.25rem; line-height: 0">&#8226;</span>
-            <span class="text-green-500 font-medium">{{ activeTracks.get(index) }}</span>
-          </template>
-        </span>
-      </div>
-
-      <template v-if="!compactMode">
         <div
-          class="flex flex-column sm:flex-row align-items-stretch sm:align-items-center gap-1 flex-1 md:flex-none"
+          class="flex align-items-center justify-content-between md:justify-content-start w-full md:flex-1 gap-1"
         >
-          <div class="flex-1 flex align-items-center gap-1 py-2">
-            <label
-              class="text-sm font-medium text-color-secondary text-uppercase label hidden lg:inline"
-              >{{ t('volume') }}</label
-            >
-            <PrimeSlider
-              :min="0"
-              :max="100"
-              :model-value="track.volume"
-              @update:model-value="$emit('setTrackVolume', index, $event)"
-              class="flex-1 md:flex-none md:w-7rem mr-2"
-              :disabled="track.muted"
-            />
-            <span
-              class="text-xs font-medium text-color-secondary font-mono"
-              style="min-width: 2rem"
-              >{{ track.muted ? '—' : track.volume + '%' }}</span
-            >
-          </div>
-          <div class="flex-1 flex align-items-center gap-1">
-            <label
-              class="text-sm font-medium text-color-secondary text-uppercase label hidden lg:inline"
-              >{{ t('instrument') }}</label
-            >
-            <PrimeSelect
-              :model-value="track.program"
-              @update:model-value="$emit('setTrackInstrument', index, $event)"
-              :options="instrumentList"
-              :option-label="(opt) => t(`instrument_${opt.program}`)"
-              option-value="program"
-              size="small"
-              class="w-full md:w-14rem"
-              scroll-height="50vh"
-            >
-              <template #value="slotProps">
-                <div class="flex align-items-center gap-2">
-                  <InstrumentIcon :program="track.program" :size="16" />
-                  <span>{{ t(`instrument_${track.program}`) }}</span>
-                </div>
-              </template>
-              <template #option="slotProps">
-                <div class="flex align-items-center gap-2">
-                  <InstrumentIcon :program="slotProps.option.program" :size="16" />
-                  <span>{{ t(`instrument_${slotProps.option.program}`) }}</span>
-                </div>
-              </template>
-            </PrimeSelect>
-          </div>
+          <span class="font-medium text-sm text-color-primary">{{
+            track.name || `Track ${index + 1}`
+          }}</span>
+          <span
+            v-if="showNoteIndicators"
+            class="flex align-items-center gap-1 text-xs font-mono text-color-secondary"
+          >
+            <template v-if="activeTracks?.has(index)">
+              <span class="text-green-500" style="font-size: 1.25rem; line-height: 0">&#8226;</span>
+              <span class="text-green-500 font-medium">{{ activeTracks.get(index) }}</span>
+            </template>
+          </span>
         </div>
-        <div class="flex gap-1 w-full md:w-auto md:ml-auto">
-          <Button
-            size="small"
-            class="flex-1 md:flex-none text-xs text-uppercase"
-            :variant="track.muted ? undefined : 'outlined'"
-            :severity="track.muted ? 'danger' : 'secondary'"
-            @click="$emit('setTrackMuted', index, !track.muted)"
-          >
-            {{ t('mute') }}
-          </Button>
-          <Button
-            size="small"
-            class="flex-1 md:flex-none text-xs text-uppercase"
-            :variant="leadTrack.includes(index) ? undefined : 'outlined'"
-            :severity="leadTrack.includes(index) ? 'info' : 'secondary'"
-            @click="$emit('setTrackLead', index)"
-          >
-            {{ t('lead') }}
-          </Button>
-          <Button
-            size="small"
-            class="flex-1 md:flex-none text-xs text-uppercase"
-            :variant="track.solo ? undefined : 'outlined'"
-            :severity="track.solo ? 'success' : 'secondary'"
-            @click="$emit('setTrackSolo', index, !track.solo)"
-          >
-            {{ t('solo') }}
-          </Button>
-        </div>
-      </template>
 
-      <template v-if="compactMode">
-        <div class="flex align-items-center gap-1 flex-1 md:flex-none justify-content-between">
+        <template v-if="!compactMode">
           <div
-            class="flex-1 md:flex-none flex align-items-center gap-1 py-2"
-            style="min-width: 8rem"
+            class="flex flex-column sm:flex-row align-items-stretch sm:align-items-center gap-1 flex-1 md:flex-none"
           >
-            <PrimeSlider
-              :min="0"
-              :max="100"
-              :model-value="track.volume"
-              @update:model-value="$emit('setTrackVolume', index, $event)"
-              class="flex-1 md:w-7rem mr-2"
-              :disabled="track.muted"
-            />
-            <span
-              class="text-xs font-medium text-color-secondary font-mono"
-              style="min-width: 2rem"
-              >{{ track.muted ? '—' : track.volume + '%' }}</span
-            >
-          </div>
-          <div class="compact-actions flex align-items-center gap-1">
-            <div class="flex-1 md:flex-none">
+            <div class="flex-1 flex align-items-center gap-1 py-2">
+              <label
+                class="text-sm font-medium text-color-secondary text-uppercase label hidden lg:inline"
+                >{{ t('volume') }}</label
+              >
+              <PrimeSlider
+                :min="0"
+                :max="100"
+                :model-value="track.volume"
+                @update:model-value="$emit('setTrackVolume', index, $event)"
+                class="flex-1 md:flex-none md:w-7rem mr-2"
+                :disabled="track.muted"
+              />
+              <span
+                class="text-xs font-medium text-color-secondary font-mono"
+                style="min-width: 2rem"
+                >{{ track.muted ? '—' : track.volume + '%' }}</span
+              >
+            </div>
+            <div class="flex-1 flex align-items-center gap-1">
+              <label
+                class="text-sm font-medium text-color-secondary text-uppercase label hidden lg:inline"
+                >{{ t('instrument') }}</label
+              >
               <PrimeSelect
                 :model-value="track.program"
                 @update:model-value="$emit('setTrackInstrument', index, $event)"
@@ -179,14 +103,14 @@
                 :option-label="(opt) => t(`instrument_${opt.program}`)"
                 option-value="program"
                 size="small"
+                class="w-full md:w-14rem"
                 scroll-height="50vh"
               >
-                <template #value>
-                  <InstrumentIcon
-                    :program="track.program"
-                    :size="16"
-                    style="display: block; margin: 0 auto"
-                  />
+                <template #value="slotProps">
+                  <div class="flex align-items-center gap-2">
+                    <InstrumentIcon :program="track.program" :size="16" />
+                    <span>{{ t(`instrument_${track.program}`) }}</span>
+                  </div>
                 </template>
                 <template #option="slotProps">
                   <div class="flex align-items-center gap-2">
@@ -196,37 +120,115 @@
                 </template>
               </PrimeSelect>
             </div>
+          </div>
+          <div class="flex gap-1 w-full md:w-auto md:ml-auto">
             <Button
               size="small"
-              class="text-xs"
+              class="flex-1 md:flex-none text-xs text-uppercase"
               :variant="track.muted ? undefined : 'outlined'"
               :severity="track.muted ? 'danger' : 'secondary'"
               @click="$emit('setTrackMuted', index, !track.muted)"
             >
-              <IconVolumeOff :size="16" class="-m-2" />
+              {{ t('mute') }}
             </Button>
             <Button
               size="small"
-              class="text-xs"
+              class="flex-1 md:flex-none text-xs text-uppercase"
               :variant="leadTrack.includes(index) ? undefined : 'outlined'"
               :severity="leadTrack.includes(index) ? 'info' : 'secondary'"
               @click="$emit('setTrackLead', index)"
             >
-              <IconMicrophone2 :size="16" class="-m-2" />
+              {{ t('lead') }}
             </Button>
             <Button
               size="small"
-              class="text-xs"
+              class="flex-1 md:flex-none text-xs text-uppercase"
               :variant="track.solo ? undefined : 'outlined'"
               :severity="track.solo ? 'success' : 'secondary'"
               @click="$emit('setTrackSolo', index, !track.solo)"
             >
-              <IconHeadphones :size="16" class="-m-2" />
+              {{ t('solo') }}
             </Button>
           </div>
-        </div>
-      </template>
-    </div>
+        </template>
+
+        <template v-if="compactMode">
+          <div class="flex align-items-center gap-1 flex-1 md:flex-none justify-content-between">
+            <div
+              class="flex-1 md:flex-none flex align-items-center gap-1 py-2"
+              style="min-width: 8rem"
+            >
+              <PrimeSlider
+                :min="0"
+                :max="100"
+                :model-value="track.volume"
+                @update:model-value="$emit('setTrackVolume', index, $event)"
+                class="flex-1 md:w-7rem mr-2"
+                :disabled="track.muted"
+              />
+              <span
+                class="text-xs font-medium text-color-secondary font-mono"
+                style="min-width: 2rem"
+                >{{ track.muted ? '—' : track.volume + '%' }}</span
+              >
+            </div>
+            <div class="compact-actions flex align-items-center gap-1">
+              <div class="flex-1 md:flex-none">
+                <PrimeSelect
+                  :model-value="track.program"
+                  @update:model-value="$emit('setTrackInstrument', index, $event)"
+                  :options="instrumentList"
+                  :option-label="(opt) => t(`instrument_${opt.program}`)"
+                  option-value="program"
+                  size="small"
+                  scroll-height="50vh"
+                >
+                  <template #value>
+                    <InstrumentIcon
+                      :program="track.program"
+                      :size="16"
+                      style="display: block; margin: 0 auto"
+                    />
+                  </template>
+                  <template #option="slotProps">
+                    <div class="flex align-items-center gap-2">
+                      <InstrumentIcon :program="slotProps.option.program" :size="16" />
+                      <span>{{ t(`instrument_${slotProps.option.program}`) }}</span>
+                    </div>
+                  </template>
+                </PrimeSelect>
+              </div>
+              <Button
+                size="small"
+                class="text-xs"
+                :variant="track.muted ? undefined : 'outlined'"
+                :severity="track.muted ? 'danger' : 'secondary'"
+                @click="$emit('setTrackMuted', index, !track.muted)"
+              >
+                <IconVolumeOff :size="16" class="-m-2" />
+              </Button>
+              <Button
+                size="small"
+                class="text-xs"
+                :variant="leadTrack.includes(index) ? undefined : 'outlined'"
+                :severity="leadTrack.includes(index) ? 'info' : 'secondary'"
+                @click="$emit('setTrackLead', index)"
+              >
+                <IconMicrophone2 :size="16" class="-m-2" />
+              </Button>
+              <Button
+                size="small"
+                class="text-xs"
+                :variant="track.solo ? undefined : 'outlined'"
+                :severity="track.solo ? 'success' : 'secondary'"
+                @click="$emit('setTrackSolo', index, !track.solo)"
+              >
+                <IconHeadphones :size="16" class="-m-2" />
+              </Button>
+            </div>
+          </div>
+        </template>
+      </div>
     </template>
   </div>
 

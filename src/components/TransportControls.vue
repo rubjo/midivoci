@@ -41,8 +41,8 @@
             :size="isFloating ? 'small' : 'normal'"
             @click="$emit('togglePlay')"
           >
-            <IconPlayerPlayFilled v-if="!isPlaying" :size="24" />
-            <IconPlayerPauseFilled v-else :size="24" />
+            <IconPlayerPlay v-if="!isPlaying" :size="24" />
+            <IconPlayerPause v-else :size="24" />
           </Button>
           <Button
             :disabled="!isLoaded"
@@ -52,7 +52,7 @@
             :size="isFloating ? 'small' : 'normal'"
             @click="$emit('stop')"
           >
-            <IconPlayerStopFilled :size="24" />
+            <IconPlayerStop :size="24" />
           </Button>
           <Button
             :disabled="!isLoaded"
@@ -81,7 +81,7 @@
             :size="isFloating ? 'small' : 'normal'"
             @click="$emit('close')"
           >
-            <IconPlayerEjectFilled :size="24" />
+            <IconPlayerEject :size="24" />
           </Button>
           <Button
             :title="t('settings')"
@@ -104,7 +104,7 @@
             class="w-full"
             @click="($emit('close'), settingsPopover.hide())"
           >
-            <IconPlayerEjectFilled :size="16" />
+            <IconPlayerEject :size="16" />
             <span>{{ t('close_track') }}</span>
           </Button>
         </div>
@@ -185,14 +185,14 @@
 import { useI18n } from 'vue-i18n'
 import { ref, computed } from 'vue'
 import {
-  IconPlayerPlayFilled,
-  IconPlayerPauseFilled,
-  IconPlayerStopFilled,
+  IconPlayerPlay,
+  IconPlayerPause,
+  IconPlayerStop,
   IconRewindBackward10,
   IconRewindForward10,
   IconRepeat,
   IconSettings,
-  IconPlayerEjectFilled,
+  IconPlayerEject,
 } from '@tabler/icons-vue'
 
 import TrackMeta from './TrackMeta.vue'
@@ -348,6 +348,9 @@ function formatTime(seconds) {
   gap: 0.25rem;
   button {
     padding: 0.5rem;
+    svg {
+      stroke-width: 1.5;
+    }
   }
 }
 

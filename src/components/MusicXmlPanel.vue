@@ -4,7 +4,7 @@
     class="musicxml-panel bg-surface-card border-1 surface-border border-round-lg overflow-hidden"
   >
     <div
-      class="panel-header flex align-items-center justify-content-between p-3 border-bottom-1 surface-border"
+      class="panel-header flex align-items-center justify-content-between p-3 surface-border"
       @click="toggleExpanded"
     >
       <h3
@@ -41,6 +41,7 @@
         v-else
         ref="containerRef"
         class="musicxml-container"
+        @click="handleContainerClick"
         @mousemove="handleHover"
         @mouseleave="hoverX = -1"
       >
@@ -232,13 +233,7 @@ function buildData(rawTimemap) {
     if (measure) {
       ;[...(entry.on || []), ...(entry.restsOn || [])].forEach((domid) => {
         const note = container.querySelector('#' + CSS.escape(domid))
-        if (note) {
-          note.addEventListener('click', () => {
-            const totalMs = measure.timestamp + (entry.tstamp - measure.timestamp)
-            emit('seek', totalMs / 1000)
-          })
-          entry.notesOn.push(domid)
-        }
+        if (note) entry.notesOn.push(domid)
       })
     }
     if (entry.measureOn) lastIdx++
@@ -327,6 +322,28 @@ function updateCursor(time) {
   cursor.style.transform = `translate(${cx}px, ${cy}px)`
   cursor.style.height = `${ch}px`
   cursor.style.width = '2px'
+}
+
+function handleContainerClick(e) {
+  const container = containerRef.value
+  if (!container || !measures.length) return
+  const containerRect = container.getBoundingClientRect()
+  const clickX = e.clientX - containerRect.left
+  const clickY = e.clientY - containerRect.top
+  for (const measure of measures) {
+    const sysTop = measure.rectSystem.top
+    const sysBottom = sysTop + measure.rectSystem.height
+    if (clickY >= sysTop && clickY <= sysBottom) {
+      const ml = measure.rectMeasure.left
+      const mr = ml + measure.rectMeasure.width
+      if (clickX >= ml && clickX <= mr) {
+        const ratio = (clickX - ml) / measure.rectMeasure.width
+        const totalMs = measure.timestamp + Math.min(1, Math.max(0, ratio)) * measure.duration
+        emit('seek', totalMs / 1000)
+        return
+      }
+    }
+  }
 }
 
 function handleHover(e) {

@@ -1,10 +1,12 @@
 <template>
   <div class="bg-surface-card border-1 surface-border border-round-lg overflow-hidden">
     <div
-      class="panel-header flex align-items-center justify-content-between p-3 border-bottom-1 surface-border"
+      class="panel-header flex align-items-center justify-content-between p-3 surface-border"
       @click="visible = !visible"
     >
-      <h3 class="text-sm font-medium text-color-secondary text-uppercase m-0 flex align-items-center gap-1">
+      <h3
+        class="text-sm font-medium text-color-secondary text-uppercase m-0 flex align-items-center gap-1"
+      >
         <IconPiano :size="16" />
         {{ t('piano_roll') }}
       </h3>

@@ -4,10 +4,12 @@
     class="pdf-panel bg-surface-card border-1 surface-border border-round-lg overflow-hidden"
   >
     <div
-      class="panel-header flex align-items-center justify-content-between p-3 border-bottom-1 surface-border"
+      class="panel-header flex align-items-center justify-content-between p-3 surface-border"
       @click="toggleExpanded"
     >
-      <h3 class="text-sm font-medium text-color-secondary text-uppercase m-0 flex align-items-center gap-1">
+      <h3
+        class="text-sm font-medium text-color-secondary text-uppercase m-0 flex align-items-center gap-1"
+      >
         <IconMusic :size="16" />
         {{ t('score_pdf') }}
       </h3>
@@ -118,7 +120,11 @@ function toggleFullscreen() {
 
 async function loadPdf(url) {
   if (pdfDoc) {
-    try { await pdfDoc.destroy() } catch { /* ignore */ }
+    try {
+      await pdfDoc.destroy()
+    } catch {
+      /* ignore */
+    }
     pdfDoc = null
   }
   numPages.value = 0
@@ -135,7 +141,11 @@ async function loadPdf(url) {
 async function renderPage() {
   if (!pdfDoc || !canvasRef.value) return
   if (renderTask) {
-    try { renderTask.cancel() } catch { /* ignore */ }
+    try {
+      renderTask.cancel()
+    } catch {
+      /* ignore */
+    }
     renderTask = null
   }
   const page = await pdfDoc.getPage(pageNum.value)
