@@ -311,6 +311,13 @@
         @toggle-loop="toggleLoop"
       />
 
+      <WikipediaPanel
+        v-if="currentFileMeta"
+        :composer="currentFileMeta?.composer ?? ''"
+        :title="currentFileMeta?.title ?? ''"
+        :wikipedia-url="currentFileMeta?.wikipedia ?? ''"
+      />
+
       <ScoreView
         v-if="midiUrl"
         :midi-url="midiUrl"
@@ -396,6 +403,7 @@ import TransportControls from './components/TransportControls.vue'
 import TrackList from './components/TrackList.vue'
 import ScoreView from './components/ScoreView.vue'
 import YouTubePanel from './components/YouTubePanel.vue'
+import WikipediaPanel from './components/WikipediaPanel.vue'
 import PdfPanel from './components/PdfPanel.vue'
 import MusicXmlPanel from './components/MusicXmlPanel.vue'
 import { decompressMxl } from './utils/musicxml-utils.js'
