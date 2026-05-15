@@ -316,8 +316,7 @@ function formatTime(seconds) {
   border: none;
   gap: 0;
   background: color-mix(in srgb, var(--extreme) 50%, transparent);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(10px);
   max-width: 500px;
   width: 100%;
   padding: 0.25rem 1.5rem;
