@@ -289,6 +289,18 @@ function refreshRects() {
   })
 }
 
+function findMeasureIndex(ms) {
+  for (let i = 0; i < measures.length; i++) {
+    if (
+      ms >= measures[i].timestamp &&
+      (i === measures.length - 1 || ms < measures[i + 1].timestamp)
+    ) {
+      return i
+    }
+  }
+  return 0
+}
+
 function updateCursor(time) {
   const cursor = cursorRef.value
   if (!cursor || !vrv || !props.duration || time < 0) {
@@ -299,16 +311,7 @@ function updateCursor(time) {
   cursor.style.display = 'block'
 
   const ms = time * 1000
-  let mi = 0
-  for (let i = 0; i < measures.length; i++) {
-    if (
-      ms >= measures[i].timestamp &&
-      (i === measures.length - 1 || ms < measures[i + 1].timestamp)
-    ) {
-      mi = i
-      break
-    }
-  }
+  const mi = findMeasureIndex(ms)
   const measure = measures[mi]
   if (!measure) return
 
@@ -350,16 +353,7 @@ function autoScroll(time) {
   const container = bodyRef.value
   if (!container || !props.duration || !measures.length) return
   const ms = time * 1000
-  let mi = 0
-  for (let i = 0; i < measures.length; i++) {
-    if (
-      ms >= measures[i].timestamp &&
-      (i === measures.length - 1 || ms < measures[i + 1].timestamp)
-    ) {
-      mi = i
-      break
-    }
-  }
+  const mi = findMeasureIndex(ms)
   const measure = measures[mi]
   if (!measure) return
   const offset = ms - measure.timestamp

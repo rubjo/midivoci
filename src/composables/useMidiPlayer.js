@@ -72,10 +72,6 @@ export function useMidiPlayer() {
     return t.muted
   }
 
-  function shouldPlayTrack(i) {
-    return !isTrackEffectivelyMuted(i)
-  }
-
   function getEffectiveGain(i) {
     return isTrackEffectivelyMuted(i) ? 0 : tracks.value[i].volume / 100
   }
@@ -157,7 +153,7 @@ export function useMidiPlayer() {
 
       if (absTime > now + LOOKAHEAD) break
 
-      if (shouldPlayTrack(n.trackIndex)) {
+      if (!isTrackEffectivelyMuted(n.trackIndex)) {
         const inst = instruments[n.trackIndex]
         if (inst) {
           try {
@@ -195,7 +191,7 @@ export function useMidiPlayer() {
       const absTime = startTime + n.time * ratio
       if (absTime < now) continue
       if (absTime > now + LOOKAHEAD) break
-      if (!shouldPlayTrack(index)) continue
+      if (!isTrackEffectivelyMuted(index)) continue
       try {
         inst.play(getTransposedName(n), absTime, { duration: n.duration * ratio, gain: 1 })
       } catch {}
@@ -218,6 +214,26 @@ export function useMidiPlayer() {
     }
     const blob = generateVisualizerBlob(midi, tracks.value, transpose.value)
     visualizerUrl.value = URL.createObjectURL(blob)
+  }
+
+  async function loadAllInstruments() {
+    instruments = []
+    for (let i = 0; i < midi.tracks.length; i++) {
+      if (midi.tracks[i].notes.length === 0) {
+        instruments.push(null)
+        continue
+      }
+      const prog = tracks.value[i]?.program ?? 0
+      try {
+        instruments.push(await loadInstrument(audioCtx, prog, trackGains[i]))
+      } catch {
+        try {
+          instruments.push(await loadInstrument(audioCtx, 0, trackGains[i]))
+        } catch {
+          instruments.push(null)
+        }
+      }
+    }
   }
 
   async function parseMidi(buffer) {
@@ -244,24 +260,7 @@ export function useMidiPlayer() {
       prevMuted = tracks.value.map(() => false)
 
       trackGains = createTrackGains(audioCtx, masterGain, midi.tracks.length)
-
-      instruments = []
-      for (let i = 0; i < midi.tracks.length; i++) {
-        if (midi.tracks[i].notes.length === 0) {
-          instruments.push(null)
-          continue
-        }
-        const prog = tracks.value[i]?.program ?? 0
-        try {
-          instruments.push(await loadInstrument(audioCtx, prog, trackGains[i]))
-        } catch {
-          try {
-            instruments.push(await loadInstrument(audioCtx, 0, trackGains[i]))
-          } catch {
-            instruments.push(null)
-          }
-        }
-      }
+      await loadAllInstruments()
 
       isLoaded.value = true
       refreshVisualizerBlob()
@@ -286,22 +285,7 @@ export function useMidiPlayer() {
     await ensureAudio()
     if (instruments.length === 0 && midi) {
       trackGains = createTrackGains(audioCtx, masterGain, midi.tracks.length)
-      for (let i = 0; i < midi.tracks.length; i++) {
-        if (midi.tracks[i].notes.length === 0) {
-          instruments.push(null)
-          continue
-        }
-        const prog = tracks.value[i]?.program ?? 0
-        try {
-          instruments.push(await loadInstrument(audioCtx, prog, trackGains[i]))
-        } catch {
-          try {
-            instruments.push(await loadInstrument(audioCtx, 0, trackGains[i]))
-          } catch {
-            instruments.push(null)
-          }
-        }
-      }
+      await loadAllInstruments()
     }
     applyAllTrackGains()
     scheduleAll()
@@ -646,7 +630,6 @@ export function useMidiPlayer() {
     midiUrl,
     tracks,
     isPlaying,
-    isPaused,
     bpm,
     originalBpm,
     duration,
