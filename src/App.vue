@@ -328,8 +328,10 @@
         :lead-track="leadTrack"
         :show-note-indicators="showNoteIndicators"
         @set-track-volume="setTrackVolume"
+        @set-track-pan="setTrackPan"
         @set-track-instrument="setTrackInstrument"
         @set-all-track-volumes="setAllTrackVolumes"
+        @set-all-track-pans="setAllTrackPans"
         @set-all-track-instruments="setAllTrackInstruments"
         @set-track-muted="setTrackMuted"
         @set-track-solo="setTrackSolo"
@@ -668,8 +670,10 @@ const {
   setTempo,
   seek,
   setTrackVolume,
+  setTrackPan,
   setTrackInstrument,
   setAllTrackVolumes,
+  setAllTrackPans,
   setAllTrackInstruments,
   setTrackMuted,
   setTrackSolo,

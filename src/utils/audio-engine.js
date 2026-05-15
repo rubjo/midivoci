@@ -29,6 +29,17 @@ export function createTrackGains(audioCtx, masterGain, count) {
   })
 }
 
+export function createTrackPanners(audioCtx, trackGains, masterGain, count) {
+  return Array.from({ length: count }, (_, i) => {
+    const p = audioCtx.createStereoPanner()
+    p.pan.value = 0
+    trackGains[i].disconnect()
+    trackGains[i].connect(p)
+    p.connect(masterGain)
+    return p
+  })
+}
+
 export async function loadInstrument(audioCtx, program, destination) {
   const sfName = getSfName(program)
 

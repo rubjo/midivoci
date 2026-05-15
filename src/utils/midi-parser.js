@@ -34,6 +34,7 @@ export function parseMidiFile(buffer) {
         channel: track.channel || 1,
         program,
         volume: 100,
+        pan: 50,
         muted: false,
         solo: false,
       }

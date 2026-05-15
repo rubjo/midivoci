@@ -13,7 +13,7 @@
             :step="0.1"
             :model-value="currentTime"
             @update:model-value="$emit('seek', $event)"
-            class="flex-1"
+            class="flex-1 py-1"
           />
           <span class="transport-time"
             >{{ formatTime(currentTime) }} / {{ formatTime(duration) }}</span

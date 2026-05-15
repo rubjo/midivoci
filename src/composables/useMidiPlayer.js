@@ -5,6 +5,7 @@ import {
   createAudioContext,
   resumeAudioContext,
   createTrackGains,
+  createTrackPanners,
   loadInstrument,
   stopAllInstruments,
   closeAudioContext,
@@ -35,6 +36,7 @@ export function useMidiPlayer() {
   let audioCtx = null
   let masterGain = null
   let trackGains = []
+  let trackPanners = []
   let midi = null
   let instruments = []
   let allNotes = []
@@ -83,6 +85,16 @@ export function useMidiPlayer() {
 
   function applyAllTrackGains() {
     trackGains.forEach((_, i) => applyTrackGain(i))
+  }
+
+  function applyTrackPan(index) {
+    if (trackPanners[index]) {
+      trackPanners[index].pan.value = ((tracks.value[index]?.pan ?? 50) - 50) / 50
+    }
+  }
+
+  function applyAllTrackPans() {
+    trackPanners.forEach((_, i) => applyTrackPan(i))
   }
 
   function binarySearchFirstGt(arr, time) {
@@ -257,6 +269,7 @@ export function useMidiPlayer() {
       currentTime.value = 0
       pausedAt = 0
       trackGains = createTrackGains(audioCtx, masterGain, midi.tracks.length)
+      trackPanners = createTrackPanners(audioCtx, trackGains, masterGain, midi.tracks.length)
       await loadAllInstruments()
 
       isLoaded.value = true
@@ -282,9 +295,11 @@ export function useMidiPlayer() {
     await ensureAudio()
     if (instruments.length === 0 && midi) {
       trackGains = createTrackGains(audioCtx, masterGain, midi.tracks.length)
+      trackPanners = createTrackPanners(audioCtx, trackGains, masterGain, midi.tracks.length)
       await loadAllInstruments()
     }
     applyAllTrackGains()
+    applyAllTrackPans()
     scheduleAll()
     playing = true
     isPlaying.value = true
@@ -416,6 +431,12 @@ export function useMidiPlayer() {
     if (isLoaded.value) scheduleVisualizerBlob()
   }
 
+  function setTrackPan(index, value) {
+    const pan = parseInt(value, 10)
+    if (tracks.value[index]) tracks.value[index].pan = pan
+    applyTrackPan(index)
+  }
+
   function setTrackInstrument(index, value) {
     const program = parseInt(value, 10)
     if (tracks.value[index]) tracks.value[index].program = program
@@ -440,6 +461,13 @@ export function useMidiPlayer() {
     })
     tracks.value.forEach((_, i) => applyTrackGain(i))
     if (isLoaded.value) scheduleVisualizerBlob()
+  }
+
+  function setAllTrackPans(value) {
+    tracks.value.forEach((track) => {
+      track.pan = value
+    })
+    tracks.value.forEach((_, i) => applyTrackPan(i))
   }
 
   function setAllTrackInstruments(program) {
@@ -536,7 +564,11 @@ export function useMidiPlayer() {
     trackGains.forEach((g) => {
       try { g.disconnect() } catch {}
     })
+    trackPanners.forEach((p) => {
+      try { p.disconnect() } catch {}
+    })
     trackGains = []
+    trackPanners = []
     instruments = []
     allNotes = []
     maxNoteDuration = 0
@@ -651,8 +683,10 @@ export function useMidiPlayer() {
     setTempo,
     seek,
     setTrackVolume,
+    setTrackPan,
     setTrackInstrument,
     setAllTrackVolumes,
+    setAllTrackPans,
     setAllTrackInstruments,
     setTrackMuted,
     setTrackSolo,
