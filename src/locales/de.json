@@ -25,6 +25,8 @@
   "close": "Schließen",
   "close_track": "Ein anderes Werk öffnen",
   "suggest_resource": "Partitur/Video/Information vorschlagen",
+  "suggest_missing_work": "Fehlendes Werk vorschlagen",
+  "suggest": "Vorschlagen",
   "collapse": "Einklappen",
   "compact_mode_off": "Erweiterte Ansicht verwenden",
   "compact_mode_on": "Kompakte Ansicht verwenden",

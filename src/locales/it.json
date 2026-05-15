@@ -25,6 +25,8 @@
   "close": "Chiudi",
   "close_track": "Apri un altro brano",
   "suggest_resource": "Suggerisci spartito/video/info",
+  "suggest_missing_work": "Suggerisci brano mancante",
+  "suggest": "Suggerisci",
   "collapse": "Comprimi",
   "compact_mode_off": "Usa vista estesa",
   "compact_mode_on": "Usa vista compatta",

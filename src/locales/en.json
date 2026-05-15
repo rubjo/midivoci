@@ -25,6 +25,8 @@
   "close": "Close",
   "close_track": "Open another work",
   "suggest_resource": "Suggest score/video/information",
+  "suggest_missing_work": "Suggest missing work",
+  "suggest": "Suggest",
   "collapse": "Collapse",
   "compact_mode_off": "Use expanded view",
   "compact_mode_on": "Use compact view",

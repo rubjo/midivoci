@@ -173,6 +173,19 @@
                   <IconMusic :size="14" class="text-color-secondary" />
                   <span class="text-xs text-color-secondary">{{ t('score') }}</span>
                 </div>
+                <div class="flex-1"></div>
+                <a
+                  :href="suggestMissingUrl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="p-button p-button-text p-1 flex-shrink-0 no-underline"
+                  style="font-size: 0.75rem"
+                  @click.stop
+                >
+                  <IconExternalLink :size="14" />
+                  <span class="hidden lg:inline">{{ t('suggest_missing_work') }}</span>
+                  <span class="lg:hidden">{{ t('suggest') }}</span>
+                </a>
               </div>
             </template>
             <template #item="slotProps">
@@ -377,6 +390,7 @@ import {
   IconUsers,
   IconDeviceTv,
   IconMusic,
+  IconExternalLink,
 } from '@tabler/icons-vue'
 import { nb_NO } from 'primelocale/js/nb_NO.js'
 import { en } from 'primelocale/js/en.js'
@@ -455,6 +469,13 @@ setPrimeLocale(locale.value)
 const autocomplete = ref(null)
 const autocompleteValue = ref('')
 let autocompleteGuard = false
+
+const suggestMissingUrl = computed(() => {
+  const q = autocompleteValue.value || ''
+  const title = encodeURIComponent('Request for missing work')
+  const body = encodeURIComponent(q ? `Suggested work: ${q}` : '')
+  return `https://github.com/rubjo/midivox/issues/new?title=${title}&body=${body}`
+})
 
 const filterScore = ref(false)
 const filterVideo = ref(false)

@@ -25,6 +25,8 @@
   "close": "Stäng",
   "close_track": "Öppna ett annat verk",
   "suggest_resource": "Föreslå not/video/information",
+  "suggest_missing_work": "Föreslå saknat verk",
+  "suggest": "Föreslå",
   "collapse": "Dölj",
   "compact_mode_off": "Använd utökad vy",
   "compact_mode_on": "Använd kompakt vy",

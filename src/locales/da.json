@@ -25,6 +25,8 @@
   "close": "Luk",
   "close_track": "Åbn et andet værk",
   "suggest_resource": "Foreslå noder/video/info",
+  "suggest_missing_work": "Foreslå manglende værk",
+  "suggest": "Foreslå",
   "collapse": "Skjul",
   "compact_mode_off": "Brug udvidet visning",
   "compact_mode_on": "Brug kompakt visning",
