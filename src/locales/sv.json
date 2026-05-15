@@ -19,8 +19,8 @@
   "close": "Stäng",
   "close_track": "Öppna ett annat verk",
   "collapse": "Dölj",
-  "compact_mode_off": "Inaktivera kompakt läge",
-  "compact_mode_on": "Aktivera kompakt läge",
+  "compact_mode_off": "Aktivera utökad vy",
+  "compact_mode_on": "Aktivera kompakt vy",
   "dark_mode": "Mörkt läge",
   "empty_state_pick_or_upload": "Välj eller ladda upp musik (MIDI- eller MusicXML-format)",
   "empty_state_press_play": "Tryck Spela",
@@ -88,5 +88,6 @@
   "tracks_empty": "Inga spår laddade",
   "transpose": "Transponera",
   "upload": "Ladda upp",
+  "upload_mobile": "Ladda upp MIDI / MusicXML",
   "volume": "Volym"
 }

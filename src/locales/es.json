@@ -19,8 +19,8 @@
   "close": "Cerrar",
   "close_track": "Abrir otra obra",
   "collapse": "Colapsar",
-  "compact_mode_off": "Desactivar modo compacto",
-  "compact_mode_on": "Activar modo compacto",
+  "compact_mode_off": "Activar vista ampliada",
+  "compact_mode_on": "Activar vista compacta",
   "dark_mode": "Modo oscuro",
   "empty_state_pick_or_upload": "Elige o sube música (formato MIDI o MusicXML)",
   "empty_state_press_play": "Presiona Reproducir",
@@ -88,5 +88,6 @@
   "tracks_empty": "Ninguna pista cargada",
   "transpose": "Transportar",
   "upload": "Subir",
+  "upload_mobile": "Subir MIDI / MusicXML",
   "volume": "Volumen"
 }

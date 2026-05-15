@@ -19,8 +19,8 @@
   "close": "Chiudi",
   "close_track": "Apri un altro brano",
   "collapse": "Comprimi",
-  "compact_mode_off": "Disattiva modalità compatta",
-  "compact_mode_on": "Attiva modalità compatta",
+  "compact_mode_off": "Attiva vista estesa",
+  "compact_mode_on": "Attiva vista compatta",
   "dark_mode": "Modalità scura",
   "empty_state_pick_or_upload": "Scegli o carica musica (formato MIDI o MusicXML)",
   "empty_state_press_play": "Premi Riproduci",
@@ -88,5 +88,6 @@
   "tracks_empty": "Nessuna traccia caricata",
   "transpose": "Trasponi",
   "upload": "Carica",
+  "upload_mobile": "Carica MIDI / MusicXML",
   "volume": "Volume"
 }

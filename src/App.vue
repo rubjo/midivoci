@@ -260,10 +260,11 @@
             @select="handleFileUpload"
             class="upload-inputgroup-btn"
             :disabled="langDropdownOpen"
+            :pt="{ root: { class: 'flex-shrink-0' } }"
           >
             <template #chooseicon>
               <IconUpload :size="16" />
-              <span class="md:hidden">{{ t('upload') }}</span>
+              <span class="md:hidden upload-mobile-label">{{ t('upload_mobile') }}</span>
             </template>
           </PrimeFileUpload>
         </PrimeInputGroup>
@@ -540,13 +541,13 @@ const libraries = [
   { name: 'fflate', url: 'https://github.com/101arrowz/fflate' },
   { name: 'soundfont-player', url: 'https://github.com/danigb/soundfont-player' },
   { name: 'Tone.js', url: 'https://tonejs.github.io/' },
+  { name: 'infojunkie/musicxml-player', url: 'https://github.com/infojunkie/musicxml-player' },
   { name: 'PrimeVue', url: 'https://primevue.org/' },
   { name: 'Vue 3', url: 'https://vuejs.org/' },
   { name: 'vue-i18n', url: 'https://vue-i18n.intlify.dev/' },
   { name: '@tabler/icons-vue', url: 'https://tabler.io/icons' },
   { name: 'Vite', url: 'https://vite.dev/' },
   { name: 'Tauri', url: 'https://tauri.app/' },
-  { name: 'musicxml-player', url: 'https://github.com/infojunkie/musicxml-player' },
 ]
 
 const projects = [

@@ -19,8 +19,8 @@
   "close": "Fermer",
   "close_track": "Ouvrir une autre œuvre",
   "collapse": "Réduire",
-  "compact_mode_off": "Désactiver le mode compact",
-  "compact_mode_on": "Activer le mode compact",
+  "compact_mode_off": "Activer la vue développée",
+  "compact_mode_on": "Activer la vue compacte",
   "dark_mode": "Mode sombre",
   "empty_state_pick_or_upload": "Choisissez ou téléchargez de la musique (format MIDI ou MusicXML)",
   "empty_state_press_play": "Appuyez sur Lecture",
@@ -88,5 +88,6 @@
   "tracks_empty": "Aucune piste chargée",
   "transpose": "Transposer",
   "upload": "Télécharger",
+  "upload_mobile": "Télécharger MIDI / MusicXML",
   "volume": "Volume"
 }

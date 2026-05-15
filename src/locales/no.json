@@ -19,8 +19,8 @@
   "close": "Lukk",
   "close_track": "Åpne et annet verk",
   "collapse": "Skjul",
-  "compact_mode_off": "Slå av kompakt visning",
-  "compact_mode_on": "Slå på kompakt visning",
+  "compact_mode_off": "Aktiver utvidet visning",
+  "compact_mode_on": "Aktiver kompakt visning",
   "dark_mode": "Mørk modus",
   "empty_state_pick_or_upload": "Velg eller last opp musikk (MIDI- eller MusicXML-format)",
   "empty_state_press_play": "Trykk Spill",
@@ -88,5 +88,6 @@
   "tracks_empty": "Ingen spor lastet",
   "transpose": "Transponer",
   "upload": "Last opp",
+  "upload_mobile": "Last opp MIDI / MusicXML",
   "volume": "Volum"
 }

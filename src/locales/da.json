@@ -19,8 +19,8 @@
   "close": "Luk",
   "close_track": "Åbn et andet værk",
   "collapse": "Skjul",
-  "compact_mode_off": "Deaktiver kompakt tilstand",
-  "compact_mode_on": "Aktiver kompakt tilstand",
+  "compact_mode_off": "Aktiver udvidet visning",
+  "compact_mode_on": "Aktiver kompakt visning",
   "dark_mode": "Mørk tilstand",
   "empty_state_pick_or_upload": "Vælg eller upload musik (MIDI- eller MusicXML-format)",
   "empty_state_press_play": "Tryk Afspil",
@@ -87,6 +87,7 @@
   "tracks": "Spor",
   "tracks_empty": "Ingen spor indlæst",
   "transpose": "Transponer",
-  "upload": "Upload",
+  "upload": "Last opp",
+  "upload_mobile": "Last opp MIDI / MusicXML",
   "volume": "Lydstyrke"
 }

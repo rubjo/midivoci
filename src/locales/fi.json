@@ -19,8 +19,8 @@
   "close": "Sulje",
   "close_track": "Avaa toinen teos",
   "collapse": "Piilota",
-  "compact_mode_off": "Poista kompakti tila käytöstä",
-  "compact_mode_on": "Ota kompakti tila käyttöön",
+  "compact_mode_off": "Ota laajennettu näkymä käyttöön",
+  "compact_mode_on": "Ota kompakti näkymä käyttöön",
   "dark_mode": "Tumma tila",
   "empty_state_pick_or_upload": "Valitse tai lataa musiikki (MIDI- tai MusicXML-muodossa)",
   "empty_state_press_play": "Paina Toista",
@@ -88,5 +88,6 @@
   "tracks_empty": "Ei raitoja ladattu",
   "transpose": "Transponoi",
   "upload": "Lataa",
+  "upload_mobile": "Lataa MIDI / MusicXML",
   "volume": "Äänenvoimakkuus"
 }
