@@ -31,7 +31,7 @@
             :size="isFloating ? 'small' : 'normal'"
             @click="skipBack"
           >
-            <IconRewindBackward10 :size="18" />
+            <IconRewindBackward10 :size="24" />
           </Button>
           <Button
             :disabled="!isLoaded"
@@ -41,8 +41,8 @@
             :size="isFloating ? 'small' : 'normal'"
             @click="$emit('togglePlay')"
           >
-            <IconPlayerPlayFilled v-if="!isPlaying" :size="18" />
-            <IconPlayerPauseFilled v-else :size="18" />
+            <IconPlayerPlayFilled v-if="!isPlaying" :size="24" />
+            <IconPlayerPauseFilled v-else :size="24" />
           </Button>
           <Button
             :disabled="!isLoaded"
@@ -52,7 +52,7 @@
             :size="isFloating ? 'small' : 'normal'"
             @click="$emit('stop')"
           >
-            <IconPlayerStopFilled :size="18" />
+            <IconPlayerStopFilled :size="24" />
           </Button>
           <Button
             :disabled="!isLoaded"
@@ -62,7 +62,7 @@
             :size="isFloating ? 'small' : 'normal'"
             @click="skipForward"
           >
-            <IconRewindForward10 :size="18" />
+            <IconRewindForward10 :size="24" />
           </Button>
           <Button
             :disabled="!isLoaded"
@@ -72,7 +72,7 @@
             :size="isFloating ? 'small' : 'normal'"
             @click="$emit('toggleLoop')"
           >
-            <IconRepeat :size="18" />
+            <IconRepeat :size="24" />
           </Button>
           <Button
             :title="t('close_track')"
@@ -81,7 +81,7 @@
             :size="isFloating ? 'small' : 'normal'"
             @click="$emit('close')"
           >
-            <IconPlayerEjectFilled :size="18" />
+            <IconPlayerEjectFilled :size="24" />
           </Button>
           <Button
             :title="t('settings')"
@@ -90,7 +90,7 @@
             :size="isFloating ? 'small' : 'normal'"
             @click="settingsPopover.toggle($event)"
           >
-            <IconSettings :size="18" />
+            <IconSettings :size="24" />
           </Button>
         </div>
       </div>
@@ -137,7 +137,9 @@
         <div class="settings-section">
           <span class="settings-label">{{ t('transpose') }}</span>
           <div class="settings-slider-row p-2">
-            <Button size="small" :disabled="!isLoaded" @click="$emit('setTranspose', transpose - 1)">−1</Button>
+            <Button size="small" :disabled="!isLoaded" @click="$emit('setTranspose', transpose - 1)"
+              >−1</Button
+            >
             <PrimeSlider
               :min="-12"
               :max="12"
@@ -146,7 +148,9 @@
               @update:model-value="$emit('setTranspose', $event)"
               class="flex-1"
             />
-            <Button size="small" :disabled="!isLoaded" @click="$emit('setTranspose', transpose + 1)">+1</Button>
+            <Button size="small" :disabled="!isLoaded" @click="$emit('setTranspose', transpose + 1)"
+              >+1</Button
+            >
           </div>
           <div class="settings-sub-row">
             <span>{{ transposeLabel }}</span>
@@ -343,6 +347,9 @@ function formatTime(seconds) {
   display: flex;
   align-items: center;
   gap: 0.25rem;
+  button {
+    padding: 0 0.4rem;
+  }
 }
 
 .transport-time {
