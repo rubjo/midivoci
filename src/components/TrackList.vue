@@ -54,9 +54,17 @@
         <div
           class="flex align-items-center justify-content-between md:justify-content-start w-full md:flex-1 gap-1"
         >
-          <span class="font-medium text-sm text-color-primary">{{
+          <span class="font-medium text-sm text-color-primary max-w-10rem md:max-w-full truncate">{{
             track.name || `Track ${index + 1}`
           }}</span>
+          <span
+            v-if="track.avgVelocity !== undefined"
+            v-tooltip="t('avg_velocity') + ': ' + track.avgVelocity + '%'"
+            class="inline-flex align-items-center hidden sm:inline ml-1"
+            :style="{ opacity: 0.1 + (track.avgVelocity / 100) * 1 }"
+          >
+            <component :is="velocityIcon(track.avgVelocity)" :size="16" />
+          </span>
           <span
             v-if="showNoteIndicators"
             class="flex align-items-center gap-1 text-xs font-mono text-color-secondary"
@@ -375,6 +383,17 @@ import {
   IconHeadphones,
   IconChevronDown,
   IconPlaylist,
+  IconPercentage0,
+  IconPercentage10,
+  IconPercentage20,
+  IconPercentage30,
+  IconPercentage40,
+  IconPercentage50,
+  IconPercentage60,
+  IconPercentage70,
+  IconPercentage80,
+  IconPercentage90,
+  IconPercentage100,
 } from '@tabler/icons-vue'
 import { instrumentList } from '../constants/instruments.js'
 import InstrumentIcon from './icons/InstrumentIcon.vue'
@@ -497,6 +516,26 @@ function lerpColor(c1, c2, t) {
 function panColor(pan) {
   if (pan <= 50) return lerpColor('#22c55e', '#0ea5e9', pan / 50)
   return lerpColor('#0ea5e9', '#ef4444', (pan - 50) / 50)
+}
+
+const velocityIcons = {
+  0: IconPercentage0,
+  10: IconPercentage10,
+  20: IconPercentage20,
+  30: IconPercentage30,
+  40: IconPercentage40,
+  50: IconPercentage50,
+  60: IconPercentage60,
+  70: IconPercentage70,
+  80: IconPercentage80,
+  90: IconPercentage90,
+  100: IconPercentage100,
+}
+
+function velocityIcon(avg) {
+  const rounded = Math.round(avg / 10) * 10
+  const clamped = Math.max(0, Math.min(100, rounded))
+  return velocityIcons[clamped]
 }
 </script>
 

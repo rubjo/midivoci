@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import PrimeVue from 'primevue/config'
+import Tooltip from 'primevue/tooltip'
 import { definePreset } from '@primeuix/themes'
 import Aura from '@primeuix/themes/aura'
 import { createI18n } from 'vue-i18n'
@@ -57,6 +58,7 @@ app.use(PrimeVue, {
 })
 
 app.use(i18n)
+app.directive('tooltip', Tooltip)
 app.mount('#app')
 
 if (window.__TAURI__) {

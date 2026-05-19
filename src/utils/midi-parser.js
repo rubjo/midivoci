@@ -1,9 +1,33 @@
 import { Midi } from '@tonejs/midi'
+import { parseMidi as rawParseMidi } from 'midi-file'
 
 export function parseMidiFile(buffer) {
   const midi = new Midi(buffer)
   const bpm = midi.header.tempos[0]?.bpm || 120
   const duration = midi.duration
+
+  // @tonejs/midi's splitTracks can lose trackName events on multi-channel tracks.
+  // Parse raw events to build a channel→name fallback map.
+  const uint8 = buffer instanceof ArrayBuffer ? new Uint8Array(buffer) : buffer
+  const rawData = rawParseMidi(uint8)
+  rawData.tracks.forEach((track) => {
+    let ticks = 0
+    track.forEach((e) => { ticks += e.deltaTime; e.absoluteTime = ticks })
+  })
+  const channelNames = new Map()
+  rawData.tracks.forEach((track, ti) => {
+    const isConductor = rawData.header.format === 1 && ti === 0
+    const nameEvent = track.find((e) => e.type === 'trackName')
+    if (nameEvent?.text && !isConductor) {
+      const channels = new Set()
+      track.forEach((e) => {
+        if (e.type === 'noteOn' && e.channel !== undefined) channels.add(e.channel)
+      })
+      channels.forEach((ch) => {
+        if (!channelNames.has(ch)) channelNames.set(ch, nameEvent.text)
+      })
+    }
+  })
 
   const allNotes = []
   let maxNoteDuration = 0
@@ -27,21 +51,28 @@ export function parseMidiFile(buffer) {
 
   midi.tracks.forEach((track, i) => {
     if (track.notes.length > 0) {
-      const programChanges = track.programChanges
-      const program = programChanges?.[0]?.number ?? 0
+      const velocities = track.notes.map((n) => n.velocity)
+      const avgVelocity =
+        velocities.length > 0
+          ? Math.round((velocities.reduce((a, b) => a + b, 0) / velocities.length) * 100)
+          : 50
+
       const trackInfo = {
-        name: track.name || `Track ${filteredTracks.length + 1}`,
+        name: track.name || channelNames.get(track.channel) || `Track ${filteredTracks.length + 1}`,
         channel: track.channel || 1,
-        program,
+        program: 0,
         volume: 100,
         pan: 50,
         muted: false,
         solo: false,
+        avgVelocity,
+        noteCount: track.notes.length,
       }
       filteredTracks.push(trackInfo)
       trackMap.set(i, filteredTracks.length - 1)
     }
   })
+
 
   const finalAllNotes = allNotes
     .map((n) => ({
