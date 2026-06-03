@@ -63,7 +63,10 @@ function midiFilePlugin() {
           }
           if (!xmlText) {
             for (const key of Object.keys(zip)) {
-              if (/\.musicxml$/i.test(key) || (/\.xml$/i.test(key) && key !== 'META-INF/container.xml')) {
+              if (
+                /\.musicxml$/i.test(key) ||
+                (/\.xml$/i.test(key) && key !== 'META-INF/container.xml')
+              ) {
                 xmlText = strFromU8(zip[key])
                 break
               }
@@ -132,7 +135,17 @@ function midiFilePlugin() {
       const pdfPath = fullPath.replace(/\.(mid|mxl)$/, '.pdf')
       const hasPdf = existsSync(pdfPath)
 
-      return { fileName, name, composer, naturalDisplay, numTracks, duration, meta, hasPdf, format: isMxl ? 'musicxml' : 'midi' }
+      return {
+        fileName,
+        name,
+        composer,
+        naturalDisplay,
+        numTracks,
+        duration,
+        meta,
+        hasPdf,
+        format: isMxl ? 'musicxml' : 'midi',
+      }
     })
 
     const titleCounts = {}
@@ -225,7 +238,7 @@ const host = process.env.TAURI_DEV_HOST
 
 export default defineConfig({
   clearScreen: false,
-  base: process.env.TAURI_ENV_PLATFORM ? './' : '/midivox/',
+  base: process.env.TAURI_ENV_PLATFORM ? './' : '/midivoci/',
   plugins: [
     vue({
       template: {

@@ -13,7 +13,7 @@ import {
 
 export const midiFileMeta = midiFileList
 const isTauri = !!import.meta.env.TAURI_ENV_PLATFORM
-const musicBaseUrl = isTauri ? '/music/' : '/midivox/music/'
+const musicBaseUrl = isTauri ? '/music/' : '/midivoci/music/'
 
 export function useMidiPlayer() {
   const midiUrl = ref('')
@@ -171,7 +171,10 @@ export function useMidiPlayer() {
             // If the note was supposed to play in the past (e.g. start of song),
             // schedule it for 'now' to avoid skipping it, but keep the duration relative.
             const scheduledTime = Math.max(now, absTime)
-            inst.play(getTransposedName(n), scheduledTime, { duration: n.duration * ratio, gain: 1 })
+            inst.play(getTransposedName(n), scheduledTime, {
+              duration: n.duration * ratio,
+              gain: 1,
+            })
           } catch {}
         }
       }
@@ -255,7 +258,7 @@ export function useMidiPlayer() {
       const parsed = parseMidiFile(buffer)
       midi = parsed.midi
       tracks.value = parsed.tracks
-      const preferredProgram = localStorage.getItem('midivox:preferred-instrument')
+      const preferredProgram = localStorage.getItem('midivoci:preferred-instrument')
       if (preferredProgram !== null) {
         tracks.value.forEach((t) => {
           t.program = Number(preferredProgram)
@@ -562,10 +565,14 @@ export function useMidiPlayer() {
     if (rafId) cancelAnimationFrame(rafId)
     stopAllInstruments(instruments)
     trackGains.forEach((g) => {
-      try { g.disconnect() } catch {}
+      try {
+        g.disconnect()
+      } catch {}
     })
     trackPanners.forEach((p) => {
-      try { p.disconnect() } catch {}
+      try {
+        p.disconnect()
+      } catch {}
     })
     trackGains = []
     trackPanners = []

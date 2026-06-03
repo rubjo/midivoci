@@ -36,13 +36,16 @@
       </div>
     </div>
     <div v-if="expanded" class="px-3 pb-3 leading-normal">
-      <div
-        :class="{ 'wikipedia-summary': summary.replace(/<[^>]+>/g, '').length > 600 }"
-      >
-        <div v-if="showFull || summary.replace(/<[^>]+>/g, '').length <= 2000" v-html="summary"></div>
+      <div :class="{ 'wikipedia-summary': summary.replace(/<[^>]+>/g, '').length > 600 }">
+        <div
+          v-if="showFull || summary.replace(/<[^>]+>/g, '').length <= 2000"
+          v-html="summary"
+        ></div>
         <template v-else>
           <div v-text="summary.replace(/<[^>]+>/g, '').slice(0, 2000)"></div>
-          <a class="text-sm font-medium text-primary cursor-pointer" @click="showFull = true">{{ t('wikipedia_more') }}</a>
+          <a class="text-sm font-medium text-primary cursor-pointer" @click="showFull = true">{{
+            t('wikipedia_more')
+          }}</a>
         </template>
       </div>
     </div>
@@ -57,7 +60,7 @@ import Button from 'primevue/button'
 
 const { t, locale } = useI18n()
 
-const EXPANDED_KEY = 'midivox:wikipedia-panel-expanded'
+const EXPANDED_KEY = 'midivoci:wikipedia-panel-expanded'
 
 const props = defineProps({
   composer: { type: String, default: '' },
@@ -72,7 +75,9 @@ const foundLang = ref('en')
 const loading = ref(false)
 const showFull = ref(false)
 
-watch(summary, () => { showFull.value = false })
+watch(summary, () => {
+  showFull.value = false
+})
 
 function toggleExpanded() {
   expanded.value = !expanded.value

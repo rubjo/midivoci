@@ -252,7 +252,7 @@ const settingsPopover = ref()
 const suggestUrl = computed(() => {
   const title = encodeURIComponent('Suggested public-domain score/video/info/resource for work')
   const body = encodeURIComponent(`${props.composer}: ${props.title}`)
-  return `https://github.com/rubjo/midivox/issues/new?title=${title}&body=${body}`
+  return `https://github.com/rubjo/midivoci/issues/new?title=${title}&body=${body}`
 })
 
 const canReset = computed(

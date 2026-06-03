@@ -47,7 +47,7 @@ import Button from 'primevue/button'
 
 const { t } = useI18n()
 
-const EXPANDED_KEY = 'midivox:youtube-panel-expanded'
+const EXPANDED_KEY = 'midivoci:youtube-panel-expanded'
 
 const props = defineProps({
   youtubeUrl: { type: String, default: '' },

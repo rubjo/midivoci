@@ -3,7 +3,8 @@
     v-if="pdfUrl"
     class="pdf-panel bg-surface-card border-1 surface-border border-round-lg overflow-hidden"
   >
-      <div class="panel-header flex align-items-center justify-content-between p-3 surface-border"
+    <div
+      class="panel-header flex align-items-center justify-content-between p-3 surface-border"
       @click="toggleExpanded"
     >
       <div class="flex flex-column gap-1">
@@ -86,7 +87,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl
 
 const { t } = useI18n()
 
-const EXPANDED_KEY = 'midivox:pdf-panel-expanded'
+const EXPANDED_KEY = 'midivoci:pdf-panel-expanded'
 
 const props = defineProps({
   pdfUrl: { type: String, default: '' },

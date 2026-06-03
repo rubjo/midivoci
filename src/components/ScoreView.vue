@@ -66,7 +66,7 @@ const props = defineProps({
 
 const emit = defineEmits(['seek'])
 
-const PIANO_ROLL_KEY = 'midivox:piano-roll-visible'
+const PIANO_ROLL_KEY = 'midivoci:piano-roll-visible'
 const visible = ref(localStorage.getItem(PIANO_ROLL_KEY) === 'true')
 watch(visible, (v) => {
   localStorage.setItem(PIANO_ROLL_KEY, v)

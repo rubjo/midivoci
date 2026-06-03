@@ -398,10 +398,10 @@ import {
 import { instrumentList } from '../constants/instruments.js'
 import InstrumentIcon from './icons/InstrumentIcon.vue'
 
-const PREFERRED_INSTRUMENT_KEY = 'midivox:preferred-instrument'
-const COMPACT_MODE_KEY = 'midivox:compact-mode'
+const PREFERRED_INSTRUMENT_KEY = 'midivoci:preferred-instrument'
+const COMPACT_MODE_KEY = 'midivoci:compact-mode'
 
-const TRACKS_EXPANDED_KEY = 'midivox:tracks-panel-expanded'
+const TRACKS_EXPANDED_KEY = 'midivoci:tracks-panel-expanded'
 
 const { t } = useI18n()
 

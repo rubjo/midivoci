@@ -2,7 +2,7 @@
   <div :class="['app', { 'has-floating': isFloating }]" :data-theme="theme">
     <header class="app-header">
       <div class="flex align-items-center gap-2 cursor-pointer" @click="infoDialogVisible = true">
-        <img src="./assets/logo.png" alt="MidiVox" class="header-logo" />
+        <img src="./assets/logo.png" alt="MidiVoci" class="header-logo" />
         <div class="app-title-wrapper">
           <h1>
             {{ t('app.title') }}<span class="subtitle-desktop">&nbsp;{{ t('app.subtitle') }}</span>
@@ -43,16 +43,16 @@
           :draggable="false"
           :style="{ maxWidth: '420px' }"
           class="info-dialog"
-          header="MidiVox"
+          header="MidiVoci"
         >
-          <img src="./assets/logo.png" alt="MidiVox" class="info-dialog-banner" />
+          <img src="./assets/logo.png" alt="MidiVoci" class="info-dialog-banner" />
           <div class="info-dialog-body">
             <div class="text-center -mt-5 mb-4">
               <em style="font-size: 1.5rem">{{ t('app.tagline') }}</em>
             </div>
             {{ t('app.description') }}
             {{ t('app.created_by') }}
-            <a href="https://github.com/rubjo/midivox" target="_blank" rel="noopener noreferrer"
+            <a href="https://github.com/rubjo/midivoci" target="_blank" rel="noopener noreferrer"
               >@rubjo</a
             >
             <span v-if="!isTauri" class="info-dialog-donate">
@@ -460,7 +460,7 @@ function setPrimeLocale(localeCode) {
 function setLocale(e) {
   const val = typeof e === 'string' ? e : e.value
   locale.value = val
-  localStorage.setItem('midivox:locale', val)
+  localStorage.setItem('midivoci:locale', val)
   setPrimeLocale(val)
 }
 
@@ -474,7 +474,7 @@ const suggestMissingUrl = computed(() => {
   const q = autocompleteValue.value || ''
   const title = encodeURIComponent('Request for missing work')
   const body = encodeURIComponent(q ? `Suggested work: ${q}` : '')
-  return `https://github.com/rubjo/midivox/issues/new?title=${title}&body=${body}`
+  return `https://github.com/rubjo/midivoci/issues/new?title=${title}&body=${body}`
 })
 
 const filterScore = ref(false)
@@ -547,21 +547,21 @@ function onOptionSelect(event) {
   setTimeout(() => document.activeElement?.blur(), 50)
 }
 
-const isFloating = ref(localStorage.getItem('midivox:float-controls') !== 'false')
+const isFloating = ref(localStorage.getItem('midivoci:float-controls') !== 'false')
 
 function toggleFloat() {
   isFloating.value = !isFloating.value
-  localStorage.setItem('midivox:float-controls', String(isFloating.value))
+  localStorage.setItem('midivoci:float-controls', String(isFloating.value))
 }
 
-const theme = ref(localStorage.getItem('midivox:theme') || 'light')
+const theme = ref(localStorage.getItem('midivoci:theme') || 'light')
 const isDark = ref(theme.value === 'dark')
 document.documentElement.setAttribute('data-theme', theme.value)
 
 function toggleTheme() {
   isDark.value = !isDark.value
   theme.value = isDark.value ? 'dark' : 'light'
-  localStorage.setItem('midivox:theme', theme.value)
+  localStorage.setItem('midivoci:theme', theme.value)
   document.documentElement.setAttribute('data-theme', theme.value)
 }
 
@@ -609,7 +609,7 @@ async function handleFileUpload(e) {
       }
       const fileName = file.name.replace(/\.(musicxml|xml|mxl)$/i, '')
       pendingMidiFileName = fileName
-      localStorage.setItem('midivox:musicxml-panel-expanded', 'true')
+      localStorage.setItem('midivoci:musicxml-panel-expanded', 'true')
       musicXmlContent.value = text
     } catch (err) {
       console.error('MusicXML upload failed:', err)
@@ -635,12 +635,12 @@ function onFileSelected(val) {
 
 async function loadMusicXmlFile(fileName, item) {
   const isTauri = !!window.__TAURI__
-  const baseUrl = isTauri ? '/music/' : '/midivox/music/'
+  const baseUrl = isTauri ? '/music/' : '/midivoci/music/'
   try {
     const res = await fetch(baseUrl + fileName)
     const buf = await res.arrayBuffer()
     const text = decompressMxl(buf)
-    localStorage.setItem('midivox:musicxml-panel-expanded', 'true')
+    localStorage.setItem('midivoci:musicxml-panel-expanded', 'true')
     musicXmlContent.value = text
     midiUrl.value = baseUrl + fileName
     currentFileHasPdf.value = !!item.hasPdf

@@ -1,4 +1,4 @@
-# MidiVox — rehearsal player for choirs
+# MidiVoci — rehearsal player for choirs
 
 A browser-based rehearsal player with piano roll visualization, multi-track controls, tempo adjustment and transposition, with sheet music and video display.
 
@@ -6,7 +6,7 @@ Comes with a selection of works from [John's Midi File Choral Music](https://www
 
 Supports upload of either MIDI or MusicXML files. For the latter, an interactive score can be shown, allowing the user to skip to any point in the score.
 
-**→ https://rubjo.github.io/midivox/**
+**→ https://rubjo.github.io/midivoci/**
 
 ## Features
 

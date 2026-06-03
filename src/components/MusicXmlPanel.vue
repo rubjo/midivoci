@@ -3,7 +3,8 @@
     v-if="xmlContent"
     class="musicxml-panel bg-surface-card border-1 surface-border border-round-lg overflow-hidden"
   >
-      <div class="panel-header flex align-items-center justify-content-between p-3 surface-border"
+    <div
+      class="panel-header flex align-items-center justify-content-between p-3 surface-border"
       @click="toggleExpanded"
     >
       <div class="flex flex-column gap-1 min-w-0">
@@ -13,12 +14,19 @@
           <IconMusic :size="16" />
           {{ t('score_interactive') }}
         </h3>
-        <div v-if="xmlMeta.creators.length || xmlMeta.rights" class="flex gap-2 text-xs text-color-secondary flex-wrap">
+        <div
+          v-if="xmlMeta.creators.length || xmlMeta.rights"
+          class="flex gap-2 text-xs text-color-secondary flex-wrap"
+        >
           <template v-for="(c, i) in xmlMeta.creators" :key="c.type">
             <span>{{ c.value }}</span>
-            <span v-if="i < xmlMeta.creators.length - 1 || xmlMeta.rights" class="text-color-muted">|</span>
+            <span v-if="i < xmlMeta.creators.length - 1 || xmlMeta.rights" class="text-color-muted"
+              >|</span
+            >
           </template>
-          <span v-if="xmlMeta.rights" class="truncate" style="max-width: 200px">{{ xmlMeta.rights }}</span>
+          <span v-if="xmlMeta.rights" class="truncate" style="max-width: 200px">{{
+            xmlMeta.rights
+          }}</span>
         </div>
       </div>
       <div class="flex align-items-center gap-1" @click.stop>
@@ -72,8 +80,8 @@ import Button from 'primevue/button'
 
 const { t } = useI18n()
 
-const EXPANDED_KEY = 'midivox:musicxml-panel-expanded'
-const ZOOM_KEY = 'midivox:musicxml-zoom'
+const EXPANDED_KEY = 'midivoci:musicxml-panel-expanded'
+const ZOOM_KEY = 'midivoci:musicxml-zoom'
 const SAVED_ZOOM = parseInt(localStorage.getItem(ZOOM_KEY), 10)
 
 const props = defineProps({
