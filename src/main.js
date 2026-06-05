@@ -61,12 +61,20 @@ app.use(i18n)
 app.directive('tooltip', Tooltip)
 app.mount('#app')
 
-if (window.__TAURI__) {
-  document.addEventListener('click', (e) => {
-    const link = e.target.closest('a[href]')
-    if (!link || !link.href) return
-    if (link.href.startsWith('file://') || link.href.startsWith('blob:')) return
-    e.preventDefault()
-    window.__TAURI__.opener.openUrl(link.href)
-  })
+// Open external links in system browser when running inside Tauri v2
+if (window.__TAURI_INTERNALS__) {
+  document.addEventListener(
+    'click',
+    (e) => {
+      const link = e.target.closest('a[href]')
+      if (!link || !link.href) return
+      if (link.href.startsWith('file://') || link.href.startsWith('blob:')) return
+      if (!link.href.startsWith('http://') && !link.href.startsWith('https://')) return
+      e.preventDefault()
+      window.__TAURI_INTERNALS__
+        .invoke('plugin:opener|open_url', { url: link.href })
+        .catch((err) => console.warn('Failed to open URL:', err))
+    },
+    true,
+  )
 }

@@ -422,7 +422,7 @@ import PdfPanel from './components/PdfPanel.vue'
 import MusicXmlPanel from './components/MusicXmlPanel.vue'
 import { decompressMxl } from './utils/musicxml-utils.js'
 
-const isTauri = !!window.__TAURI__
+const isTauri = !!window.__TAURI_INTERNALS__
 
 const { t, locale } = useI18n()
 
@@ -634,7 +634,7 @@ function onFileSelected(val) {
 }
 
 async function loadMusicXmlFile(fileName, item) {
-  const isTauri = !!window.__TAURI__
+  const isTauri = !!window.__TAURI_INTERNALS__
   const baseUrl = isTauri ? '/music/' : '/midivoci/music/'
   try {
     const res = await fetch(baseUrl + fileName)
