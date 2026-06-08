@@ -90,17 +90,6 @@
             <PrimeDivider />
 
             <h4 class="text-sm font-semibold text-color-secondary text-uppercase mb-2">
-              {{ t('app.sheet_music') }}
-            </h4>
-            <p class="text-sm">
-              {{ t('app.sheet_music_credit') }}
-              <a href="https://imslp.org/" target="_blank" rel="noopener noreferrer">imslp.org</a>
-              {{ t('app.sheet_music_sources') }}
-            </p>
-
-            <PrimeDivider />
-
-            <h4 class="text-sm font-semibold text-color-secondary text-uppercase mb-2">
               {{ t('app.libraries') }}
             </h4>
             <div class="text-sm info-dialog-tags flex flex-wrap gap-2">
@@ -198,16 +187,6 @@
                     }})
                   </span>
                 </div>
-                <a
-                  v-if="slotProps.option.composerMeta?.wikipedia"
-                  :href="slotProps.option.composerMeta.wikipedia"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="p-button p-1 flex-shrink-0"
-                  @click.stop
-                >
-                  <IconInfoCircle :size="14" style="vertical-align: middle" />
-                </a>
               </div>
             </template>
             <template #option="slotProps">
@@ -353,7 +332,6 @@ import {
   IconSun,
   IconMoon,
   IconLanguage,
-  IconInfoCircle,
   IconUpload,
   IconHelp,
   IconClock,
