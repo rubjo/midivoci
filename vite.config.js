@@ -132,9 +132,6 @@ function midiFilePlugin() {
         }
       }
 
-      const pdfPath = fullPath.replace(/\.(mid|mxl)$/, '.pdf')
-      const hasPdf = existsSync(pdfPath)
-
       return {
         fileName,
         name,
@@ -143,7 +140,6 @@ function midiFilePlugin() {
         numTracks,
         duration,
         meta,
-        hasPdf,
         format: isMxl ? 'musicxml' : 'midi',
       }
     })
@@ -185,7 +181,7 @@ function midiFilePlugin() {
         numTracks: f.numTracks,
         duration: f.duration,
         meta: f.meta,
-        hasPdf: f.hasPdf,
+
         composerRef: f.fileName.split('/')[0],
         format: f.format,
       }

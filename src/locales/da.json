@@ -30,7 +30,6 @@
   "expand": "Vis",
   "file_or": "eller",
   "float_controls": "Svævekontroller",
-  "fullscreen": "Fuld skærm",
   "hide_note_indicators": "Skjul nodeindikatorer",
   "instrument": "Instrument",
   "instrument_0": "Flygel",
@@ -55,12 +54,10 @@
   "language": "Sprog",
   "lead": "Lead",
   "light_mode": "Lys tilstand",
-  "live_performance_video": "Video",
   "loop_off": "Loop off",
   "loop_on": "Loop on",
   "musicxml_load_error": "Kunne ikke gengive MusicXML-fil",
   "mute": "Dæmp",
-  "openInNewTab": "Åbn i ny fane",
   "or": "eller",
   "orUpload": "...eller upload fil (MIDI / MusicXML)",
   "pan_center": "C",
@@ -77,7 +74,6 @@
   "reset_tempo": "Nulstil tempo",
   "score": "Noder",
   "score_interactive": "Noder (interaktiv)",
-  "score_pdf": "Noder (PDF)",
   "searchForComposerOrWork": "Søg efter komponist eller værk",
   "semitones": "halvtoner",
   "set_balance_double_ensemble": "Sæt balance for dobbelt ensemble",
@@ -99,7 +95,5 @@
   "transpose": "Transponer",
   "upload": "Last opp",
   "upload_mobile": "Last opp MIDI / MusicXML",
-  "volume": "Lydstyrke",
-  "wikipedia_composer": "komponist",
-  "wikipedia_more": "mere…"
+  "volume": "Lydstyrke"
 }

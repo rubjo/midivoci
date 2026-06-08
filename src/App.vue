@@ -162,13 +162,6 @@
             <template #header>
               <div class="flex gap-3 p-2 border-bottom-1 surface-border">
                 <div class="flex align-items-center gap-2">
-                  <PrimeToggleSwitch v-model="filterVideo" />
-                  <IconDeviceTv :size="14" class="text-color-secondary" />
-                  <span class="text-xs text-color-secondary">{{
-                    t('live_performance_video')
-                  }}</span>
-                </div>
-                <div class="flex align-items-center gap-2">
                   <PrimeToggleSwitch v-model="filterScore" />
                   <IconMusic :size="14" class="text-color-secondary" />
                   <span class="text-xs text-color-secondary">{{ t('score') }}</span>
@@ -242,24 +235,12 @@
                       {{ slotProps.option.format === 'musicxml' ? 'MusicXML' : 'MIDI' }}
                     </Tag>
                     <Tag
-                      v-if="slotProps.option.youtube"
-                      severity="info"
-                      class="font-mono track-info"
-                    >
-                      <IconDeviceTv :size="12" />
-                      {{ t('live_performance_video') }}
-                    </Tag>
-                    <Tag
                       v-if="slotProps.option.hasPdf"
                       severity="success"
                       class="font-mono track-info"
                     >
                       <IconMusic :size="12" />
-                      {{
-                        slotProps.option.format === 'musicxml'
-                          ? t('score_interactive')
-                          : t('score_pdf')
-                      }}
+                      {{ t('score_interactive') }}
                     </Tag>
                   </div>
                 </div>
@@ -324,13 +305,6 @@
         @toggle-loop="toggleLoop"
       />
 
-      <WikipediaPanel
-        v-if="currentFileMeta"
-        :composer="currentFileMeta?.composer ?? ''"
-        :title="currentFileMeta?.title ?? ''"
-        :wikipedia-url="currentFileMeta?.wikipedia ?? ''"
-      />
-
       <ScoreView
         v-if="midiUrl"
         :midi-url="midiUrl"
@@ -359,10 +333,6 @@
         @toggle-note-indicators="showNoteIndicators = !showNoteIndicators"
       />
 
-      <YouTubePanel v-if="currentFileMeta?.youtube" :youtube-url="currentFileMeta.youtube" />
-
-      <PdfPanel v-if="currentFileHasPdf" :pdf-url="currentPdfUrl" />
-
       <MusicXmlPanel
         v-if="musicXmlContent"
         :xml-content="musicXmlContent"
@@ -388,7 +358,6 @@ import {
   IconHelp,
   IconClock,
   IconUsers,
-  IconDeviceTv,
   IconMusic,
   IconExternalLink,
 } from '@tabler/icons-vue'
@@ -416,9 +385,6 @@ import { useMidiPlayer, midiFileMeta } from './composables/useMidiPlayer.js'
 import TransportControls from './components/TransportControls.vue'
 import TrackList from './components/TrackList.vue'
 import ScoreView from './components/ScoreView.vue'
-import YouTubePanel from './components/YouTubePanel.vue'
-import WikipediaPanel from './components/WikipediaPanel.vue'
-import PdfPanel from './components/PdfPanel.vue'
 import MusicXmlPanel from './components/MusicXmlPanel.vue'
 import { decompressMxl } from './utils/musicxml-utils.js'
 
@@ -478,7 +444,6 @@ const suggestMissingUrl = computed(() => {
 })
 
 const filterScore = ref(false)
-const filterVideo = ref(false)
 
 const filteredGroups = computed(() => {
   return fileGroups.value
@@ -486,7 +451,6 @@ const filteredGroups = computed(() => {
       ...group,
       items: group.items.filter((item) => {
         if (filterScore.value && !item.hasPdf) return false
-        if (filterVideo.value && !item.youtube) return false
         return true
       }),
     }))
@@ -514,7 +478,6 @@ function clearCurrentTrack() {
   isLoaded.value = false
   midiUrl.value = ''
   currentFileMeta.value = null
-  currentFileHasPdf.value = false
   tracks.value = []
   musicXmlContent.value = ''
   suggestions.value = filteredGroups.value
@@ -528,7 +491,7 @@ function onAutocompleteFocus() {
   nextTick(() => autocomplete.value?.show())
 }
 
-watch([filterScore, filterVideo], () => {
+watch(filterScore, () => {
   const input = autocomplete.value?.$el?.querySelector('input')
   suggestions.value = getFilteredSuggestions(input?.value)
 })
@@ -643,7 +606,6 @@ async function loadMusicXmlFile(fileName, item) {
     localStorage.setItem('midivoci:musicxml-panel-expanded', 'true')
     musicXmlContent.value = text
     midiUrl.value = baseUrl + fileName
-    currentFileHasPdf.value = !!item.hasPdf
     const meta = item.meta || {}
     currentFileMeta.value = { ...meta, composer: item.composer, title: item.display }
   } catch (err) {
@@ -689,7 +651,6 @@ const {
   activeTracks,
   leadTrack,
   currentFileMeta,
-  currentFileHasPdf,
   transpose,
   loop,
   setTranspose,
@@ -754,8 +715,7 @@ const fileGroups = computed(() => {
       numTracks: file.numTracks,
       duration: file.duration,
       format: file.format,
-      youtube: !!file.meta?.youtube,
-      hasPdf: !!file.hasPdf || file.format === 'musicxml',
+      hasPdf: file.format === 'musicxml',
       _display: file.display.toLowerCase(),
       _composer: (file.composer || '').toLowerCase(),
     })
@@ -766,11 +726,6 @@ const fileGroups = computed(() => {
     group.items.sort((a, b) => a.label.localeCompare(b.label))
   })
   return result
-})
-
-const currentPdfUrl = computed(() => {
-  if (!midiUrl.value || !currentFileHasPdf.value) return ''
-  return midiUrl.value.replace(/\.(mid|mxl)$/, '.pdf')
 })
 
 const dataLoaded = computed(() => midiFileMeta.value.length > 0)

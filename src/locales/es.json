@@ -30,7 +30,6 @@
   "expand": "Expandir",
   "file_or": "o",
   "float_controls": "Controles flotantes",
-  "fullscreen": "Pantalla completa",
   "hide_note_indicators": "Ocultar indicadores de notas",
   "instrument": "Instrumento",
   "instrument_0": "Piano de cola",
@@ -55,12 +54,10 @@
   "language": "Idioma",
   "lead": "Principal",
   "light_mode": "Modo claro",
-  "live_performance_video": "Video",
   "loop_off": "Loop off",
   "loop_on": "Loop on",
   "musicxml_load_error": "No se pudo renderizar el archivo MusicXML",
   "mute": "Silenciar",
-  "openInNewTab": "Abrir en nueva pestaña",
   "or": "o",
   "orUpload": "...o subir archivo (MIDI / MusicXML)",
   "pan_center": "C",
@@ -77,7 +74,6 @@
   "reset_tempo": "Restablecer tempo",
   "score": "Partitura",
   "score_interactive": "Partitura (interactiva)",
-  "score_pdf": "Partitura (PDF)",
   "searchForComposerOrWork": "Buscar compositor u obra",
   "semitones": "semitonos",
   "set_balance_double_ensemble": "Establecer balance para doble conjunto",
@@ -99,7 +95,5 @@
   "transpose": "Transportar",
   "upload": "Subir",
   "upload_mobile": "Subir MIDI / MusicXML",
-  "volume": "Volumen",
-  "wikipedia_composer": "compositor",
-  "wikipedia_more": "más…"
+  "volume": "Volumen"
 }

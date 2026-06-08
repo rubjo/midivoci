@@ -30,7 +30,6 @@
   "expand": "Visa",
   "file_or": "eller",
   "float_controls": "Flytande kontroller",
-  "fullscreen": "Fullskärm",
   "hide_note_indicators": "Dölj notindikatorer",
   "instrument": "Instrument",
   "instrument_0": "Flygel",
@@ -55,12 +54,10 @@
   "language": "Språk",
   "lead": "Lead",
   "light_mode": "Ljust läge",
-  "live_performance_video": "Video",
   "loop_off": "Loop off",
   "loop_on": "Loop on",
   "musicxml_load_error": "Kunde inte rendera MusicXML-fil",
   "mute": "Tysta",
-  "openInNewTab": "Öppna i ny flik",
   "or": "eller",
   "orUpload": "...eller ladda upp fil (MIDI / MusicXML)",
   "pan_center": "C",
@@ -77,7 +74,6 @@
   "reset_tempo": "Återställ tempo",
   "score": "Noter",
   "score_interactive": "Noter (interaktiv)",
-  "score_pdf": "Noter (PDF)",
   "searchForComposerOrWork": "Sök efter kompositör eller verk",
   "semitones": "halvtoner",
   "set_balance_double_ensemble": "Ställ in balans för dubbel ensemble",
@@ -99,7 +95,5 @@
   "transpose": "Transponera",
   "upload": "Ladda upp",
   "upload_mobile": "Ladda upp MIDI / MusicXML",
-  "volume": "Volym",
-  "wikipedia_composer": "kompositör",
-  "wikipedia_more": "mer…"
+  "volume": "Volym"
 }

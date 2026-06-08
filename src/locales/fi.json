@@ -30,7 +30,6 @@
   "expand": "Näytä",
   "file_or": "tai",
   "float_controls": "Kelluvat säätimet",
-  "fullscreen": "Koko näyttö",
   "hide_note_indicators": "Piilota nuoli-indikaattorit",
   "instrument": "Soitin",
   "instrument_0": "Flyygeli",
@@ -55,12 +54,10 @@
   "language": "Kieli",
   "lead": "Johtava",
   "light_mode": "Vaalea tila",
-  "live_performance_video": "Video",
   "loop_off": "Loop off",
   "loop_on": "Loop on",
   "musicxml_load_error": "MusicXML-tiedoston renderöinti epäonnistui",
   "mute": "Mykistä",
-  "openInNewTab": "Avaa uudessa välilehdessä",
   "or": "tai",
   "orUpload": "...tai lataa tiedosto (MIDI / MusicXML)",
   "pan_center": "K",
@@ -77,7 +74,6 @@
   "reset_tempo": "Palauta tempo",
   "score": "Nuotit",
   "score_interactive": "Nuotit (interaktiiviset)",
-  "score_pdf": "Nuotit (PDF)",
   "searchForComposerOrWork": "Etsi säveltäjää tai teosta",
   "semitones": "puolisävelaskelta",
   "set_balance_double_ensemble": "Aseta tasapaino kaksoiskokoonpanolle",
@@ -99,7 +95,5 @@
   "transpose": "Transponoi",
   "upload": "Lataa",
   "upload_mobile": "Lataa MIDI / MusicXML",
-  "volume": "Äänenvoimakkuus",
-  "wikipedia_composer": "säveltäjä",
-  "wikipedia_more": "lisää…"
+  "volume": "Äänenvoimakkuus"
 }

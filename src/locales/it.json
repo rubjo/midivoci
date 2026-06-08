@@ -30,7 +30,6 @@
   "expand": "Espandi",
   "file_or": "o",
   "float_controls": "Controlli fluttuanti",
-  "fullscreen": "Schermo intero",
   "hide_note_indicators": "Nascondi indicatori note",
   "instrument": "Strumento",
   "instrument_0": "Pianoforte a coda",
@@ -55,12 +54,10 @@
   "language": "Lingua",
   "lead": "Principale",
   "light_mode": "Modalità chiara",
-  "live_performance_video": "Video",
   "loop_off": "Loop off",
   "loop_on": "Loop on",
   "musicxml_load_error": "Impossibile visualizzare il file MusicXML",
   "mute": "Muto",
-  "openInNewTab": "Apri in nuova scheda",
   "or": "o",
   "orUpload": "...o carica file (MIDI / MusicXML)",
   "pan_center": "C",
@@ -77,7 +74,6 @@
   "reset_tempo": "Reimposta tempo",
   "score": "Spartito",
   "score_interactive": "Spartito (interattivo)",
-  "score_pdf": "Spartito (PDF)",
   "searchForComposerOrWork": "Cerca compositore o opera",
   "semitones": "semitoni",
   "set_balance_double_ensemble": "Imposta bilanciamento per doppio ensemble",
@@ -99,7 +95,5 @@
   "transpose": "Trasponi",
   "upload": "Carica",
   "upload_mobile": "Carica MIDI / MusicXML",
-  "volume": "Volume",
-  "wikipedia_composer": "compositore",
-  "wikipedia_more": "altro…"
+  "volume": "Volume"
 }

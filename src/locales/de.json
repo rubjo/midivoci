@@ -30,7 +30,6 @@
   "expand": "Ausklappen",
   "file_or": "oder",
   "float_controls": "Schwebende Steuerung",
-  "fullscreen": "Vollbild",
   "hide_note_indicators": "Notenindikatoren ausblenden",
   "instrument": "Instrument",
   "instrument_0": "Konzertflügel",
@@ -55,12 +54,10 @@
   "language": "Sprache",
   "lead": "Lead",
   "light_mode": "Hellmodus",
-  "live_performance_video": "Video",
   "loop_off": "Loop off",
   "loop_on": "Loop on",
   "musicxml_load_error": "MusicXML-Datei konnte nicht gerendert werden",
   "mute": "Stumm",
-  "openInNewTab": "In neuem Tab öffnen",
   "or": "oder",
   "orUpload": "...oder Datei hochladen (MIDI / MusicXML)",
   "pan_center": "M",
@@ -77,7 +74,6 @@
   "reset_tempo": "Tempo zurücksetzen",
   "score": "Partitur",
   "score_interactive": "Partitur (interaktiv)",
-  "score_pdf": "Partitur (PDF)",
   "searchForComposerOrWork": "Nach Komponist oder Werk suchen",
   "semitones": "Halbtöne",
   "set_balance_double_ensemble": "Balance für Doppelchor einstellen",
@@ -99,7 +95,5 @@
   "transpose": "Transponieren",
   "upload": "Hochladen",
   "upload_mobile": "MIDI / MusicXML hochladen",
-  "volume": "Lautstärke",
-  "wikipedia_composer": "Komponist",
-  "wikipedia_more": "mehr…"
+  "volume": "Lautstärke"
 }

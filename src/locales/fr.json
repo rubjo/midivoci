@@ -30,7 +30,6 @@
   "expand": "Développer",
   "file_or": "ou",
   "float_controls": "Contrôles flottants",
-  "fullscreen": "Plein écran",
   "hide_note_indicators": "Masquer les indicateurs de notes",
   "instrument": "Instrument",
   "instrument_0": "Piano à queue",
@@ -55,12 +54,10 @@
   "language": "Langue",
   "lead": "Principal",
   "light_mode": "Mode clair",
-  "live_performance_video": "Vidéo",
   "loop_off": "Loop off",
   "loop_on": "Loop on",
   "musicxml_load_error": "Impossible de rendre le fichier MusicXML",
   "mute": "Muet",
-  "openInNewTab": "Ouvrir dans un nouvel onglet",
   "or": "ou",
   "orUpload": "...ou télécharger un fichier (MIDI / MusicXML)",
   "pan_center": "C",
@@ -77,7 +74,6 @@
   "reset_tempo": "Réinitialiser le tempo",
   "score": "Partition",
   "score_interactive": "Partition (interactive)",
-  "score_pdf": "Partition (PDF)",
   "searchForComposerOrWork": "Rechercher un compositeur ou une œuvre",
   "semitones": "demi-tons",
   "set_balance_double_ensemble": "Définir la balance pour double chœur",
@@ -99,7 +95,5 @@
   "transpose": "Transposer",
   "upload": "Télécharger",
   "upload_mobile": "Télécharger MIDI / MusicXML",
-  "volume": "Volume",
-  "wikipedia_composer": "compositeur",
-  "wikipedia_more": "plus…"
+  "volume": "Volume"
 }

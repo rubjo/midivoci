@@ -30,7 +30,6 @@
   "expand": "Expand",
   "file_or": "or",
   "float_controls": "Float controls",
-  "fullscreen": "Fullscreen",
   "hide_note_indicators": "Hide playing notes",
   "instrument": "Instrument",
   "instrument_0": "Acoustic Grand Piano",
@@ -55,12 +54,10 @@
   "language": "Language",
   "lead": "Lead",
   "light_mode": "Light mode",
-  "live_performance_video": "Video",
   "loop_off": "Loop off",
   "loop_on": "Loop on",
   "musicxml_load_error": "Could not render MusicXML file",
   "mute": "Mute",
-  "openInNewTab": "Open in new tab",
   "or": "or",
   "orUpload": "...or upload file (MIDI / MusicXML)",
   "pan_center": "C",
@@ -77,7 +74,6 @@
   "reset_tempo": "Reset tempo",
   "score": "Score",
   "score_interactive": "Score (interactive)",
-  "score_pdf": "Score (PDF)",
   "searchForComposerOrWork": "Search: composer/work",
   "semitones": "semitones",
   "set_balance_double_ensemble": "Set balance for double ensemble",
@@ -99,7 +95,5 @@
   "transpose": "Transpose",
   "upload": "Upload",
   "upload_mobile": "Upload MIDI / MusicXML",
-  "volume": "Volume",
-  "wikipedia_composer": "composer",
-  "wikipedia_more": "more…"
+  "volume": "Volume"
 }

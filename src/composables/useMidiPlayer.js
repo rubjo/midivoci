@@ -29,7 +29,6 @@ export function useMidiPlayer() {
   const activeTracks = ref(new Map())
   const leadTrack = ref([])
   const currentFileMeta = ref(null)
-  const currentFileHasPdf = ref(false)
   const transpose = ref(0)
   const loop = ref(false)
 
@@ -590,7 +589,6 @@ export function useMidiPlayer() {
     activeTracks.value = new Map()
     leadTrack.value = []
     currentFileMeta.value = null
-    currentFileHasPdf.value = false
     transpose.value = 0
     if (visualizerUrl.value) {
       URL.revokeObjectURL(visualizerUrl.value)
@@ -641,7 +639,6 @@ export function useMidiPlayer() {
       await loadMidiFromUrl(musicBaseUrl + file)
       const meta = item.meta || {}
       currentFileMeta.value = { ...meta, composer: item.composer, title: item.display }
-      currentFileHasPdf.value = !!item.hasPdf
     } catch (err) {
       console.error('Failed to load MIDI file:', file, err)
     }
@@ -652,7 +649,6 @@ export function useMidiPlayer() {
     const file = e.target.files[0]
     if (file) {
       currentFileMeta.value = null
-      currentFileHasPdf.value = false
       const buffer = await file.arrayBuffer()
       const blobUrl = URL.createObjectURL(file)
       const fileName = file.name.replace(/\.midi?$/i, '')
@@ -677,7 +673,6 @@ export function useMidiPlayer() {
     activeTracks,
     leadTrack,
     currentFileMeta,
-    currentFileHasPdf,
     transpose,
     loop,
     setTranspose,
