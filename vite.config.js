@@ -243,7 +243,7 @@ export default defineConfig({
         },
       },
     }),
-    // vueDevTools(),
+    vueDevTools(),
     midiFilePlugin(),
   ],
   resolve: {
