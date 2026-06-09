@@ -14,9 +14,8 @@ Supports upload of either MIDI or MusicXML files. For the latter, an interactive
 - **Piano roll** visualization synced to playback
 - **Multi-track controls** — volume, mute, solo, lead, instrument selection
 - **Tempo & transpose** — adjust speed (25%–300%) and key (±12 semitones)
-- **Sheet music** — MusicXML score rendering (Verovio) and PDF display
+- **Sheet music** — MusicXML score rendering (Verovio)
 - **Interactive score** — (MusicXML only) click anywhere on a system to seek
-- **YouTube video** — sync performance videos with playback
 - **File upload** — load your own MIDI or MusicXML files
 - **Floating controls** — detachable transport bar
 - **Language support** — 9 languages (EN, NO, DE, FR, IT, ES, SV, DA, FI)
