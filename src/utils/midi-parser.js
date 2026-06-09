@@ -12,7 +12,10 @@ export function parseMidiFile(buffer) {
   const rawData = rawParseMidi(uint8)
   rawData.tracks.forEach((track) => {
     let ticks = 0
-    track.forEach((e) => { ticks += e.deltaTime; e.absoluteTime = ticks })
+    track.forEach((e) => {
+      ticks += e.deltaTime
+      e.absoluteTime = ticks
+    })
   })
   const channelNames = new Map()
   rawData.tracks.forEach((track, ti) => {
@@ -51,12 +54,6 @@ export function parseMidiFile(buffer) {
 
   midi.tracks.forEach((track, i) => {
     if (track.notes.length > 0) {
-      const velocities = track.notes.map((n) => n.velocity)
-      const avgVelocity =
-        velocities.length > 0
-          ? Math.round((velocities.reduce((a, b) => a + b, 0) / velocities.length) * 100)
-          : 50
-
       const trackInfo = {
         name: track.name || channelNames.get(track.channel) || `Track ${filteredTracks.length + 1}`,
         channel: track.channel || 1,
@@ -65,14 +62,12 @@ export function parseMidiFile(buffer) {
         pan: 50,
         muted: false,
         solo: false,
-        avgVelocity,
         noteCount: track.notes.length,
       }
       filteredTracks.push(trackInfo)
       trackMap.set(i, filteredTracks.length - 1)
     }
   })
-
 
   const finalAllNotes = allNotes
     .map((n) => ({
