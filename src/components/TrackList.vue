@@ -449,20 +449,60 @@ const menuItems = computed(() => [
     visible: props.tracks.some((t) => t.pan !== 50),
     command: () => emit('setAllTrackPans', 50),
   },
+  ...emphasizeGroupItems.value,
+  { separator: true },
   {
-    label: t('set_balance_double_ensemble'),
-    visible:
-      props.tracks.some((t) => t.name?.includes('1')) &&
-      props.tracks.some((t) => t.name?.includes('2')),
+    label: t('reset_all_parts'),
     command: () => {
       props.tracks.forEach((track, i) => {
-        const first = track.name?.match(/[12]/)?.[0]
-        if (first === '1') emit('setTrackPan', i, 10)
-        else if (first === '2') emit('setTrackPan', i, 90)
+        if (track.solo) emit('setTrackSolo', i, false)
       })
+      props.tracks.forEach((track, i) => {
+        if (track.muted) emit('setTrackMuted', i, false)
+      })
+      props.leadTrack.forEach((i) => emit('setTrackLead', i))
+      emit('setAllTrackVolumes', 100)
+      emit('setAllTrackPans', 50)
+      emit('setAllTrackInstruments', 0)
     },
   },
 ])
+
+const trackGroups = computed(() => {
+  const groups = new Map()
+  props.tracks.forEach((track, i) => {
+    const m = track.name?.match(/\d/)
+    if (m) {
+      const digit = m[0]
+      if (!groups.has(digit)) groups.set(digit, [])
+      groups.get(digit).push(i)
+    }
+  })
+  return groups
+})
+
+const emphasizeGroupItems = computed(() => {
+  const items = []
+  const sorted = [...trackGroups.value.entries()].sort(([a], [b]) => a.localeCompare(b))
+  if (sorted.length <= 1) return []
+  sorted.forEach(([digit]) => {
+    items.push({
+      label: t('emphasize_group', { n: digit }),
+      command: () => {
+        props.tracks.forEach((track, i) => {
+          const first = track.name?.match(/\d/)?.[0]
+          if (!first) return
+          const shouldBeLead = first === digit
+          const isCurrentlyLead = props.leadTrack.includes(i)
+          if (shouldBeLead !== isCurrentlyLead) {
+            emit('setTrackLead', i)
+          }
+        })
+      },
+    })
+  })
+  return items
+})
 
 function applyVolume() {
   emit('setAllTrackVolumes', bulkVolume.value)

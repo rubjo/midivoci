@@ -28,7 +28,7 @@
             :title="t('skip_back')"
             :severity="isFloating ? 'contrast' : ''"
             :variant="isFloating ? 'text' : 'filled'"
-            :size="isFloating ? 'small' : 'normal'"
+            size="normal"
             @click="skipBack"
           >
             <IconRewindBackward10 :size="24" />
@@ -38,7 +38,7 @@
             :title="isPlaying ? t('pause') : t('play')"
             :severity="isFloating ? 'contrast' : ''"
             :variant="isFloating ? 'text' : 'filled'"
-            :size="isFloating ? 'small' : 'normal'"
+            size="normal"
             @click="$emit('togglePlay')"
           >
             <IconPlayerPlay v-if="!isPlaying" :size="24" />
@@ -49,7 +49,7 @@
             :title="t('stop')"
             :severity="isFloating ? 'contrast' : ''"
             :variant="isFloating ? 'text' : 'filled'"
-            :size="isFloating ? 'small' : 'normal'"
+            size="normal"
             @click="$emit('stop')"
           >
             <IconPlayerStop :size="24" />
@@ -59,7 +59,7 @@
             :title="t('skip_forward')"
             :severity="isFloating ? 'contrast' : ''"
             :variant="isFloating ? 'text' : 'filled'"
-            :size="isFloating ? 'small' : 'normal'"
+            size="normal"
             @click="skipForward"
           >
             <IconRewindForward10 :size="24" />
@@ -69,7 +69,7 @@
             :title="loop ? t('loop_on') : t('loop_off')"
             :severity="loop ? 'success' : isFloating ? 'contrast' : undefined"
             :variant="isFloating ? 'text' : 'filled'"
-            :size="isFloating ? 'small' : 'normal'"
+            size="normal"
             @click="$emit('toggleLoop')"
           >
             <IconRepeat :size="24" />
@@ -78,7 +78,7 @@
             :title="t('close_track')"
             :severity="isFloating ? 'contrast' : ''"
             :variant="isFloating ? 'text' : 'filled'"
-            :size="isFloating ? 'small' : 'normal'"
+            size="normal"
             @click="$emit('close')"
           >
             <IconPlayerEject :size="24" />
@@ -87,7 +87,7 @@
             :title="t('settings')"
             :severity="isFloating ? 'contrast' : ''"
             :variant="isFloating ? 'text' : 'filled'"
-            :size="isFloating ? 'small' : 'normal'"
+            size="normal"
             @click="settingsPopover.toggle($event)"
           >
             <IconSettings :size="24" />
@@ -380,7 +380,7 @@ function formatTime(seconds) {
 }
 
 .transport-floating .transport-buttons-inner button {
-  padding: 0 0.4rem;
+  padding: 0 0.55rem;
 }
 
 .transport-time {
