@@ -22,7 +22,7 @@
   "compact_mode_on": "Använd kompakt vy",
   "dark_mode": "Mörkt läge",
   "emphasize_group": "Framhäv grupp {n}",
-  "empty_state_intro": "Välkommen till MidiVoci! Spela upp musikverk och kontrollera enskilda stämmor — justera volym, instrument och tempo för att öva och lära dig din stämma.",
+  "empty_state_intro": "Välkommen! Spela upp musikverk och kontrollera enskilda stämmor — justera volym, instrument och tempo för att öva och lära dig din stämma. Så här gör du:",
   "empty_state_pick_or_upload": "Välj eller ladda upp musik (MIDI- eller MusicXML-format)",
   "empty_state_press_play": "Tryck Spela",
   "empty_state_volume": "Ändra volymen för varje stämma (eller använd tysta/lead/solo-knapparna)",

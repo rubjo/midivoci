@@ -22,7 +22,7 @@
   "compact_mode_on": "Käytä kompaktia näkymää",
   "dark_mode": "Tumma tila",
   "emphasize_group": "Korosta ryhmää {n}",
-  "empty_state_intro": "Tervetuloa MidiVociin! Toista musiikkiteoksia ja hallitse yksittäisiä ääniä — säädä äänenvoimakkuutta, soitinta ja tempoa harjoitellaksesi ja oppiaksesi osuutesi.",
+  "empty_state_intro": "Tervetuloa! Toista musiikkiteoksia ja hallitse yksittäisiä ääniä — säädä äänenvoimakkuutta, soitinta ja tempoa harjoitellaksesi ja oppiaksesi osuutesi. Näin se tehdään:",
   "empty_state_pick_or_upload": "Valitse tai lataa musiikki (MIDI- tai MusicXML-muodossa)",
   "empty_state_press_play": "Paina Toista",
   "empty_state_volume": "Säädä äänenvoimakkuutta kullekin äänelle (tai käytä mykistä/johtava/soolo-painikkeita)",

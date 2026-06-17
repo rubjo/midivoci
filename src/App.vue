@@ -826,11 +826,9 @@ function searchFiles(event) {
 }
 
 .empty-state-intro {
-  font-size: 1.15rem;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-  text-align: center;
-  color: var(--p-text-muted-color);
+  font-size: 1.5rem;
+  line-height: 1.5;
+  margin: 1rem 0;
 }
 
 .empty-state-step {

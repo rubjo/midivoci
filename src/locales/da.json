@@ -22,7 +22,7 @@
   "compact_mode_on": "Brug kompakt visning",
   "dark_mode": "Mørk tilstand",
   "emphasize_group": "Fremhæv gruppe {n}",
-  "empty_state_intro": "Velkommen til MidiVoci! Afspil musikværker og styr enkelte stemmer — justér lydstyrke, instrument og tempo for at øve dig og lære din stemme.",
+  "empty_state_intro": "Velkommen! Afspil musikværker og styr enkelte stemmer — justér lydstyrke, instrument og tempo for at øve dig og lære din stemme. Sådan gør du:",
   "empty_state_pick_or_upload": "Vælg eller upload musik (MIDI- eller MusicXML-format)",
   "empty_state_press_play": "Tryk Afspil",
   "empty_state_volume": "Juster lydstyrken for hver stemme (eller brug dæmp/lead/solo-knapperne)",
