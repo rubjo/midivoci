@@ -70,6 +70,33 @@
                   />
                 </a>
               </div>
+              <div class="mt-4 flex flex-column align-items-center gap-2">
+                <span class="text-sm font-semibold">{{ t('app.install_from_app_store') }}</span>
+                <div class="flex gap-2 flex-wrap justify-content-center">
+                  <a
+                    href="https://apps.apple.com/us/app/midivoci/id6777052916?platform=mac"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      height="35"
+                      src="https://tools.applemediaservices.com/api/badges/download-on-the-mac-app-store/black/en-us?size=250x83"
+                      alt="Download on the Mac App Store"
+                    />
+                  </a>
+                  <a
+                    href="https://apps.apple.com/us/app/midivoci/id6777052916?platform=ios"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      height="35"
+                      src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83"
+                      alt="Download on the App Store"
+                    />
+                  </a>
+                </div>
+              </div>
             </span>
 
             <PrimeDivider />
@@ -247,17 +274,40 @@
         v-if="!isLoaded && !musicXmlContent"
         class="empty-state flex flex-column align-items-center justify-content-center"
       >
-        <IconHelp
-          v-if="!showHelp"
-          :size="64"
-          class="empty-state-icon cursor-pointer"
-          @click="showHelp = true"
-          style="stroke-width: 0.08rem"
-        />
-        <div v-else class="empty-state-inner">
+        <div class="empty-state-inner">
           <div class="empty-state-step">1. {{ t('empty_state_pick_or_upload') }}</div>
           <div class="empty-state-step">2. {{ t('empty_state_volume') }}</div>
           <div class="empty-state-step">3. {{ t('empty_state_press_play') }}</div>
+        </div>
+
+        <div
+          v-if="!isTauri && !isLoaded && !musicXmlContent"
+          class="store-banner flex flex-wrap align-items-center justify-content-center gap-2 p-2"
+        >
+          <a
+            href="https://apps.apple.com/us/app/midivoci/id6777052916?platform=mac"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="store-badge-link"
+          >
+            <img
+              height="35"
+              src="https://tools.applemediaservices.com/api/badges/download-on-the-mac-app-store/black/en-us?size=250x83"
+              alt="Download on the Mac App Store"
+            />
+          </a>
+          <a
+            href="https://apps.apple.com/us/app/midivoci/id6777052916?platform=ios"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="store-badge-link"
+          >
+            <img
+              height="35"
+              src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83"
+              alt="Download on the App Store"
+            />
+          </a>
         </div>
       </div>
 
@@ -333,7 +383,6 @@ import {
   IconMoon,
   IconLanguage,
   IconUpload,
-  IconHelp,
   IconClock,
   IconUsers,
   IconMusic,
@@ -508,7 +557,6 @@ function toggleTheme() {
 
 const showNoteIndicators = ref(false)
 const infoDialogVisible = ref(false)
-const showHelp = ref(false)
 
 const libraries = [
   { name: '@tonejs/midi', url: 'https://github.com/Tonejs/Midi' },
@@ -772,16 +820,6 @@ function searchFiles(event) {
   padding: 2rem;
 }
 
-.empty-state-icon {
-  color: var(--p-text-muted-color);
-  opacity: 0.25;
-  transition: opacity 0.25s;
-}
-
-.empty-state-icon:hover {
-  opacity: 0.75;
-}
-
 .empty-state-inner {
   width: min(80vw, 480px);
 }
@@ -805,5 +843,14 @@ function searchFiles(event) {
 
 .has-floating {
   padding-bottom: 200px;
+}
+
+.store-banner {
+  border-bottom: 1px solid var(--p-surface-border);
+  background: var(--p-surface-ground);
+}
+
+.store-badge-link {
+  line-height: 0;
 }
 </style>

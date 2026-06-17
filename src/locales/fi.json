@@ -2,6 +2,7 @@
   "app.created_by": "Luonut",
   "app.description": "MIDI-harjoitussoitin pianorullan visualisoinnilla, moniraitaohjauksella, tempon säädöllä ja transponoinnilla, nuottinäytöllä. Täydellinen kuorolaisille.",
   "app.donations_welcome": "lahjoitukset tervetulleita!",
+  "app.install_from_app_store": "Asenna App Storesta",
   "app.libraries": "Kiitokset",
   "app.midi_credit": "John's MIDI File Choral Music -sivuston luvalla —",
   "app.midi_files": "MIDI-tiedostot",

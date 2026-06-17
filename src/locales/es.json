@@ -2,6 +2,7 @@
   "app.created_by": "Creado por",
   "app.description": "Un reproductor de ensayos MIDI con visualización de piano roll, controles multipista, ajuste de tempo y transposición, con visualización de partituras. Perfecto para coristas.",
   "app.donations_welcome": "¡donaciones bienvenidas!",
+  "app.install_from_app_store": "Instalar desde la App Store",
   "app.libraries": "Agradecimientos",
   "app.midi_credit": "Cortesía de John's MIDI File Choral Music —",
   "app.midi_files": "Archivos MIDI",

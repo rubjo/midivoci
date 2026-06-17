@@ -2,6 +2,7 @@
   "app.created_by": "Laget av",
   "app.description": "En MIDI-øvingsspiller med pianorull-visualisering, flersporskontroller, tempojustering og transponering, med noter. Perfekt for kormedlemmer.",
   "app.donations_welcome": "donasjoner tas imot med takk!",
+  "app.install_from_app_store": "Installér fra App Store",
   "app.libraries": "Takk til",
   "app.midi_credit": "MIDI-filer tilpasset fra John's MIDI File Choral Music —",
   "app.midi_files": "MIDI-filer",

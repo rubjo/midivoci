@@ -2,6 +2,7 @@
   "app.created_by": "Créé par",
   "app.description": "Un lecteur de répétition MIDI avec visualisation de piano roll, contrôles multipistes, ajustement du tempo et transposition, avec affichage de partitions. Parfait pour les choristes.",
   "app.donations_welcome": "dons bienvenus !",
+  "app.install_from_app_store": "Installer depuis l'App Store",
   "app.libraries": "Remerciements",
   "app.midi_credit": "Avec l'aimable autorisation de John's MIDI File Choral Music —",
   "app.midi_files": "Fichiers MIDI",

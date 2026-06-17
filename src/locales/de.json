@@ -2,6 +2,7 @@
   "app.created_by": "Erstellt von",
   "app.description": "Ein MIDI-Übungsplayer mit Klavierrollenvisualisierung, Mehrspursteuerung, Tempoanpassung und Transponierung, mit Notenanzeige. Perfekt für Chormitglieder.",
   "app.donations_welcome": "Spenden willkommen!",
+  "app.install_from_app_store": "Aus dem App Store installieren",
   "app.libraries": "Dank an",
   "app.midi_credit": "Mit freundlicher Genehmigung von John's MIDI File Choral Music —",
   "app.midi_files": "MIDI-Dateien",

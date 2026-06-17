@@ -2,6 +2,7 @@
   "app.created_by": "Skapad av",
   "app.description": "En MIDI-övningsspelare med pianorullvisualisering, flerspårskontroll, tempojustering och transponering, med noter. Perfekt för körmedlemmar.",
   "app.donations_welcome": "donationer välkomna!",
+  "app.install_from_app_store": "Installera från App Store",
   "app.libraries": "Tack till",
   "app.midi_credit": "Med tillstånd från John's MIDI File Choral Music —",
   "app.midi_files": "MIDI-filer",

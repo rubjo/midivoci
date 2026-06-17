@@ -2,6 +2,7 @@
   "app.created_by": "Created by",
   "app.description": "A rehearsal player with piano roll visualization, multi-track controls, tempo adjustment and transposition, with sheet music display. Perfect for choir members.",
   "app.donations_welcome": "donations welcome!",
+  "app.install_from_app_store": "Install from the App Store",
   "app.libraries": "Thanks to",
   "app.midi_credit": "Adapted from John's MIDI File Choral Music site —",
   "app.midi_files": "MIDI Files",
