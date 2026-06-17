@@ -40,9 +40,40 @@
       content="A rehearsal player with piano roll visualization, multi-track controls, tempo adjustment and transposition, with sheet music and video display."
     />
     <meta name="twitter:image" content="https://rubjo.github.io/midivoci/favicon.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "applicationCategory": "Multimedia",
+        "author": {
+          "@type": "Person",
+          "name": "@rubjo"
+        },
+        "browserRequirements": "Requires JavaScript",
+        "description": "A rehearsal player with piano roll visualization, multi-track controls, tempo adjustment and transposition, with sheet music and video display. Perfect for choir members.",
+        "name": "MidiVoci",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "operatingSystem": "Web, macOS, iOS",
+        "url": "https://rubjo.github.io/midivoci/"
+      }
+    </script>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <h1 style="position: absolute; clip: rect(0 0 0 0)">
+        MidiVoci — rehearsal player for choirs
+      </h1>
+      <p style="position: absolute; clip: rect(0 0 0 0)">
+        A browser-based rehearsal player for choir members with piano roll visualization,
+        multi-track controls, tempo adjustment, transposition, and sheet music display. Supports
+        MIDI and MusicXML files.
+      </p>
+    </div>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
