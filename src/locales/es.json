@@ -22,6 +22,7 @@
   "compact_mode_on": "Usar vista compacta",
   "dark_mode": "Modo oscuro",
   "emphasize_group": "Enfatizar grupo {n}",
+  "empty_state_intro": "¡Bienvenido a MidiVoci! Reproduce obras musicales y controla partes individuales — ajusta el volumen, el instrumento y el tempo para ensayar y aprender tu parte.",
   "empty_state_pick_or_upload": "Elige o sube música (formato MIDI o MusicXML)",
   "empty_state_press_play": "Presiona Reproducir",
   "empty_state_volume": "Cambia el volumen de cada voz (o usa los botones silenciar/principal/solo)",

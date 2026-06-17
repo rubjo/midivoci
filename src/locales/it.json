@@ -22,6 +22,7 @@
   "compact_mode_on": "Usa vista compatta",
   "dark_mode": "Modalità scura",
   "emphasize_group": "Enfatizza gruppo {n}",
+  "empty_state_intro": "Benvenuto su MidiVoci! Riproduci brani musicali e controlla le singole parti — regola volume, strumento e tempo per provare e imparare la tua parte.",
   "empty_state_pick_or_upload": "Scegli o carica musica (formato MIDI o MusicXML)",
   "empty_state_press_play": "Premi Riproduci",
   "empty_state_volume": "Cambia il volume per ogni voce (o usa i pulsanti muto/principale/solo)",

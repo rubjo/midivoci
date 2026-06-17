@@ -22,6 +22,7 @@
   "compact_mode_on": "Use compact view",
   "dark_mode": "Dark mode",
   "emphasize_group": "Emphasize group {n}",
+  "empty_state_intro": "Welcome to MidiVoci! Play back musical works and control individual parts — adjust volume, instrument and tempo to rehearse and learn your part.",
   "empty_state_pick_or_upload": "Select or upload music (MIDI or MusicXML format)",
   "empty_state_press_play": "Press Play",
   "empty_state_volume": "Change the volume level for any voice/part (or use the mute/lead/solo buttons)",

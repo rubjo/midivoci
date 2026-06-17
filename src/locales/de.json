@@ -22,6 +22,7 @@
   "compact_mode_on": "Kompakte Ansicht verwenden",
   "dark_mode": "Dunkelmodus",
   "emphasize_group": "Gruppe {n} hervorheben",
+  "empty_state_intro": "Willkommen bei MidiVoci! Spielen Sie Musikwerke ab und steuern Sie einzelne Stimmen — passen Sie Lautstärke, Instrument und Tempo an, um Ihre Stimme zu proben und zu lernen.",
   "empty_state_pick_or_upload": "Musik auswählen oder hochladen (MIDI oder MusicXML-Format)",
   "empty_state_press_play": "Drücke Abspielen",
   "empty_state_volume": "Ändere die Lautstärke für jede Stimme (oder verwende die Stumm/Lead/Solo-Buttons)",

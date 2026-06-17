@@ -22,6 +22,7 @@
   "compact_mode_on": "Bruk kompakt visning",
   "dark_mode": "Mørk modus",
   "emphasize_group": "Fremhev gruppe {n}",
+  "empty_state_intro": "Velkommen til MidiVoci! Spill av musikkverk og kontroller enkeltstemmer — juster volum, instrument og tempo for å øve og lære stemmen din.",
   "empty_state_pick_or_upload": "Velg eller last opp musikk (MIDI- eller MusicXML-format)",
   "empty_state_press_play": "Trykk Spill",
   "empty_state_volume": "Juster volumet for hver stemme (eller bruk demp/led/solo-knappene)",

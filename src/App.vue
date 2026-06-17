@@ -275,6 +275,7 @@
         class="empty-state flex flex-column align-items-center justify-content-center"
       >
         <div class="empty-state-inner">
+          <p class="empty-state-intro">{{ t('empty_state_intro') }}</p>
           <div class="empty-state-step">1. {{ t('empty_state_pick_or_upload') }}</div>
           <div class="empty-state-step">2. {{ t('empty_state_volume') }}</div>
           <div class="empty-state-step">3. {{ t('empty_state_press_play') }}</div>
@@ -822,6 +823,14 @@ function searchFiles(event) {
 
 .empty-state-inner {
   width: min(80vw, 480px);
+}
+
+.empty-state-intro {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: var(--p-text-muted-color);
 }
 
 .empty-state-step {
